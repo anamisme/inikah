@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>iNikah – KUA Karangdadap</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --green-deep:    #0A5C36;
+            --green-mid:     #148A4C;
+            --green-light:   #1BA55A;
+            --green-tint:    rgba(10, 92, 54, 0.06);
+            --gold:          #C8A540;
+            --gold-tint:     rgba(200, 165, 64, 0.11);
+            --bg:            #F2F8F4;
+            --surface:       #FFFFFF;
+            --border:        rgba(10, 92, 54, 0.08);
+            --text:          #12231A;
+            --muted:         #5A7063;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            background-image:
+                radial-gradient(ellipse at 15% 0%, rgba(20, 138, 76, 0.09) 0%, transparent 55%),
+                radial-gradient(ellipse at 88% 85%, rgba(10, 92, 54, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+            font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            letter-spacing: -0.1px;
+            /* MODIFIKASI: Ditinggikan dari 116px ke 150px agar menu bawah lebih longgar & seimbang */
+            padding-top: 150px; 
+            padding-bottom: 60px;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* ════════════════════════════════
+           SPLASH SCREEN
+        ════════════════════════════════ */
+        #splashScreen {
+            position: fixed; inset: 0;
+            background: linear-gradient(160deg, #EDF7F1 0%, #E0F2E9 100%);
+            z-index: 9999;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center; gap: 20px;
+            transition: opacity 0.6s ease, visibility 0.6s;
+        }
+        .splash-brand { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+        .splash-wordmark {
+            font-family: "Playfair Display", serif;
+            font-size: 3rem; line-height: 1; color: var(--text);
+            letter-spacing: -1px;
+        }
+        .splash-wordmark .wi { font-style: italic; font-weight: 400; color: var(--gold); }
+        .splash-wordmark .wn { font-weight: 700; }
+        .splash-sub {
+            font-size: 0.68rem; font-weight: 600; color: var(--muted);
+            text-transform: uppercase; letter-spacing: 1.8px;
+        }
+        .splash-spinner {
+            width: 24px; height: 24px;
+            border: 2.5px solid rgba(10, 92, 54, 0.12);
+            border-top-color: var(--green-mid);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ════════════════════════════════
+           NAVBAR – Frosted Glass Premium
+        ════════════════════════════════ */
+        .ios-navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+            padding: 14px 20px 12px;
+            /* MODIFIKASI: Mengubah putih transparan menjadi warna hijau muda lembut khas KUA */
+            background: rgba(224, 242, 233, 0.78);
+            backdrop-filter: blur(32px) saturate(140%); -webkit-backdrop-filter: blur(32px) saturate(140%);
+            border-bottom: 1px solid rgba(10, 92, 54, 0.12);
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        /* Subtle gold shimmer below header */
+        .ios-navbar::after {
+            content: '';
+            position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                rgba(200, 165, 64, 0.45) 35%,
+                rgba(200, 165, 64, 0.45) 65%,
+                transparent 100%);
+        }
+
+        /* Wordmark – serif italic "i" + bold "Nikah" */
+        .logo-wordmark {
+            font-family: "Playfair Display", serif;
+            font-size: 1.7rem; line-height: 1; color: var(--text);
+            letter-spacing: -0.5px;
+        }
+        .logo-wordmark .wi { font-style: italic; font-weight: 400; color: var(--gold); }
+        .logo-wordmark .wn { font-weight: 700; }
+
+        .ios-subtitle {
+            font-size: 0.66rem; font-weight: 600; color: var(--muted);
+            text-transform: uppercase; letter-spacing: 1px;
+            margin: 5px 0 0 2px;
+        }
+
+        /* ════════════════════════════════
+           LAYOUT CONTAINER
+        ════════════════════════════════ */
+        .ios-container { width: 100%; max-width: 600px; margin: 0 auto; padding: 0 15px; }
+
+        /* ════════════════════════════════
+           MAIN CARDS
+        ════════════════════════════════ */
+        .ios-main-card {
+            background: var(--surface);
+            border-radius: 18px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 2px 12px rgba(10, 92, 54, 0.04), 0 1px 3px rgba(0,0,0,0.04);
+            margin-bottom: 15px; /* Sedikit dilonggarkan antar card */
+            transition: box-shadow 0.25s, transform 0.25s;
+        }
+        .ios-main-card:hover {
+            box-shadow: 0 6px 26px rgba(10, 92, 54, 0.08);
+            transform: translateY(-1px);
+        }
+        .ios-card-header {
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; -webkit-tap-highlight-color: transparent;
+        }
+        .ios-card-icon-title { display: flex; align-items: center; gap: 13px; flex: 1; min-width: 0; }
+
+        /* Card icons – solid gradient */
+        .ios-card-icon {
+            width: 44px; height: 44px; border-radius: 13px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .icon-cating {
+            background: linear-gradient(145deg, #0A5C36, #1BAA58);
+            color: #FFFFFF;
+            box-shadow: 0 3px 10px rgba(10, 92, 54, 0.24);
+        }
+        .icon-jadwal {
+            background: linear-gradient(145deg, #0D7040, #22B56A);
+            color: #FFFFFF;
+            box-shadow: 0 3px 10px rgba(13, 112, 64, 0.22);
+        }
+        .icon-bantuan {
+            background: linear-gradient(145deg, #8B6A14, #C8A540);
+            color: #FFFFFF;
+            box-shadow: 0 3px 10px rgba(200, 165, 64, 0.25);
+        }
+
+        .ios-card-title { font-size: 1rem; font-weight: 700; color: var(--text); margin: 0; }
+        .ios-card-desc { font-size: 0.74rem; color: var(--muted); margin-top: 2px; display: block; }
+
+        .chevron-main {
+            font-size: 20px; color: #C7C7CC;
+            transition: transform 0.3s ease, color 0.3s ease;
+            flex-shrink: 0; margin-left: 6px;
+        }
+        .chevron-main.rotated { transform: rotate(90deg); color: var(--green-mid); }
+
+        /* ════════════════════════════════
+           SUBMENU ACCORDION (FIXED SMOOTH)
+        ════════════════════════════════ */
+        .ios-submenu-wrapper {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .ios-submenu-wrapper.active {
+            grid-template-rows: 1fr;
+        }
+        .ios-submenu-inner {
+            overflow: hidden;
+            transition: opacity 0.3s ease, padding 0.4s ease, margin 0.4s ease;
+            opacity: 0;
+            padding-top: 0;
+            margin-top: 0;
+        }
+        .ios-submenu-wrapper.active .ios-submenu-inner {
+            opacity: 1;
+            margin-top: 12px;
+            border-top: 1px solid var(--border);
+            padding-top: 8px;
+        }
+
+        .sub-list-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 11px 8px; border-radius: 12px;
+            text-decoration: none; color: inherit;
+            margin-bottom: 2px;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.18s;
+        }
+        .sub-list-item:hover { background: var(--green-tint); }
+        .sub-list-item:active { background: rgba(10,92,54,0.1); }
+
+        .sub-list-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+
+        /* Step badges – gradient pill */
+        .sub-badge {
+            min-width: 30px; height: 30px; border-radius: 9px;
+            font-size: 0.8rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .badge-1 { background: linear-gradient(135deg, var(--green-deep), var(--green-mid)); color: #fff; }
+        .badge-2 { background: linear-gradient(135deg, #1BA55A, #20C997); color: #fff; }
+        .badge-3 { background: linear-gradient(135deg, var(--green-deep), var(--green-mid)); color: #fff; }
+        .badge-4 { background: linear-gradient(135deg, #8B6A14, var(--gold)); color: #fff; }
+        .badge-icon { background: var(--green-tint); color: var(--green-deep); }
+        .badge-icon-gold { background: var(--gold-tint); color: #8B6914; }
+
+        .sub-title-box { display: flex; flex-direction: column; min-width: 0; }
+        .sub-title { font-size: 0.875rem; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sub-desc { font-size: 0.72rem; color: var(--muted); line-height: 1.35; }
+
+        /* ════════════════════════════════
+           BOOKSHELF & INNER DOCS
+        ════════════════════════════════ */
+        .apple-books-container { 
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .apple-books-container.show { 
+            grid-template-rows: 1fr;
+        }
+        .apple-books-inner {
+            overflow: hidden;
+            transition: margin 0.4s ease;
+            margin: 0;
+        }
+        .apple-books-container.show .apple-books-inner {
+            margin: 8px 0;
+        }
+
+        .bookshelf-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px 10px;
+            padding: 14px 10px;
+            background: var(--green-tint);
+            border-radius: 14px;
+        }
+        @media (max-width: 400px) {
+            .bookshelf-grid { grid-template-columns: repeat(2, 1fr); }
+            body { padding-top: 135px; } /* Penyesuaian jarak di layar super kecil */
+            .logo-wordmark { font-size: 1.4rem; }
+        }
+
+        .book-item {
+            text-decoration: none; display: flex; flex-direction: column;
+            align-items: center; text-align: center;
+            transition: transform 0.2s;
+        }
+        .book-item:hover { transform: scale(1.04) translateY(-2px); }
+
+        .book-cover {
+            width: 100%; max-width: 110px; aspect-ratio: 3/4;
+            border-radius: 3px 8px 8px 3px;
+            box-shadow: 3px 5px 14px rgba(10, 92, 54, 0.16), inset -3px 0 5px rgba(0,0,0,0.18);
+            position: relative;
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: 8px 7px; overflow: hidden;
+            border-left: 4px solid rgba(0,0,0,0.2);
+        }
+
+        .cover-1  { background: linear-gradient(145deg, #0A5C36, #04331D); }
+        .cover-2  { background: linear-gradient(145deg, #148A4C, #0A5C36); }
+        .cover-3  { background: linear-gradient(145deg, #1E965D, #106B40); }
+        .cover-4  { background: linear-gradient(145deg, #28A745, #1E7E34); }
+        .cover-5  { background: linear-gradient(145deg, #20C997, #17A2B8); }
+        .cover-6  { background: linear-gradient(145deg, #11998e, #38ef7d); }
+        .cover-7  { background: linear-gradient(145deg, #5AD427, #2E7D32); }
+        .cover-8  { background: linear-gradient(145deg, #00A3E0, #0A5C36); }
+        .cover-9  { background: linear-gradient(145deg, #85929E, #2C3E50); }
+        .cover-10 { background: linear-gradient(145deg, #141414, #2D3130); }
+
+        .book-badge { font-size: 0.48rem; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; }
+        .book-cover-title { font-size: 0.62rem; font-weight: 700; color: #FFF; line-height: 1.25; text-align: left; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+        .book-label-title { font-size: 0.72rem; font-weight: 600; color: var(--text); margin-top: 5px; width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* ════════════════════════════════
+           DOCUMENT LIST
+        ════════════════════════════════ */
+        .doc-list-group { background: var(--green-tint); border-radius: 12px; overflow: hidden; padding: 4px; margin-top: 0; list-style: none; }
+        .doc-list-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px; text-decoration: none; color: inherit;
+            border-radius: 8px; transition: background-color 0.18s;
+        }
+        .doc-list-item:hover { background: rgba(10,92,54,0.07); }
+        .doc-badge {
+            min-width: 36px; height: 22px; border-radius: 5px;
+            font-size: 0.62rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+            color: #FFF;
+        }
+
+        /* ════════════════════════════════
+           FORM ELEMENTS
+        ════════════════════════════════ */
+        .ios-input {
+            width: 100%; padding: 13px 15px; border-radius: 12px;
+            border: 1.5px solid var(--border);
+            background: #FFFFFF; font-size: 0.95rem; font-family: inherit;
+            margin-bottom: 12px; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .ios-input:focus {
+            border-color: var(--green-mid);
+            box-shadow: 0 0 0 3px rgba(20, 138, 76, 0.1);
+        }
+
+        .ios-btn-premium {
+            width: 100%; padding: 13px 16px; border-radius: 12px; border: none;
+            background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%);
+            color: #FFFFFF; font-size: 0.95rem; font-weight: 700; font-family: inherit;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 16px rgba(10, 92, 54, 0.22);
+            cursor: pointer; -webkit-tap-highlight-color: transparent;
+            transition: all 0.2s; letter-spacing: 0.1px;
+        }
+        .ios-btn-premium:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 7px 22px rgba(10, 92, 54, 0.28); }
+        .ios-btn-premium:active { transform: scale(0.98); }
+        .btn-icon-left { font-size: 20px; }
+        .btn-text-main { flex-grow: 1; text-align: left; margin-left: 10px; }
+        .btn-icon-right { font-size: 18px; opacity: 0.7; }
+
+        /* ════════════════════════════════
+           INNER PAGES
+        ════════════════════════════════ */
+        .ios-search-wrapper { width: 100%; max-width: 100%; padding: 0 15px; }
+
+        .ios-back-btn {
+            color: var(--green-deep); font-size: 0.9rem;
+            display: inline-flex; align-items: center; gap: 2px;
+            padding: 12px 0; cursor: pointer; font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .ios-back-btn:hover { opacity: 0.6; }
+
+        .spreadsheet-frame-container {
+            width: 100%; height: 75vh; height: 75dvh;
+            background: #FFFFFF; border-radius: 16px; overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            position: relative; margin-top: 8px;
+        }
+        .spreadsheet-frame-container iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+
+        /* ════════════════════════════════
+           SEARCH RESULTS LIST
+        ════════════════════════════════ */
+        .ios-list-group { background: #FFFFFF; border-radius: 14px; overflow: hidden; border: 1px solid var(--border); }
+        .ios-list-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 14px; text-decoration: none; color: inherit;
+            border-bottom: 1px solid #F0F0F0; transition: background-color 0.18s;
+        }
+        .ios-list-item:last-child { border-bottom: none; }
+        .ios-list-item:hover { background: #F7FBF9; }
+        .ios-list-left { display: flex; align-items: center; gap: 12px; }
+        .ios-list-title-box { display: flex; flex-direction: column; }
+        .ios-list-badge {
+            min-width: 48px; height: 24px; border-radius: 6px;
+            font-size: 0.6rem; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+            color: #FFF;
+        }
+        .ios-list-main-title { font-size: 0.875rem; font-weight: 600; color: var(--text); }
+
+        /* ════════════════════════════════
+           PAGE FOOTER
+        ════════════════════════════════ */
+        .page-footer {
+            text-align: center; padding: 24px 16px 0;
+            font-size: 0.68rem; color: var(--muted); font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .page-footer::before {
+            content: '';
+            display: block; width: 48px; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(200,165,64,0.45), transparent);
+            margin: 0 auto 14px;
+        }
+    
+        /* ===== ULTRA PREMIUM iOS STYLE ===== */
+        body {
+            perspective: 1000px;
+        }
+
+        .ios-navbar {
+            top: 12px !important;
+            left: 12px !important;
+            right: 12px !important;
+            border-radius: 24px;
+            /* MODIFIKASI: Memadukan border putih halus dengan latar belakang hijau muda premium */
+            border: 1px solid rgba(255,255,255,.45);
+            background: rgba(224, 242, 233, 0.78) !important;
+            backdrop-filter: blur(30px) saturate(160%);
+            -webkit-backdrop-filter: blur(30px) saturate(160%);
+            box-shadow:
+                0 8px 32px rgba(10, 92, 54, 0.06),
+                inset 0 1px 0 rgba(255,255,255,.65);
+        }
+
+        .ios-main-card {
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            transition:
+              transform .45s cubic-bezier(.22,1,.36,1),
+              box-shadow .45s cubic-bezier(.22,1,.36,1);
+        }
+
+        .ios-main-card::before {
+            content:'';
+            position:absolute;
+            inset:0;
+            background:linear-gradient(
+              135deg,
+              rgba(255,255,255,.22),
+              transparent 40%,
+              rgba(27,165,90,.08)
+            );
+            pointer-events:none;
+        }
+
+        .ios-main-card:hover {
+            transform:translateY(-6px) scale(1.01);
+            box-shadow:0 20px 40px rgba(10,92,54,.12);
+        }
+
+        .ios-card-icon {
+            position:relative;
+            overflow:hidden;
+        }
+
+        .ios-card-icon::after {
+            content:'';
+            position:absolute;
+            width:250%;
+            height:250%;
+            left:-75%;
+            top:-75%;
+            background:radial-gradient(circle,rgba(255,255,255,.45),transparent 60%);
+            animation:liquidGlow 5s infinite linear;
+        }
+
+        @keyframes liquidGlow {
+            from { transform:rotate(0deg); }
+            to { transform:rotate(360deg); }
+        }
+
+        .ios-card-header,
+        .sub-list-item,
+        .book-item,
+        .ios-btn-premium {
+            transform:translateZ(0);
+        }
+
+        .ios-card-header:active,
+        .sub-list-item:active,
+        .book-item:active,
+        .ios-btn-premium:active {
+            animation:hapticBounce .5s cubic-bezier(.34,1.56,.64,1);
+        }
+
+        @keyframes hapticBounce {
+            0% { transform:scale(1); }
+            35% { transform:scale(.94); }
+            70% { transform:scale(1.04); }
+            100% { transform:scale(1); }
+        }
+
+        .ios-submenu-wrapper,
+        .apple-books-container {
+            transition: grid-template-rows .4s cubic-bezier(.16,1,.3,1);
+        }
+
+        .page-enter {
+            animation:pageEnter .45s cubic-bezier(.22,1,.36,1);
+        }
+
+        @keyframes pageEnter {
+            from {
+                opacity:0;
+                transform:translateY(20px) scale(.98);
+            }
+            to {
+                opacity:1;
+                transform:translateY(0) scale(1);
+            }
+        }
+
+        .parallax-card {
+            transition:transform .12s linear;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════════════════
+         SPLASH SCREEN
+    ═══════════════════════════════ -->
+    <div id="splashScreen">
+        <div class="splash-brand">
+            <div class="splash-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></div>
+            <div class="splash-sub">KUA Karangdadap</div>
+        </div>
+        <div class="splash-spinner"></div>
+    </div>
+
+    <!-- ═══════════════════════════════
+         NAVBAR
+    ═══════════════════════════════ -->
+    <div class="ios-navbar" id="iosMainHeader">
+        <div class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></div>
+        <p class="ios-subtitle">Informasi Pernikahan · KUA Karangdadap</p>
+    </div>
+
+    <!-- ═══════════════════════════════
+         MAIN MENU PAGE
+    ═══════════════════════════════ -->
+    <div id="menuPage" class="ios-container">
+
+        <!-- ── CARD 1 : TAHAPAN MANDIRI CATIN ── -->
+        <div class="ios-main-card">
+            <div class="ios-card-header" onclick="toggleMainMenu('catingSubmenu','catingChevron')">
+                <div class="ios-card-icon-title">
+                    <div class="ios-card-icon icon-cating">
+                        <span class="material-icons-outlined" style="font-size:20px;">favorite_border</span>
+                    </div>
+                    <div>
+                        <h2 class="ios-card-title">Tahapan Mandiri Catin</h2>
+                        <span class="ios-card-desc">Alur bimbingan & pre-post test mandiri</span>
+                    </div>
+                </div>
+                <span class="material-icons-outlined chevron-main" id="catingChevron">chevron_right</span>
+            </div>
+
+            <div class="ios-submenu-wrapper" id="catingSubmenu">
+                <div class="ios-submenu-inner">
+
+                    <!-- Step 1 -->
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSfh_V1Oj6WvOyvdOeA_BRm8kOBXY0bEqm8iXkwHnj3lfQaNCA/viewform" target="_blank" class="sub-list-item">
+                        <div class="sub-list-left">
+                            <div class="sub-badge badge-1">1</div>
+                            <div class="sub-title-box">
+                                <span class="sub-title">Isi Evaluasi Pre-Test</span>
+                                <span class="sub-desc">Wajib diisi sebelum membaca materi bimbingan</span>
+                            </div>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:16px;color:#C7C7CC;">open_in_new</span>
+                    </a>
+
+                    <!-- Step 2 – Perpustakaan Digital -->
+                    <div onclick="toggleBookShelf(event)" class="sub-list-item" style="cursor:pointer;">
+                        <div class="sub-list-left">
+                            <div class="sub-badge badge-2">2</div>
+                            <div class="sub-title-box">
+                                <span class="sub-title">Perpustakaan Digital Mandiri</span>
+                                <span class="sub-desc">Akses materi bimbingan perkawinan Bab 1–10</span>
+                            </div>
+                        </div>
+                        <span class="material-icons-outlined" id="bookChevron" style="font-size:18px;color:#C7C7CC;transition:transform 0.3s;">expand_more</span>
+                    </div>
+
+                    <div class="apple-books-container" id="innerBookshelf">
+                        <div class="apple-books-inner">
+                            <div class="bookshelf-grid">
+                                <a href="https://drive.google.com/file/d/1Z_27vFPRH5jduQWD9WAidb-7aPOHOE0d/view" target="_blank" class="book-item"><div class="book-cover cover-1"><span class="book-badge">Bimwin</span><span class="book-cover-title">Membangun Landasan Keluarga Sakinah</span></div><span class="book-label-title">Bab 1</span></a>
+                                <a href="https://drive.google.com/file/d/1y4cgJcZJefTgw0HT4EQ0euxIYpWmpbjK/view" target="_blank" class="book-item"><div class="book-cover cover-2"><span class="book-badge">Bimwin</span><span class="book-cover-title">Merencanakan Perkawinan Kokoh</span></div><span class="book-label-title">Bab 2</span></a>
+                                <a href="https://drive.google.com/file/d/1E243FXTaJLI0pUOJQYgSl_UpgsGSrvn2/view" target="_blank" class="book-item"><div class="book-cover cover-3"><span class="book-badge">Bimwin</span><span class="book-cover-title">Dinamika Perkawinan</span></div><span class="book-label-title">Bab 3</span></a>
+                                <a href="https://drive.google.com/file/d/1XyCT40nC0i0gd-R_GoKZLqLs3H2_L_Eq/view" target="_blank" class="book-item"><div class="book-cover cover-4"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kebutuhan Keluarga</span></div><span class="book-label-title">Bab 4</span></a>
+                                <a href="https://drive.google.com/file/d/1hsBuxsj8Qx9OKdxCr-ovuWWDHC0nqeEg/view" target="_blank" class="book-item"><div class="book-cover cover-5"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kesehatan Keluarga</span></div><span class="book-label-title">Bab 5</span></a>
+                                <a href="https://drive.google.com/file/d/12c87keH8b3ZROkDhmwnhSGTeZdzllR6S/view" target="_blank" class="book-item"><div class="book-cover cover-6"><span class="book-badge">Bimwin</span><span class="book-cover-title">Generasi Berkualitas</span></div><span class="book-label-title">Bab 6</span></a>
+                                <a href="https://drive.google.com/file/d/1Mx4sx6eRezzvThD5uWaldCbkGRg0NLKR/view" target="_blank" class="book-item"><div class="book-cover cover-7"><span class="book-badge">Bimwin</span><span class="book-cover-title">Ketahanan Keluarga Masa Kini</span></div><span class="book-label-title">Bab 7</span></a>
+                                <a href="https://drive.google.com/file/d/1oD41mimrN32gTXKwNb_lZSHvRtk73t23/view" target="_blank" class="book-item"><div class="book-cover cover-8"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengenali Hukum</span></div><span class="book-label-title">Bab 8</span></a>
+                                <a href="https://drive.google.com/file/d/1VBTqLSArAg3oeBsXiqYLttHNwlDd0QEo/view" target="_blank" class="book-item"><div class="book-cover cover-9"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengelola Konflik</span></div><span class="book-label-title">Bab 9</span></a>
+                                <a href="https://drive.google.com/file/d/1KlV24vihDnBrzcW4UHMy_mD3sS8bvNN5/view" target="_blank" class="book-item"><div class="book-cover cover-10"><span class="book-badge">Bimwin</span><span class="book-cover-title">Prosedur Pendaftaran NR</span></div><span class="book-label-title">Bab 10</span></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScX3EdfUwP9f0vGi2FX26X3aOucvfklb0smHGPnGTa8xfeobQ/viewform" target="_blank" class="sub-list-item">
+                        <div class="sub-list-left">
+                            <div class="sub-badge badge-3">3</div>
+                            <div class="sub-title-box">
+                                <span class="sub-title">Isi Evaluasi Post-Test</span>
+                                <span class="sub-desc">Wajib diisi setelah selesai membaca materi bimbingan</span>
+                            </div>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:16px;color:#C7C7CC;">open_in_new</span>
+                    </a>
+
+                    <!-- Step 4 -->
+                    <div onclick="bukaCariSertifikat()" class="sub-list-item" style="cursor:pointer;">
+                        <div class="sub-list-left">
+                            <div class="sub-badge badge-4">4</div>
+                            <div class="sub-title-box">
+                                <span class="sub-title">Klaim & Ambil E-Sertifikat</span>
+                                <span class="sub-desc">Unduh lembar berkas kelulusan Bimwin Anda</span>
+                            </div>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:18px;color:#C7C7CC;">chevron_right</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ── CARD 2 : JADWAL KUA ── -->
+        <div class="ios-main-card">
+            <div class="ios-card-header" onclick="toggleMainMenu('jadwalSubmenu','jadwalChevron')">
+                <div class="ios-card-icon-title">
+                    <div class="ios-card-icon icon-jadwal">
+                        <span class="material-icons-outlined" style="font-size:20px;">calendar_today</span>
+                    </div>
+                    <div>
+                        <h2 class="ios-card-title">Layanan Penjadwalan KUA</h2>
+                        <span class="ios-card-desc">Sistem cek waktu akad & petugas penghulu</span>
+                    </div>
+                </div>
+                <span class="material-icons-outlined chevron-main" id="jadwalChevron">chevron_right</span>
+            </div>
+
+            <div class="ios-submenu-wrapper" id="jadwalSubmenu">
+                <div class="ios-submenu-inner">
+                    <div onclick="bukaHalamanJadwalAkad()" class="sub-list-item" style="cursor:pointer;">
+                        <div class="sub-list-left">
+                            <div class="sub-badge badge-icon">
+                                <span class="material-icons-outlined" style="font-size:15px;">event</span>
+                            </div>
+                            <div class="sub-title-box">
+                                <span class="sub-title">Cek Jadwal Akad Nikah</span>
+                                <span class="sub-desc">Lihat lembar sinkronisasi data jadwal akad nikah</span>
+                            </div>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:18px;color:#C7C7CC;">chevron_right</span>
+                    </div>
+
+                    <div onclick="bukaHalamanJadwalPenghulu()" class="sub-list-item" style="cursor:pointer;">
+                        <div class="sub-list-left">
+                            <div class="sub-badge badge-icon">
+                                <span class="material-icons-outlined" style="font-size:15px;">assignment_ind</span>
+                        </div>
+                            <div class="sub-title-box">
+                                <span class="sub-title">Cek Petugas Penghulu</span>
+                                <span class="sub-desc">Lihat surat penunjukan tugas Penghulu KUA</span>
+                            </div>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:18px;color:#C7C7CC;">chevron_right</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── CARD 3 : INFORMASI & BANTUAN ── -->
+        <div class="ios-main-card">
+            <div class="ios-card-header" onclick="toggleMainMenu('bantuanSubmenu','bantuanChevron')">
+                <div class="ios-card-icon-title">
+                    <div class="ios-card-icon icon-bantuan">
+                        <span class="material-icons-outlined" style="font-size:20px;">info</span>
+                    </div>
+                    <div>
+                        <h2 class="ios-card-title">Informasi & Bantuan KUA</h2>
+                        <span class="ios-card-desc">Format dokumen perkawinan & chat bantuan</span>
+                    </div>
+                </div>
+                <span class="material-icons-outlined chevron-main" id="bantuanChevron">chevron_right</span>
+            </div>
+
+            <div class="ios-submenu-wrapper" id="bantuanSubmenu">
+                <div class="ios-submenu-inner">
+
+                    <div onclick="toggleDocList(event)" class="sub-list-item" style="cursor:pointer;">
+                        <div class="sub-list-left">
+                            <div class="sub-badge badge-icon-gold">
+                                <span class="material-icons-outlined" style="font-size:15px;">description</span>
+                            </div>
+                            <div class="sub-title-box">
+                                <span class="sub-title">Unduh Blangko Dokumen Nikah</span>
+                                <span class="sub-desc">Template surat resmi N-1 sampai dengan N-6</span>
+                            </div>
+                        </div>
+                        <span class="material-icons-outlined" id="docChevron" style="font-size:18px;color:#C7C7CC;transition:transform 0.3s;">expand_more</span>
+                    </div>
+
+                    <div class="apple-books-container" id="innerDocList">
+                        <div class="apple-books-inner">
+                            <ul class="doc-list-group">
+                                <li><a href="https://drive.google.com/file/d/1tIgOPjhtj6E0YTvkmz4Rpwv31Ms8FXFk/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-1</div><span style="font-size:0.85rem;font-weight:600;">Surat Pengantar Perkawinan</span></div><span class="material-icons-outlined" style="font-size:16px;color:#8E8E93;">file_download</span></a></li>
+                                <li><a href="https://drive.google.com/file/d/13NMRP1b2B32W0Al543gitZ6WBoUejFkT/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-2</div><span style="font-size:0.85rem;font-weight:600;">Permohonan Kehendak Nikah</span></div><span class="material-icons-outlined" style="font-size:16px;color:#8E8E93;">file_download</span></a></li>
+                                <li><a href="https://drive.google.com/file/d/1SzchBL1MXRK7sobvWUjC26q1L9KFW_7w/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-3</div><span style="font-size:0.85rem;font-weight:600;">Surat Persetujuan Mempelai</span></div><span class="material-icons-outlined" style="font-size:16px;color:#8E8E93;">file_download</span></a></li>
+                                <li><a href="https://drive.google.com/file/d/1ExN-VXponEhDIdwKxQdE0r9tR-QzxIFT/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-4</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Orang Tua</span></div><span class="material-icons-outlined" style="font-size:16px;color:#8E8E93;">file_download</span></a></li>
+                                <li><a href="https://drive.google.com/file/d/1eG-rh5zqS4gwsnRT_BiXi0O1SqLBEtL2/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-5</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Pengadilan</span></div><span class="material-icons-outlined" style="font-size:16px;color:#8E8E93;">file_download</span></a></li>
+                                <li><a href="https://drive.google.com/file/d/1edlVXp_XYzO9IHl7hXllvgkR2YxzJtKi/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-6</div><span style="font-size:0.85rem;font-weight:600;">Surat Kematian Pasangan</span></div><span class="material-icons-outlined" style="font-size:16px;color:#8E8E93;">file_download</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <a href="https://wa.me/6285226466464?text=Halo%20Penghulu%20KUA%20Karangdadap..." target="_blank" class="sub-list-item">
+                        <div class="sub-list-left">
+                            <div class="sub-badge badge-icon-gold">
+                                <span class="material-icons-outlined" style="font-size:15px;">chat</span>
+                            </div>
+                            <div class="sub-title-box">
+                                <span class="sub-title">Tanya Layanan Penghulu</span>
+                                <span class="sub-desc">Konsultasi interaktif via WhatsApp KUA</span>
+                            </div>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:16px;color:var(--green-mid);">open_in_new</span>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer">KUA Karangdadap · Kabupaten Pekalongan</div>
+
+    </div><!-- /menuPage -->
+
+    <!-- ═══════════════════════════════
+         HALAMAN JADWAL AKAD
+    ═══════════════════════════════ -->
+    <div id="jadwalAkadPage" class="d-none">
+        <div class="ios-search-wrapper">
+            <div class="ios-back-btn" onclick="kembaliKeMenu()">
+                <span class="material-icons-outlined" style="font-size:20px;">chevron_left</span>
+                Kembali ke Menu Utama
+            </div>
+            <h2 class="fw-bold mb-3" style="font-size:1.2rem;color:var(--green-deep);font-family:'Playfair Display',serif;">Tabel Jadwal Akad Nikah</h2>
+            <div class="spreadsheet-frame-container">
+                <iframe src="https://docs.google.com/spreadsheets/d/1_Ba5_CVCd6u9pI0-TBsQFzNYdBlImBaQ_s6IYxwd8Jw/preview?rm=minimal"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════
+         HALAMAN JADWAL PENGHULU
+    ═══════════════════════════════ -->
+    <div id="jadwalPenghuluPage" class="d-none">
+        <div class="ios-search-wrapper">
+            <div class="ios-back-btn" onclick="kembaliKeMenu()">
+                <span class="material-icons-outlined" style="font-size:20px;">chevron_left</span>
+                Kembali ke Menu Utama
+            </div>
+            <h2 class="fw-bold mb-3" style="font-size:1.2rem;color:var(--green-deep);font-family:'Playfair Display',serif;">Tabel Petugas Penghulu</h2>
+            <div class="spreadsheet-frame-container">
+                <iframe src="https://docs.google.com/spreadsheets/d/1t_wFqRLwIv-HvHDLA04dofqmZy9jcBP0SHeV7zZt-R8/preview?rm=minimal"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════
+         HALAMAN PENCARIAN SERTIFIKAT
+    ═══════════════════════════════ -->
+    <div id="searchPage" class="d-none">
+        <div class="ios-search-wrapper">
+            <div class="ios-back-btn" onclick="kembaliKeMenu()">
+                <span class="material-icons-outlined" style="font-size:20px;">chevron_left</span>
+                Kembali ke Menu Utama
+            </div>
+            <h2 class="fw-bold mb-3" style="font-size:1.35rem;color:var(--green-deep);font-family:'Playfair Display',serif;">Cek E-Sertifikat</h2>
+
+            <input type="text" id="searchInput" class="ios-input" placeholder="Ketik Nama Lengkap Anda..." autocomplete="off">
+
+            <button class="ios-btn-premium" onclick="prosesCariSertifikat()">
+                <span class="material-icons-outlined btn-icon-left">search</span>
+                <span class="btn-text-main">Cari Dokumen</span>
+                <span class="material-icons-outlined btn-icon-right">chevron_right</span>
+            </button>
+
+            <div id="loading" class="text-center d-none my-4 text-muted">Menghubungkan ke database KUA...</div>
+            <div id="resultArea" class="mt-4"></div>
+        </div>
+    </div>
+
+    <script>
+        // SPLASH SCREEN
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                if (splash) {
+                    splash.style.opacity = '0';
+                    setTimeout(() => splash.style.visibility = 'hidden', 600);
+                }
+            }, 1000);
+        });
+
+        // ACCORDION TOGGLE
+        function toggleMainMenu(idSubmenu, idChevron) {
+            const submenu = document.getElementById(idSubmenu);
+            const chevron = document.getElementById(idChevron);
+            if (submenu && chevron) {
+                submenu.classList.toggle('active');
+                chevron.classList.toggle('rotated');
+            }
+        }
+
+        function toggleBookShelf(event) {
+            event.stopPropagation();
+            const shelf = document.getElementById('innerBookshelf');
+            const chev  = document.getElementById('bookChevron');
+            if (shelf && chev) {
+                shelf.classList.toggle('show');
+                chev.style.transform = shelf.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        }
+
+        function toggleDocList(event) {
+            event.stopPropagation();
+            const list = document.getElementById('innerDocList');
+            const chev = document.getElementById('docChevron');
+            if (list && chev) {
+                list.classList.toggle('show');
+                chev.style.transform = list.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+        }
+
+        // NAVIGASI HALAMAN
+        function kembaliKeMenu() {
+            ['searchPage','jadwalAkadPage','jadwalPenghuluPage'].forEach(id => {
+                document.getElementById(id).classList.add('d-none');
+            });
+            document.getElementById('menuPage').classList.remove('d-none');
+            window.scrollTo(0, 0);
+        }
+
+        window.bukaCariSertifikat = function() {
+            document.getElementById('menuPage').classList.add('d-none');
+            document.getElementById('searchPage').classList.remove('d-none');
+        }
+
+        window.bukaHalamanJadwalAkad = function() {
+            document.getElementById('menuPage').classList.add('d-none');
+            document.getElementById('jadwalAkadPage').classList.remove('d-none');
+        }
+
+        window.bukaHalamanJadwalPenghulu = function() {
+            document.getElementById('menuPage').classList.add('d-none');
+            document.getElementById('jadwalPenghuluPage').classList.remove('d-none');
+        }
+
+        // FETCH SERTIFIKAT
+        function prosesCariSertifikat() {
+            const input      = document.getElementById('searchInput').value.trim();
+            const loading    = document.getElementById('loading');
+            const resultArea = document.getElementById('resultArea');
+
+            if (!input) return alert('Silakan masukkan nama lengkap!');
+
+            loading.classList.remove('d-none');
+            resultArea.innerHTML = '';
+
+            const urlWebApp = "https://script.google.com/macros/s/AKfycbzSsypF03AF6k9b9N2s_rmQsk6-kLVuErjwGSPQdX3fC6zBhiUsCuMMwkpTnoRBq450Dg/exec?q=" + encodeURIComponent(input);
+
+            fetch(urlWebApp)
+                .then(r => r.json())
+                .then(data => {
+                    loading.classList.add('d-none');
+                    if (data.length === 0) {
+                        resultArea.innerHTML = `
+                            <div class="text-center text-muted p-4">
+                                <span class="material-icons-outlined" style="font-size:48px;color:#C7C7CC;">search_off</span>
+                                <p class="mt-2" style="font-size:0.875rem;">Sertifikat belum terbit atau nama salah.<br>Pastikan nama sesuai dengan form Post-Test.</p>
+                            </div>`;
+                    } else {
+                        let html = `<div class="ios-list-group">`;
+                        data.forEach(item => {
+                            html += `
+                                <a href="${item.link}" target="_blank" class="ios-list-item">
+                                    <div class="ios-list-left">
+                                        <div class="ios-list-badge">E-CERT</div>
+                                        <div class="ios-list-title-box">
+                                            <span class="ios-list-main-title" style="text-transform:uppercase;">${item.nama}</span>
+                                            <span style="font-size:0.75rem;color:#8E8E93;">Sertifikat Tersedia</span>
+                                        </div>
+                                    </div>
+                                    <span class="material-icons-outlined" style="color:var(--green-mid);">file_download</span>
+                                </a>`;
+                        });
+                        html += `</div>`;
+                        resultArea.innerHTML = html;
+                    }
+                })
+                .catch(err => {
+                    loading.classList.add('d-none');
+                    alert('Gagal memuat data. Periksa kembali koneksi internet Anda.');
+                    console.error(err);
+                });
+        }
+
+        document.getElementById("searchInput").addEventListener("keypress", e => {
+            if (e.key === "Enter") prosesCariSertifikat();
+        });
+    
+        document.addEventListener('DOMContentLoaded',()=>{
+
+         document.querySelectorAll('.ios-main-card').forEach(card=>{
+           card.classList.add('parallax-card');
+         });
+
+         window.addEventListener('scroll',()=>{
+           const y=window.scrollY;
+           document.querySelectorAll('.parallax-card').forEach((el,i)=>{
+              const offset=(y*0.015)*(i+1);
+              el.style.transform='translateY('+offset+'px)';
+           });
+         });
+
+         function animatePage(id){
+           const el=document.getElementById(id);
+           if(!el) return;
+           el.classList.remove('page-enter');
+           void el.offsetWidth;
+           el.classList.add('page-enter');
+         }
+
+         const oldCari=window.bukaCariSertifikat;
+         window.bukaCariSertifikat=function(){
+           oldCari();
+           animatePage('searchPage');
+         };
+
+         const oldAkad=window.bukaHalamanJadwalAkad;
+         window.bukaHalamanJadwalAkad=function(){
+           oldAkad();
+           animatePage('jadwalAkadPage');
+         };
+
+         const oldPeng=window.bukaHalamanJadwalPenghulu;
+         window.bukaHalamanJadwalPenghulu=function(){
+           oldPeng();
+           animatePage('jadwalPenghuluPage');
+         };
+
+        });
+    </script>
+</body>
+</html>
