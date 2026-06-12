@@ -17,7 +17,7 @@
             --green-tint:    rgba(10, 92, 54, 0.06);
             --gold:          #C8A540;
             --gold-tint:     rgba(200, 165, 64, 0.11);
-            --bg:            #F2F8F4;
+            --bg:            #EDF7F1;
             --surface:       #FFFFFF;
             --border:        rgba(10, 92, 54, 0.08);
             --text:          #12231A;
@@ -27,11 +27,8 @@
         * { box-sizing: border-box; }
 
         body {
-            background-color: var(--bg);
-            background-image:
-                radial-gradient(ellipse at 15% 0%, rgba(20, 138, 76, 0.09) 0%, transparent 55%),
-                radial-gradient(ellipse at 88% 85%, rgba(10, 92, 54, 0.05) 0%, transparent 50%);
-            background-attachment: fixed;
+            background-body {
+    background: #EDF7F1;
             font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
             color: var(--text);
             -webkit-font-smoothing: antialiased;
@@ -46,8 +43,9 @@
            SPLASH SCREEN (UPDATED)
         ════════════════════════════════ */
         #splashScreen {
-            position: fixed; inset: 0;
-            background: linear-gradient(160deg, #EDF7F1 0%, #E0F2E9 100%);
+    position: fixed;
+    inset: 0;
+    background: #EDF7F1;
             z-index: 9999;
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
