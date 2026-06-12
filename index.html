@@ -36,7 +36,6 @@
             color: var(--text);
             -webkit-font-smoothing: antialiased;
             letter-spacing: -0.1px;
-            /* MODIFIKASI: Ditinggikan dari 116px ke 150px agar menu bawah lebih longgar & seimbang */
             padding-top: 150px; 
             padding-bottom: 60px;
             margin: 0;
@@ -44,36 +43,65 @@
         }
 
         /* ════════════════════════════════
-           SPLASH SCREEN
+           SPLASH SCREEN (UPDATED)
         ════════════════════════════════ */
         #splashScreen {
             position: fixed; inset: 0;
             background: linear-gradient(160deg, #EDF7F1 0%, #E0F2E9 100%);
             z-index: 9999;
             display: flex; flex-direction: column;
-            justify-content: center; align-items: center; gap: 20px;
+            justify-content: center; align-items: center;
             transition: opacity 0.6s ease, visibility 0.6s;
+            overflow: hidden;
         }
-        .splash-brand { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+        
+        .splash-brand { 
+            display: flex; flex-direction: column; align-items: center; gap: 14px; 
+            opacity: 0;
+            transform: scale(0.3);
+            animation: logoZoomBounce 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 0.2s;
+            position: relative;
+            z-index: 2;
+        }
+        
+        @keyframes logoZoomBounce {
+            0% { opacity: 0; transform: scale(0.3); }
+            70% { opacity: 1; transform: scale(1.1); }
+            85% { transform: scale(0.95); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
         .splash-wordmark {
             font-family: "Playfair Display", serif;
-            font-size: 3rem; line-height: 1; color: var(--text);
+            font-size: 3.5rem; line-height: 1; color: var(--text);
             letter-spacing: -1px;
         }
         .splash-wordmark .wi { font-style: italic; font-weight: 400; color: var(--gold); }
         .splash-wordmark .wn { font-weight: 700; }
         .splash-sub {
-            font-size: 0.68rem; font-weight: 600; color: var(--muted);
-            text-transform: uppercase; letter-spacing: 1.8px;
+            font-size: 0.75rem; font-weight: 600; color: var(--muted);
+            text-transform: uppercase; letter-spacing: 2px;
         }
-        .splash-spinner {
-            width: 24px; height: 24px;
-            border: 2.5px solid rgba(10, 92, 54, 0.12);
-            border-top-color: var(--green-mid);
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+
+        /* Efek Love Beterbangan (Instagram Style) */
+        .splash-heart {
+            position: absolute;
+            color: #E24C4C;
+            font-size: 24px;
+            pointer-events: none;
+            bottom: 45%;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: flyUpHeart 1.5s ease-out forwards;
+            z-index: 1;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @keyframes flyUpHeart {
+            0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.9; transform: translateY(-20px) scale(1.2) rotate(5deg); }
+            100% { transform: translateY(-250px) scale(0.8) rotate(-15deg); opacity: 0; }
+        }
 
         /* ════════════════════════════════
            NAVBAR – Frosted Glass Premium
@@ -81,13 +109,11 @@
         .ios-navbar {
             position: fixed; top: 0; left: 0; right: 0; z-index: 999;
             padding: 14px 20px 12px;
-            /* MODIFIKASI: Mengubah putih transparan menjadi warna hijau muda lembut khas KUA */
             background: rgba(224, 242, 233, 0.78);
             backdrop-filter: blur(32px) saturate(140%); -webkit-backdrop-filter: blur(32px) saturate(140%);
             border-bottom: 1px solid rgba(10, 92, 54, 0.12);
             display: flex; flex-direction: column; justify-content: center;
         }
-        /* Subtle gold shimmer below header */
         .ios-navbar::after {
             content: '';
             position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
@@ -98,7 +124,6 @@
                 transparent 100%);
         }
 
-        /* Wordmark – serif italic "i" + bold "Nikah" */
         .logo-wordmark {
             font-family: "Playfair Display", serif;
             font-size: 1.7rem; line-height: 1; color: var(--text);
@@ -127,7 +152,7 @@
             padding: 16px;
             border: 1px solid var(--border);
             box-shadow: 0 2px 12px rgba(10, 92, 54, 0.04), 0 1px 3px rgba(0,0,0,0.04);
-            margin-bottom: 15px; /* Sedikit dilonggarkan antar card */
+            margin-bottom: 15px;
             transition: box-shadow 0.25s, transform 0.25s;
         }
         .ios-main-card:hover {
@@ -140,7 +165,6 @@
         }
         .ios-card-icon-title { display: flex; align-items: center; gap: 13px; flex: 1; min-width: 0; }
 
-        /* Card icons – solid gradient */
         .ios-card-icon {
             width: 44px; height: 44px; border-radius: 13px;
             display: flex; align-items: center; justify-content: center;
@@ -210,7 +234,6 @@
 
         .sub-list-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
 
-        /* Step badges – gradient pill */
         .sub-badge {
             min-width: 30px; height: 30px; border-radius: 9px;
             font-size: 0.8rem; font-weight: 700;
@@ -258,7 +281,7 @@
         }
         @media (max-width: 400px) {
             .bookshelf-grid { grid-template-columns: repeat(2, 1fr); }
-            body { padding-top: 135px; } /* Penyesuaian jarak di layar super kecil */
+            body { padding-top: 135px; }
             .logo-wordmark { font-size: 1.4rem; }
         }
 
@@ -266,6 +289,7 @@
             text-decoration: none; display: flex; flex-direction: column;
             align-items: center; text-align: center;
             transition: transform 0.2s;
+            cursor: pointer;
         }
         .book-item:hover { transform: scale(1.04) translateY(-2px); }
 
@@ -402,16 +426,13 @@
         }
     
         /* ===== ULTRA PREMIUM iOS STYLE ===== */
-        body {
-            perspective: 1000px;
-        }
+        body { perspective: 1000px; }
 
         .ios-navbar {
             top: 12px !important;
             left: 12px !important;
             right: 12px !important;
             border-radius: 24px;
-            /* MODIFIKASI: Memadukan border putih halus dengan latar belakang hijau muda premium */
             border: 1px solid rgba(255,255,255,.45);
             background: rgba(224, 242, 233, 0.78) !important;
             backdrop-filter: blur(30px) saturate(160%);
@@ -448,10 +469,7 @@
             box-shadow:0 20px 40px rgba(10,92,54,.12);
         }
 
-        .ios-card-icon {
-            position:relative;
-            overflow:hidden;
-        }
+        .ios-card-icon { position:relative; overflow:hidden; }
 
         .ios-card-icon::after {
             content:'';
@@ -500,49 +518,30 @@
         }
 
         @keyframes pageEnter {
-            from {
-                opacity:0;
-                transform:translateY(20px) scale(.98);
-            }
-            to {
-                opacity:1;
-                transform:translateY(0) scale(1);
-            }
+            from { opacity:0; transform:translateY(20px) scale(.98); }
+            to { opacity:1; transform:translateY(0) scale(1); }
         }
 
-        .parallax-card {
-            transition:transform .12s linear;
-        }
+        .parallax-card { transition:transform .12s linear; }
 
     </style>
 </head>
 <body>
 
-    <!-- ═══════════════════════════════
-         SPLASH SCREEN
-    ═══════════════════════════════ -->
     <div id="splashScreen">
         <div class="splash-brand">
             <div class="splash-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></div>
             <div class="splash-sub">KUA Karangdadap</div>
         </div>
-        <div class="splash-spinner"></div>
     </div>
 
-    <!-- ═══════════════════════════════
-         NAVBAR
-    ═══════════════════════════════ -->
     <div class="ios-navbar" id="iosMainHeader">
         <div class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></div>
         <p class="ios-subtitle">Informasi Pernikahan · KUA Karangdadap</p>
     </div>
 
-    <!-- ═══════════════════════════════
-         MAIN MENU PAGE
-    ═══════════════════════════════ -->
     <div id="menuPage" class="ios-container">
 
-        <!-- ── CARD 1 : TAHAPAN MANDIRI CATIN ── -->
         <div class="ios-main-card">
             <div class="ios-card-header" onclick="toggleMainMenu('catingSubmenu','catingChevron')">
                 <div class="ios-card-icon-title">
@@ -560,7 +559,6 @@
             <div class="ios-submenu-wrapper" id="catingSubmenu">
                 <div class="ios-submenu-inner">
 
-                    <!-- Step 1 -->
                     <a href="https://docs.google.com/forms/d/e/1FAIpQLSfh_V1Oj6WvOyvdOeA_BRm8kOBXY0bEqm8iXkwHnj3lfQaNCA/viewform" target="_blank" class="sub-list-item">
                         <div class="sub-list-left">
                             <div class="sub-badge badge-1">1</div>
@@ -572,7 +570,6 @@
                         <span class="material-icons-outlined" style="font-size:16px;color:#C7C7CC;">open_in_new</span>
                     </a>
 
-                    <!-- Step 2 – Perpustakaan Digital -->
                     <div onclick="toggleBookShelf(event)" class="sub-list-item" style="cursor:pointer;">
                         <div class="sub-list-left">
                             <div class="sub-badge badge-2">2</div>
@@ -587,21 +584,20 @@
                     <div class="apple-books-container" id="innerBookshelf">
                         <div class="apple-books-inner">
                             <div class="bookshelf-grid">
-                                <a href="https://drive.google.com/file/d/1Z_27vFPRH5jduQWD9WAidb-7aPOHOE0d/view" target="_blank" class="book-item"><div class="book-cover cover-1"><span class="book-badge">Bimwin</span><span class="book-cover-title">Membangun Landasan Keluarga Sakinah</span></div><span class="book-label-title">Bab 1</span></a>
-                                <a href="https://drive.google.com/file/d/1y4cgJcZJefTgw0HT4EQ0euxIYpWmpbjK/view" target="_blank" class="book-item"><div class="book-cover cover-2"><span class="book-badge">Bimwin</span><span class="book-cover-title">Merencanakan Perkawinan Kokoh</span></div><span class="book-label-title">Bab 2</span></a>
-                                <a href="https://drive.google.com/file/d/1E243FXTaJLI0pUOJQYgSl_UpgsGSrvn2/view" target="_blank" class="book-item"><div class="book-cover cover-3"><span class="book-badge">Bimwin</span><span class="book-cover-title">Dinamika Perkawinan</span></div><span class="book-label-title">Bab 3</span></a>
-                                <a href="https://drive.google.com/file/d/1XyCT40nC0i0gd-R_GoKZLqLs3H2_L_Eq/view" target="_blank" class="book-item"><div class="book-cover cover-4"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kebutuhan Keluarga</span></div><span class="book-label-title">Bab 4</span></a>
-                                <a href="https://drive.google.com/file/d/1hsBuxsj8Qx9OKdxCr-ovuWWDHC0nqeEg/view" target="_blank" class="book-item"><div class="book-cover cover-5"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kesehatan Keluarga</span></div><span class="book-label-title">Bab 5</span></a>
-                                <a href="https://drive.google.com/file/d/12c87keH8b3ZROkDhmwnhSGTeZdzllR6S/view" target="_blank" class="book-item"><div class="book-cover cover-6"><span class="book-badge">Bimwin</span><span class="book-cover-title">Generasi Berkualitas</span></div><span class="book-label-title">Bab 6</span></a>
-                                <a href="https://drive.google.com/file/d/1Mx4sx6eRezzvThD5uWaldCbkGRg0NLKR/view" target="_blank" class="book-item"><div class="book-cover cover-7"><span class="book-badge">Bimwin</span><span class="book-cover-title">Ketahanan Keluarga Masa Kini</span></div><span class="book-label-title">Bab 7</span></a>
-                                <a href="https://drive.google.com/file/d/1oD41mimrN32gTXKwNb_lZSHvRtk73t23/view" target="_blank" class="book-item"><div class="book-cover cover-8"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengenali Hukum</span></div><span class="book-label-title">Bab 8</span></a>
-                                <a href="https://drive.google.com/file/d/1VBTqLSArAg3oeBsXiqYLttHNwlDd0QEo/view" target="_blank" class="book-item"><div class="book-cover cover-9"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengelola Konflik</span></div><span class="book-label-title">Bab 9</span></a>
-                                <a href="https://drive.google.com/file/d/1KlV24vihDnBrzcW4UHMy_mD3sS8bvNN5/view" target="_blank" class="book-item"><div class="book-cover cover-10"><span class="book-badge">Bimwin</span><span class="book-cover-title">Prosedur Pendaftaran NR</span></div><span class="book-label-title">Bab 10</span></a>
+                                <div onclick="bukaEbook('https://drive.google.com/file/d/1Z_27vFPRH5jduQWD9WAidb-7aPOHOE0d/preview', 'Bab 1 - Membangun Landasan Keluarga Sakinah')" class="book-item"><div class="book-cover cover-1"><span class="book-badge">Bimwin</span><span class="book-cover-title">Membangun Landasan Keluarga Sakinah</span></div><span class="book-label-title">Bab 1</span></div>
+                                <div onclick="bukaEbook('https://drive.google.com/file/d/1y4cgJcZJefTgw0HT4EQ0euxIYpWmpbjK/preview', 'Bab 2 - Merencanakan Perkawinan Kokoh')" class="book-item"><div class="book-cover cover-2"><span class="book-badge">Bimwin</span><span class="book-cover-title">Merencanakan Perkawinan Kokoh</span></div><span class="book-label-title">Bab 2</span></div>
+                                <div onclick="bukaEbook('https://drive.google.com/file/d/1E243FXTaJLI0pUOJQYgSl_UpgsGSrvn2/preview', 'Bab 3 - Dinamika Perkawinan')" class="book-item"><div class="book-cover cover-3"><span class="book-badge">Bimwin</span><span class="book-cover-title">Dinamika Perkawinan</span></div><span class="book-label-title">Bab 3</span></div>
+                                <div onclick="bukaEbook('https://drive.google.com/file/d/1XyCT40nC0i0gd-R_GoKZLqLs3H2_L_Eq/preview', 'Bab 4 - Kebutuhan Keluarga')" class="book-item"><div class="book-cover cover-4"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kebutuhan Keluarga</span></div><span class="book-label-title">Bab 4</span></div>
+                                <div onclick="bukaEbook('https://drive.google.com/file/d/1hsBuxsj8Qx9OKdxCr-ovuWWDHC0nqeEg/preview', 'Bab 5 - Kesehatan Keluarga')" class="book-item"><div class="book-cover cover-5"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kesehatan Keluarga</span></div><span class="book-label-title">Bab 5</span></div>
+                                <div onclick="bukaEbook('https://drive.google.com/file/d/12c87keH8b3ZROkDhmwnhSGTeZdzllR6S/preview', 'Bab 6 - Generasi Berkualitas')" class="book-item"><div class="book-cover cover-6"><span class="book-badge">Bimwin</span><span class="book-cover-title">Generasi Berkualitas</span></div><span class="book-label-title">Bab 6</span></div>
+                                <div onclick="bukaEbook('https://drive.google.com/file/d/1Mx4sx6eRezzvThD5uWaldCbkGRg0NLKR/preview', 'Bab 7 - Ketahanan Keluarga Masa Kini')" class="book-item"><div class="book-cover cover-7"><span class="book-badge">Bimwin</span><span class="book-cover-title">Ketahanan Keluarga Masa Kini</span></div><span class="book-label-title">Bab 7</span></div>
+                                <div onclick="bukaEbook('https://drive.google.com/file/d/1oD41mimrN32gTXKwNb_lZSHvRtk73t23/preview', 'Bab 8 - Mengenali Hukum')" class="book-item"><div class="book-cover cover-8"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengenali Hukum</span></div><span class="book-label-title">Bab 8</span></div>
+                                <div onclick="bukaEbook('https://drive.google.com/file/d/1VBTqLSArAg3oeBsXiqYLttHNwlDd0QEo/preview', 'Bab 9 - Mengelola Konflik')" class="book-item"><div class="book-cover cover-9"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengelola Konflik</span></div><span class="book-label-title">Bab 9</span></div>
+                                <div onclick="bukaEbook('https://drive.google.com/file/d/1KlV24vihDnBrzcW4UHMy_mD3sS8bvNN5/preview', 'Bab 10 - Prosedur Pendaftaran NR')" class="book-item"><div class="book-cover cover-10"><span class="book-badge">Bimwin</span><span class="book-cover-title">Prosedur Pendaftaran NR</span></div><span class="book-label-title">Bab 10</span></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 3 -->
                     <a href="https://docs.google.com/forms/d/e/1FAIpQLScX3EdfUwP9f0vGi2FX26X3aOucvfklb0smHGPnGTa8xfeobQ/viewform" target="_blank" class="sub-list-item">
                         <div class="sub-list-left">
                             <div class="sub-badge badge-3">3</div>
@@ -613,7 +609,6 @@
                         <span class="material-icons-outlined" style="font-size:16px;color:#C7C7CC;">open_in_new</span>
                     </a>
 
-                    <!-- Step 4 -->
                     <div onclick="bukaCariSertifikat()" class="sub-list-item" style="cursor:pointer;">
                         <div class="sub-list-left">
                             <div class="sub-badge badge-4">4</div>
@@ -629,7 +624,6 @@
             </div>
         </div>
 
-        <!-- ── CARD 2 : JADWAL KUA ── -->
         <div class="ios-main-card">
             <div class="ios-card-header" onclick="toggleMainMenu('jadwalSubmenu','jadwalChevron')">
                 <div class="ios-card-icon-title">
@@ -675,7 +669,6 @@
             </div>
         </div>
 
-        <!-- ── CARD 3 : INFORMASI & BANTUAN ── -->
         <div class="ios-main-card">
             <div class="ios-card-header" onclick="toggleMainMenu('bantuanSubmenu','bantuanChevron')">
                 <div class="ios-card-icon-title">
@@ -738,11 +731,8 @@
 
         <div class="page-footer">KUA Karangdadap · Kabupaten Pekalongan</div>
 
-    </div><!-- /menuPage -->
+    </div>
 
-    <!-- ═══════════════════════════════
-         HALAMAN JADWAL AKAD
-    ═══════════════════════════════ -->
     <div id="jadwalAkadPage" class="d-none">
         <div class="ios-search-wrapper">
             <div class="ios-back-btn" onclick="kembaliKeMenu()">
@@ -756,9 +746,6 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════
-         HALAMAN JADWAL PENGHULU
-    ═══════════════════════════════ -->
     <div id="jadwalPenghuluPage" class="d-none">
         <div class="ios-search-wrapper">
             <div class="ios-back-btn" onclick="kembaliKeMenu()">
@@ -772,9 +759,19 @@
         </div>
     </div>
 
-    <!-- ═══════════════════════════════
-         HALAMAN PENCARIAN SERTIFIKAT
-    ═══════════════════════════════ -->
+    <div id="ebookPage" class="d-none">
+        <div class="ios-search-wrapper">
+            <div class="ios-back-btn" onclick="kembaliKeMenu()">
+                <span class="material-icons-outlined" style="font-size:20px;">chevron_left</span>
+                Kembali ke Menu Utama
+            </div>
+            <h2 id="ebookTitle" class="fw-bold mb-3" style="font-size:1.1rem;color:var(--green-deep);font-family:'Plus Jakarta Sans',sans-serif; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">Materi Bimwin</h2>
+            <div class="spreadsheet-frame-container">
+                <iframe id="ebookFrame" src="" allow="autoplay"></iframe>
+            </div>
+        </div>
+    </div>
+
     <div id="searchPage" class="d-none">
         <div class="ios-search-wrapper">
             <div class="ios-back-btn" onclick="kembaliKeMenu()">
@@ -797,16 +794,53 @@
     </div>
 
     <script>
-        // SPLASH SCREEN
+        // SPLASH SCREEN ANIMATION & LIVES HEART EFFECT
         window.addEventListener('DOMContentLoaded', () => {
+            const splash = document.getElementById('splashScreen');
+            
+            // Efek Love Mulai Bermunculan Setelah Logo Menempel Sempurna (detik ke 0.8)
             setTimeout(() => {
-                const splash = document.getElementById('splashScreen');
+                createSplashHearts();
+            }, 800);
+
+            // Menutup Splash Screen secara total pada detik ke-3
+            setTimeout(() => {
                 if (splash) {
                     splash.style.opacity = '0';
                     setTimeout(() => splash.style.visibility = 'hidden', 600);
                 }
-            }, 1000);
+            }, 3200);
         });
+
+        function createSplashHearts() {
+            const splash = document.getElementById('splashScreen');
+            const heartIcons = ['favorite', 'favorite_border']; // Variasi icon love
+            
+            // Generate 15 partikel love secara acak berkala
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    if(splash.style.visibility === 'hidden') return;
+                    
+                    const heart = document.createElement('span');
+                    heart.className = 'material-icons-outlined splash-heart';
+                    heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+                    
+                    // Acak posisi horizontal (X) dan ukuran font
+                    const randomX = Math.floor(Math.random() * 60) + 20; // range 20% - 80%
+                    const randomSize = Math.floor(Math.random() * 16) + 16; // size 16px - 32px
+                    const randomDelay = Math.random() * 0.5;
+                    
+                    heart.style.left = `${randomX}%`;
+                    heart.style.fontSize = `${randomSize}px`;
+                    heart.style.animationDelay = `${randomDelay}s`;
+                    
+                    splash.appendChild(heart);
+                    
+                    // Hapus element dari DOM setelah animasi selesai
+                    setTimeout(() => heart.remove(), 1500);
+                }, i * 120);
+            }
+        }
 
         // ACCORDION TOGGLE
         function toggleMainMenu(idSubmenu, idChevron) {
@@ -840,10 +874,11 @@
 
         // NAVIGASI HALAMAN
         function kembaliKeMenu() {
-            ['searchPage','jadwalAkadPage','jadwalPenghuluPage'].forEach(id => {
+            ['searchPage','jadwalAkadPage','jadwalPenghuluPage','ebookPage'].forEach(id => {
                 document.getElementById(id).classList.add('d-none');
             });
             document.getElementById('menuPage').classList.remove('d-none');
+            document.getElementById('ebookFrame').src = ""; // reset iframe source
             window.scrollTo(0, 0);
         }
 
@@ -860,6 +895,21 @@
         window.bukaHalamanJadwalPenghulu = function() {
             document.getElementById('menuPage').classList.add('d-none');
             document.getElementById('jadwalPenghuluPage').classList.remove('d-none');
+        }
+
+        // FUNGSI BARU: MEMBUKA EBOOK DI DALAM APLIKASI
+        window.bukaEbook = function(url, judul) {
+            document.getElementById('menuPage').classList.add('d-none');
+            document.getElementById('ebookTitle').innerText = judul;
+            document.getElementById('ebookFrame').src = url;
+            document.getElementById('ebookPage').classList.remove('d-none');
+            
+            // Trigger animasi smooth enter
+            const el = document.getElementById('ebookPage');
+            el.classList.remove('page-enter');
+            void el.offsetWidth;
+            el.classList.add('page-enter');
+            window.scrollTo(0, 0);
         }
 
         // FETCH SERTIFIKAT
