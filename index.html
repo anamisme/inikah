@@ -114,7 +114,7 @@
            NAVBAR (HEADER KEMENAG)
         ════════════════════════════════ */
         .ios-navbar {
-            position: fixed; top: 16px; left: 16px; right: 16px; z-index: 999;
+            position: fixed; top: 1rem; left: 1rem; right: 1rem; z-index: 999;
             padding: 10px 20px;
             background: rgba(0, 102, 64, 0.85);
             backdrop-filter: blur(24px) saturate(180%);
@@ -129,24 +129,21 @@
         .logo-wordmark {
             font-family: "Playfair Display", serif;
             font-size: 1.4rem; line-height: 1; 
-            color: #ffffff; 
+            color: #ffffff; margin: 0; font-weight: normal;
         }
         .logo-wordmark .wi { font-style: italic; color: var(--gold-light); }
         .logo-wordmark .wn { font-weight: 700; }
         
         .ios-subtitle {
-            font-size: 0.55rem; /* <-- Angka ini diperkecil dari 0.65rem */
-            font-weight: 600; 
+            font-size: 0.55rem; font-weight: 600; 
             color: rgba(255, 255, 255, 0.9);
-            text-transform: uppercase; 
-            letter-spacing: 1.5px; 
-            margin-top: 2px;
+            text-transform: uppercase; letter-spacing: 1.5px; margin-top: 2px;
         }
 
         /* ════════════════════════════════
            KARTU MENU DENGAN EFEK 3D & GRADASI
         ════════════════════════════════ */
-        .ios-container { width: 100%; max-width: 600px; margin: 0 auto; padding: 0 16px; }
+        .ios-container { width: 100%; max-width: 37.5rem; margin: 0 auto; padding: 0 16px; }
 
         .ios-main-card {
             background: 
@@ -159,17 +156,13 @@
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            
-            /* Efek Mekanikal 3D: Lip 8px solid di bawah + Drop Shadow */
             box-shadow: 
-                0 8px 0 rgba(15, 118, 110, 0.12),         /* Bibir 3D */
-                0 16px 24px rgba(6, 78, 59, 0.08),        /* Bayangan jatuh */
-                inset 0 2px 4px rgba(255, 255, 255, 1);   /* Highlight cahaya atas */
-                
+                0 8px 0 rgba(15, 118, 110, 0.12),         
+                0 16px 24px rgba(6, 78, 59, 0.08),        
+                inset 0 2px 4px rgba(255, 255, 255, 1);   
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        /* State Melayang (Hover) */
         .ios-main-card:hover {
             transform: translateY(-4px) scale(1.01);
             background: 
@@ -181,13 +174,12 @@
                 inset 0 2px 4px rgba(255, 255, 255, 1);
         }
 
-        /* State Ditekan (Active) -> Tombol masuk ke dalam */
         .ios-main-card:active {
-            transform: translateY(8px) scale(0.99); /* Turun menutupi bibir 3D */
+            transform: translateY(8px) scale(0.99); 
             box-shadow: 
-                0 0 0 rgba(15, 118, 110, 0.12),          /* Bibir 3D hilang */
-                0 4px 8px rgba(6, 78, 59, 0.06),         /* Sisa bayangan dekat */
-                inset 0 4px 8px rgba(0, 0, 0, 0.06);     /* Bayangan dalam (tenggelam) */
+                0 0 0 rgba(15, 118, 110, 0.12),          
+                0 4px 8px rgba(6, 78, 59, 0.06),         
+                inset 0 4px 8px rgba(0, 0, 0, 0.06);     
         }
         
         .ios-card-header {
@@ -203,7 +195,6 @@
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0; 
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            /* Border tipis untuk ilusi pantulan cahaya ikon */
             border-top: 1px solid rgba(255, 255, 255, 0.5);
             border-bottom: 1px solid rgba(0, 0, 0, 0.15);
         }
@@ -310,7 +301,7 @@
             padding: 16px 12px; background: var(--green-tint);
             border-radius: 20px; margin: 8px 0;
         }
-        @media (max-width: 420px) {
+        @media (max-width: 26.25rem) {
             .bookshelf-grid { grid-template-columns: repeat(2, 1fr); }
             body { padding-top: 140px; }
             .logo-wordmark { font-size: 1.25rem; }
@@ -323,7 +314,7 @@
         .book-item:hover { transform: translateY(-4px) scale(1.03); }
 
         .book-cover {
-            width: 100%; max-width: 100px; aspect-ratio: 3/4;
+            width: 100%; max-width: 6.25rem; aspect-ratio: 3/4;
             border-radius: 4px 12px 12px 4px;
             box-shadow: 0 8px 16px rgba(6, 78, 59, 0.15), inset -4px 0 6px rgba(0,0,0,0.15);
             position: relative; display: flex; flex-direction: column;
@@ -364,7 +355,7 @@
         
         .app-modal-content {
             background: #ffffff;
-            width: 100%; max-width: 850px;
+            width: 100%; max-width: 53.125rem;
             height: 82vh; height: 82dvh;
             border-radius: 28px;
             box-shadow: 0 30px 70px rgba(6, 78, 59, 0.18);
@@ -513,7 +504,8 @@
 
     <!-- STICKY KEMENAG NAVBAR -->
     <div class="ios-navbar" id="iosMainHeader">
-        <div class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></div>
+        <!-- PERBAIKAN: Diubah ke h1 untuk hirarki SEO & Linter Audit -->
+        <h1 class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></h1>
         <p class="ios-subtitle">Informasi Pernikahan · KUA Karangdadap</p>
     </div>
 
