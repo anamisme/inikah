@@ -57,7 +57,7 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
 
-       /* ════════════════════════════════
+        /* ════════════════════════════════
            SPLASH SCREEN
         ════════════════════════════════ */
         #splashScreen {
@@ -82,10 +82,9 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
-        /* Ini adalah bagian yang mengatur ukuran "iNikah" */
         .splash-wordmark {
             font-family: "Playfair Display", serif;
-            font-size: 4rem; /* <-- UKURAN BESAR SEMULA */
+            font-size: 4rem; 
             color: var(--text);
             letter-spacing: -1px;
         }
@@ -109,6 +108,39 @@
             0% { transform: translateY(50px) scale(0.5) rotate(0deg); opacity: 0; }
             20% { opacity: 0.8; transform: translateY(0) scale(1.2) rotate(10deg); }
             100% { transform: translateY(-300px) scale(0.6) rotate(-20deg); opacity: 0; }
+        }
+
+        /* ════════════════════════════════
+           NAVBAR (HEADER KEMENAG)
+        ════════════════════════════════ */
+        .ios-navbar {
+            position: fixed; top: 16px; left: 16px; right: 16px; z-index: 999;
+            padding: 10px 20px;
+            background: rgba(0, 102, 64, 0.85);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            box-shadow: 0 4px 16px rgba(0, 102, 64, 0.3), inset 0 1px 1px rgba(255,255,255,0.2);
+            display: flex; flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo-wordmark {
+            font-family: "Playfair Display", serif;
+            font-size: 1.4rem; line-height: 1; 
+            color: #ffffff; 
+        }
+        .logo-wordmark .wi { font-style: italic; color: var(--gold-light); }
+        .logo-wordmark .wn { font-weight: 700; }
+        
+        .ios-subtitle {
+            font-size: 0.55rem; /* <-- Angka ini diperkecil dari 0.65rem */
+            font-weight: 600; 
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            margin-top: 2px;
         }
 
         /* ════════════════════════════════
@@ -471,6 +503,7 @@
 </head>
 <body>
 
+    <!-- SPLASH SCREEN -->
     <div id="splashScreen">
         <div class="splash-brand">
             <div class="splash-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></div>
@@ -478,11 +511,13 @@
         </div>
     </div>
 
+    <!-- STICKY KEMENAG NAVBAR -->
     <div class="ios-navbar" id="iosMainHeader">
         <div class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></div>
         <p class="ios-subtitle">Informasi Pernikahan · KUA Karangdadap</p>
     </div>
 
+    <!-- UNIVERSAL FLOATING MODAL (UNTUK EBOOK & SPREADSHEET JADWAL) -->
     <div id="appModal" class="app-modal-overlay">
         <div class="app-modal-content">
             <button class="app-modal-close" onclick="tutupModalFrame()" title="Tutup">
@@ -495,10 +530,13 @@
         </div>
     </div>
 
+    <!-- MAIN APP CONTAINER -->
     <div class="ios-container">
 
+        <!-- DASHBOARD MENU PAGE -->
         <div id="menuPage" class="page-view">
 
+            <!-- CARD 1: TAHAPAN CATIN (3D Card) -->
             <div class="ios-main-card" onclick="toggleMainMenu('catingSubmenu','catingChevron')">
                 <div class="ios-card-header">
                     <div class="ios-card-icon-title">
@@ -538,6 +576,7 @@
                             <span class="material-icons-outlined" id="bookChevron" style="font-size:20px;color:#94a3b8;transition:transform 0.3s;">expand_more</span>
                         </div>
 
+                        <!-- DIGITAL BOOKSHELF GRID -->
                         <div class="apple-books-container" id="innerBookshelf">
                             <div class="apple-books-inner">
                                 <div class="bookshelf-grid">
@@ -581,6 +620,7 @@
                 </div>
             </div>
 
+            <!-- CARD 2: JADWAL LAYANAN (3D Card) -->
             <div class="ios-main-card" onclick="toggleMainMenu('jadwalSubmenu','jadwalChevron')">
                 <div class="ios-card-header">
                     <div class="ios-card-icon-title">
@@ -626,6 +666,7 @@
                 </div>
             </div>
 
+            <!-- CARD 3: DOKUMEN & BANTUAN (3D Card) -->
             <div class="ios-main-card" onclick="toggleMainMenu('bantuanSubmenu','bantuanChevron')">
                 <div class="ios-card-header">
                     <div class="ios-card-icon-title">
@@ -656,6 +697,7 @@
                             <span class="material-icons-outlined" id="docChevron" style="font-size:20px;color:#94a3b8;transition:transform 0.3s;">expand_more</span>
                         </div>
 
+                        <!-- BLANGKO LIST -->
                         <div class="apple-books-container" id="innerDocList">
                             <div class="apple-books-inner">
                                 <ul class="doc-list-group">
@@ -689,6 +731,7 @@
             <div class="page-footer">KUA Karangdadap · Kabupaten Pekalongan</div>
         </div>
 
+        <!-- SEARCH CERTIFICATE PAGE -->
         <div id="searchPage" class="page-view d-none">
             <div class="ios-search-wrapper">
                 <div class="ios-back-btn" onclick="kembaliKeMenu()">
