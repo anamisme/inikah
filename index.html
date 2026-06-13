@@ -23,9 +23,6 @@
             --border:        rgba(15, 118, 110, 0.08);
             --text:          #0f172a;
             --muted:         #64748b;
-            --shadow-sm:     0 2px 8px rgba(15, 118, 110, 0.04);
-            --shadow-md:     0 12px 34px rgba(15, 118, 110, 0.08);
-            --shadow-lg:     0 24px 60px rgba(6, 78, 59, 0.12);
         }
 
         * { 
@@ -139,52 +136,70 @@
         }
 
         /* ════════════════════════════════
-           CARDS & INTERACTIONS
+           KARTU MENU DENGAN EFEK 3D & GRADASI
         ════════════════════════════════ */
         .ios-container { width: 100%; max-width: 600px; margin: 0 auto; padding: 0 16px; }
 
         .ios-main-card {
             background: 
-                linear-gradient(145deg, rgba(255, 255, 255, 1) 0%, rgba(240, 253, 244, 0.8) 100%) padding-box,
+                linear-gradient(145deg, #ffffff 0%, #f4fdf8 100%) padding-box,
                 linear-gradient(135deg, rgba(20, 184, 166, 0.7) 0%, rgba(15, 118, 110, 0.05) 50%, rgba(6, 78, 59, 0.6) 100%) border-box;
             border: 1.5px solid transparent;
             border-radius: 28px;
             padding: 20px;
-            box-shadow: var(--shadow-sm);
-            margin-bottom: 20px;
+            margin-bottom: 28px;
             position: relative;
             overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            
+            /* Efek Mekanikal 3D: Lip 8px solid di bawah + Drop Shadow */
+            box-shadow: 
+                0 8px 0 rgba(15, 118, 110, 0.12),         /* Bibir 3D */
+                0 16px 24px rgba(6, 78, 59, 0.08),        /* Bayangan jatuh */
+                inset 0 2px 4px rgba(255, 255, 255, 1);   /* Highlight cahaya atas */
+                
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
+        /* State Melayang (Hover) */
         .ios-main-card:hover {
             transform: translateY(-4px) scale(1.01);
-            box-shadow: var(--shadow-md);
             background: 
-                linear-gradient(145deg, rgba(255, 255, 255, 1) 0%, rgba(240, 253, 244, 0.95) 100%) padding-box,
+                linear-gradient(145deg, #ffffff 0%, #f4fdf8 100%) padding-box,
                 linear-gradient(135deg, rgba(20, 184, 166, 1) 0%, rgba(15, 118, 110, 0.2) 50%, rgba(6, 78, 59, 0.9) 100%) border-box;
+            box-shadow: 
+                0 12px 0 rgba(15, 118, 110, 0.15),
+                0 24px 32px rgba(6, 78, 59, 0.12),
+                inset 0 2px 4px rgba(255, 255, 255, 1);
+        }
+
+        /* State Ditekan (Active) -> Tombol masuk ke dalam */
+        .ios-main-card:active {
+            transform: translateY(8px) scale(0.99); /* Turun menutupi bibir 3D */
+            box-shadow: 
+                0 0 0 rgba(15, 118, 110, 0.12),          /* Bibir 3D hilang */
+                0 4px 8px rgba(6, 78, 59, 0.06),         /* Sisa bayangan dekat */
+                inset 0 4px 8px rgba(0, 0, 0, 0.06);     /* Bayangan dalam (tenggelam) */
         }
         
         .ios-card-header {
             display: flex; align-items: center; justify-content: space-between;
-            cursor: pointer;
         }
         .ios-card-icon-title { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
 
         /* ════════════════════════════════
-           EFEK 3D IKON MENU
+           IKON MENU EFEK 3D
         ════════════════════════════════ */
         .ios-card-icon {
             width: 50px; height: 50px; border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0; 
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            /* Border tipis untuk ilusi pantulan cahaya */
+            /* Border tipis untuk ilusi pantulan cahaya ikon */
             border-top: 1px solid rgba(255, 255, 255, 0.5);
             border-bottom: 1px solid rgba(0, 0, 0, 0.15);
         }
         
-        /* Interaksi 3D saat kartu di-hover */
         .ios-main-card:hover .ios-card-icon {
             transform: translateY(-5px) scale(1.08) rotate(4deg);
         }
@@ -193,9 +208,9 @@
             background: linear-gradient(145deg, var(--green-mid), var(--green-deep));
             color: #fff; 
             box-shadow: 
-                0 12px 20px -6px rgba(6, 78, 59, 0.6),             /* Bayangan jatuh (Drop shadow) */
-                inset 0 4px 6px rgba(255, 255, 255, 0.3),          /* Highlight cahaya atas */
-                inset 0 -4px 6px rgba(0, 0, 0, 0.3);               /* Bayangan kedalaman bawah */
+                0 12px 20px -6px rgba(6, 78, 59, 0.6),             
+                inset 0 4px 6px rgba(255, 255, 255, 0.3),          
+                inset 0 -4px 6px rgba(0, 0, 0, 0.3);               
         }
         
         .icon-jadwal {
@@ -395,7 +410,7 @@
         }
 
         /* ════════════════════════════════
-           FORMS & MODERN GLASS INPUT
+           FORMS & BUTTONS
         ════════════════════════════════ */
         .ios-input {
             width: 100%; padding: 16px 20px; border-radius: 16px;
@@ -426,11 +441,6 @@
         }
         .ios-btn-premium:active { transform: scale(0.98); }
         .btn-text-main { flex-grow: 1; text-align: left; margin-left: 12px; }
-
-        /* ════════════════════════════════
-           INNER PAGES & FLUID FRAMES
-        ════════════════════════════════ */
-        .ios-search-wrapper { width: 100%; max-width: 100%; padding: 0; }
 
         .ios-back-btn {
             color: var(--green-mid); font-size: 0.95rem;
@@ -485,7 +495,6 @@
 </head>
 <body>
 
-    <!-- SPLASH SCREEN -->
     <div id="splashScreen">
         <div class="splash-brand">
             <div class="splash-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></div>
@@ -493,13 +502,11 @@
         </div>
     </div>
 
-    <!-- STICKY GLASS NAVBAR -->
     <div class="ios-navbar" id="iosMainHeader">
         <div class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></div>
         <p class="ios-subtitle">Informasi Pernikahan · KUA Karangdadap</p>
     </div>
 
-    <!-- UNIVERSAL FLOATING MODAL -->
     <div id="appModal" class="app-modal-overlay">
         <div class="app-modal-content">
             <button class="app-modal-close" onclick="tutupModalFrame()" title="Tutup">
@@ -512,15 +519,12 @@
         </div>
     </div>
 
-    <!-- MAIN APP CONTAINER -->
     <div class="ios-container">
 
-        <!-- DASHBOARD MENU PAGE -->
         <div id="menuPage" class="page-view">
 
-            <!-- CARD 1: TAHAPAN CATIN -->
-            <div class="ios-main-card">
-                <div class="ios-card-header" onclick="toggleMainMenu('catingSubmenu','catingChevron')">
+            <div class="ios-main-card" onclick="toggleMainMenu('catingSubmenu','catingChevron')">
+                <div class="ios-card-header">
                     <div class="ios-card-icon-title">
                         <div class="ios-card-icon icon-cating">
                             <span class="material-icons-outlined" style="font-size:24px;">favorite_border</span>
@@ -534,7 +538,7 @@
                 </div>
 
                 <div class="ios-submenu-wrapper" id="catingSubmenu">
-                    <div class="ios-submenu-inner">
+                    <div class="ios-submenu-inner" onclick="event.stopPropagation()">
 
                         <a href="https://docs.google.com/forms/d/e/1FAIpQLSfh_V1Oj6WvOyvdOeA_BRm8kOBXY0bEqm8iXkwHnj3lfQaNCA/viewform" target="_blank" class="sub-list-item">
                             <div class="sub-list-left">
@@ -558,7 +562,6 @@
                             <span class="material-icons-outlined" id="bookChevron" style="font-size:20px;color:#94a3b8;transition:transform 0.3s;">expand_more</span>
                         </div>
 
-                        <!-- DIGITAL BOOKSHELF GRID -->
                         <div class="apple-books-container" id="innerBookshelf">
                             <div class="apple-books-inner">
                                 <div class="bookshelf-grid">
@@ -602,9 +605,8 @@
                 </div>
             </div>
 
-            <!-- CARD 2: JADWAL LAYANAN -->
-            <div class="ios-main-card">
-                <div class="ios-card-header" onclick="toggleMainMenu('jadwalSubmenu','jadwalChevron')">
+            <div class="ios-main-card" onclick="toggleMainMenu('jadwalSubmenu','jadwalChevron')">
+                <div class="ios-card-header">
                     <div class="ios-card-icon-title">
                         <div class="ios-card-icon icon-jadwal">
                             <span class="material-icons-outlined" style="font-size:24px;">calendar_today</span>
@@ -618,7 +620,7 @@
                 </div>
 
                 <div class="ios-submenu-wrapper" id="jadwalSubmenu">
-                    <div class="ios-submenu-inner">
+                    <div class="ios-submenu-inner" onclick="event.stopPropagation()">
                         <div onclick="bukaModalFrame('https://docs.google.com/spreadsheets/d/1_Ba5_CVCd6u9pI0-TBsQFzNYdBlImBaQ_s6IYxwd8Jw/preview?rm=minimal', 'Tabel Jadwal Akad Nikah')" class="sub-list-item" style="cursor:pointer;">
                             <div class="sub-list-left">
                                 <div class="sub-badge badge-icon">
@@ -648,9 +650,8 @@
                 </div>
             </div>
 
-            <!-- CARD 3: DOKUMEN & BANTUAN -->
-            <div class="ios-main-card">
-                <div class="ios-card-header" onclick="toggleMainMenu('bantuanSubmenu','bantuanChevron')">
+            <div class="ios-main-card" onclick="toggleMainMenu('bantuanSubmenu','bantuanChevron')">
+                <div class="ios-card-header">
                     <div class="ios-card-icon-title">
                         <div class="ios-card-icon icon-bantuan">
                             <span class="material-icons-outlined" style="font-size:24px;">info</span>
@@ -664,7 +665,7 @@
                 </div>
 
                 <div class="ios-submenu-wrapper" id="bantuanSubmenu">
-                    <div class="ios-submenu-inner">
+                    <div class="ios-submenu-inner" onclick="event.stopPropagation()">
 
                         <div onclick="toggleDocList(event)" class="sub-list-item" style="cursor:pointer;">
                             <div class="sub-list-left">
@@ -679,7 +680,6 @@
                             <span class="material-icons-outlined" id="docChevron" style="font-size:20px;color:#94a3b8;transition:transform 0.3s;">expand_more</span>
                         </div>
 
-                        <!-- BLANGKO LIST -->
                         <div class="apple-books-container" id="innerDocList">
                             <div class="apple-books-inner">
                                 <ul class="doc-list-group">
@@ -713,7 +713,6 @@
             <div class="page-footer">KUA Karangdadap · Kabupaten Pekalongan</div>
         </div>
 
-        <!-- SEARCH CERTIFICATE PAGE -->
         <div id="searchPage" class="page-view d-none">
             <div class="ios-search-wrapper">
                 <div class="ios-back-btn" onclick="kembaliKeMenu()">
