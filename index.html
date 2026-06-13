@@ -393,7 +393,7 @@
         /* ════════════════════════════════
            BLANGKO DOCUMENTS
         ════════════════════════════════ */
-        .doc-list-group { background: var(--green-tint); border-radius: 20px; overflow: hidden; padding: 6px; list-style: none; margin: 8px 0 0 0;}
+        .doc-list-group { background: var(--green-tint); border-radius: 20px; overflow: hidden; padding: 6px; list-style: none; margin: 0;}
         .doc-list-item {
             display: flex; align-items: center; justify-content: space-between;
             padding: 12px; text-decoration: none; color: inherit;
@@ -441,19 +441,10 @@
         .ios-btn-premium:active { transform: scale(0.98); }
         .btn-text-main { flex-grow: 1; text-align: left; margin-left: 12px; }
 
-        .ios-back-btn {
-            color: var(--green-mid); font-size: 0.95rem;
-            display: inline-flex; align-items: center; gap: 4px;
-            padding: 8px 12px; cursor: pointer; font-weight: 600;
-            border-radius: 12px; background: rgba(15, 118, 110, 0.05);
-            margin-bottom: 20px; transition: all 0.2s;
-        }
-        .ios-back-btn:hover { background: rgba(15, 118, 110, 0.1); color: var(--green-deep); }
-
         /* ════════════════════════════════
            DYNAMIC SEARCH RESULTS LIST
         ════════════════════════════════ */
-        .ios-list-group { background: #FFFFFF; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow-sm); }
+        .ios-list-group { background: #FFFFFF; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
         .ios-list-item {
             display: flex; align-items: center; justify-content: space-between;
             padding: 14px 18px; text-decoration: none; color: inherit;
@@ -504,7 +495,6 @@
 
     <!-- STICKY KEMENAG NAVBAR -->
     <div class="ios-navbar" id="iosMainHeader">
-        <!-- PERBAIKAN: Diubah ke h1 untuk hirarki SEO & Linter Audit -->
         <h1 class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></h1>
         <p class="ios-subtitle">Informasi Pernikahan · KUA Karangdadap</p>
     </div>
@@ -518,6 +508,55 @@
             <h3 id="appModalTitle" class="app-modal-title">Memuat...</h3>
             <div class="app-modal-body">
                 <iframe id="appModalFrame" src="" allow="autoplay"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING MODAL PENCERIAN SERTIFIKAT -->
+    <div id="searchModal" class="app-modal-overlay">
+        <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
+            <button class="app-modal-close" onclick="tutupModalSertifikat()" title="Tutup">
+                <span class="material-icons-outlined">close</span>
+            </button>
+            <h3 class="app-modal-title">Cek & Klaim E-Sertifikat</h3>
+            <div class="p-4" style="background: #f8fafc;">
+                <p class="text-muted small mb-3">Silakan masukkan nama lengkap Anda untuk mengunduh berkas lembar kelulusan Bimwin mandiri.</p>
+                
+                <input type="text" id="searchInput" class="ios-input" placeholder="Ketik Nama Lengkap Anda..." autocomplete="off">
+
+                <button class="ios-btn-premium" onclick="prosesCariSertifikat()">
+                    <span class="material-icons-outlined">search</span>
+                    <span class="btn-text-main">Cari Dokumen</span>
+                    <span class="material-icons-outlined" style="opacity: 0.7;">chevron_right</span>
+                </button>
+
+                <div id="loading" class="text-center d-none my-4 text-muted">
+                    <div class="spinner-border spinner-border-sm text-success me-2" role="status"></div>
+                    Menghubungkan ke database KUA...
+                </div>
+                <div id="resultArea" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BARU: FLOATING MODAL UNTUK UNDUH BLANGKO DOKUMEN NIKAH -->
+    <div id="blankoModal" class="app-modal-overlay">
+        <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
+            <button class="app-modal-close" onclick="tutupModalBlanko()" title="Tutup">
+                <span class="material-icons-outlined">close</span>
+            </button>
+            <h3 class="app-modal-title">Unduh Blangko Dokumen Nikah</h3>
+            <div class="p-4" style="background: #f8fafc;">
+                <p class="text-muted small mb-3">Silakan klik pada dokumen yang Anda butuhkan untuk mengunduh template surat resmi N-1 sampai dengan N-6.</p>
+                
+                <ul class="doc-list-group">
+                    <li><a href="https://drive.google.com/file/d/1tIgOPjhtj6E0YTvkmz4Rpwv31Ms8FXFk/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-1</div><span style="font-size:0.85rem;font-weight:600;">Surat Pengantar Perkawinan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="https://drive.google.com/file/d/13NMRP1b2B32W0Al543gitZ6WBoUejFkT/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-2</div><span style="font-size:0.85rem;font-weight:600;">Permohonan Kehendak Nikah</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="https://drive.google.com/file/d/1SzchBL1MXRK7sobvWUjC26q1L9KFW_7w/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-3</div><span style="font-size:0.85rem;font-weight:600;">Surat Persetujuan Mempelai</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="https://drive.google.com/file/d/1ExN-VXponEhDIdwKxQdE0r9tR-QzxIFT/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-4</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Orang Tua</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="https://drive.google.com/file/d/1eG-rh5zqS4gwsnRT_BiXi0O1SqLBEtL2/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-5</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Pengadilan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="https://drive.google.com/file/d/1edlVXp_XYzO9IHl7hXllvgkR2YxzJtKi/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-6</div><span style="font-size:0.85rem;font-weight:600;">Surat Kematian Pasangan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                </ul>
             </div>
         </div>
     </div>
@@ -597,7 +636,7 @@
                             <span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">open_in_new</span>
                         </a>
 
-                        <div onclick="bukaHalaman('searchPage')" class="sub-list-item" style="cursor:pointer;">
+                        <div onclick="bukaModalSertifikat()" class="sub-list-item" style="cursor:pointer;">
                             <div class="sub-list-left">
                                 <div class="sub-badge badge-4">4</div>
                                 <div class="sub-title-box">
@@ -605,7 +644,7 @@
                                     <span class="sub-desc">Unduh lembar berkas kelulusan Bimwin Anda</span>
                                 </div>
                             </div>
-                            <span class="material-icons-outlined" style="font-size:20px;color:#94a3b8;">chevron_right</span>
+                            <span class="material-icons-outlined" style="font-size:20px;color:#0f766e;">chevron_right</span>
                         </div>
 
                     </div>
@@ -676,7 +715,8 @@
                 <div class="ios-submenu-wrapper" id="bantuanSubmenu">
                     <div class="ios-submenu-inner" onclick="event.stopPropagation()">
 
-                        <div onclick="toggleDocList(event)" class="sub-list-item" style="cursor:pointer;">
+                        <!-- PERBAIKAN: Diubah untuk memicu floating modal bukaModalBlanko() -->
+                        <div onclick="bukaModalBlanko()" class="sub-list-item" style="cursor:pointer;">
                             <div class="sub-list-left">
                                 <div class="sub-badge badge-icon-gold">
                                     <span class="material-icons-outlined" style="font-size:16px;">description</span>
@@ -686,21 +726,7 @@
                                     <span class="sub-desc">Template surat resmi N-1 sampai dengan N-6</span>
                                 </div>
                             </div>
-                            <span class="material-icons-outlined" id="docChevron" style="font-size:20px;color:#94a3b8;transition:transform 0.3s;">expand_more</span>
-                        </div>
-
-                        <!-- BLANGKO LIST -->
-                        <div class="apple-books-container" id="innerDocList">
-                            <div class="apple-books-inner">
-                                <ul class="doc-list-group">
-                                    <li><a href="https://drive.google.com/file/d/1tIgOPjhtj6E0YTvkmz4Rpwv31Ms8FXFk/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-1</div><span style="font-size:0.85rem;font-weight:600;">Surat Pengantar Perkawinan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
-                                    <li><a href="https://drive.google.com/file/d/13NMRP1b2B32W0Al543gitZ6WBoUejFkT/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-2</div><span style="font-size:0.85rem;font-weight:600;">Permohonan Kehendak Nikah</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
-                                    <li><a href="https://drive.google.com/file/d/1SzchBL1MXRK7sobvWUjC26q1L9KFW_7w/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-3</div><span style="font-size:0.85rem;font-weight:600;">Surat Persetujuan Mempelai</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
-                                    <li><a href="https://drive.google.com/file/d/1ExN-VXponEhDIdwKxQdE0r9tR-QzxIFT/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-4</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Orang Tua</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
-                                    <li><a href="https://drive.google.com/file/d/1eG-rh5zqS4gwsnRT_BiXi0O1SqLBEtL2/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-5</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Pengadilan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
-                                    <li><a href="https://drive.google.com/file/d/1edlVXp_XYzO9IHl7hXllvgkR2YxzJtKi/view" target="_blank" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-6</div><span style="font-size:0.85rem;font-weight:600;">Surat Kematian Pasangan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
-                                </ul>
-                            </div>
+                            <span class="material-icons-outlined" style="font-size:20px;color:#b45309;">chevron_right</span>
                         </div>
 
                         <a href="https://wa.me/6285226466464?text=Halo%20Penghulu%20KUA%20Karangdadap..." target="_blank" class="sub-list-item">
@@ -721,30 +747,6 @@
             </div>
 
             <div class="page-footer">KUA Karangdadap · Kabupaten Pekalongan</div>
-        </div>
-
-        <!-- SEARCH CERTIFICATE PAGE -->
-        <div id="searchPage" class="page-view d-none">
-            <div class="ios-search-wrapper">
-                <div class="ios-back-btn" onclick="kembaliKeMenu()">
-                    <span class="material-icons-outlined" style="font-size:20px;">chevron_left</span>Kembali
-                </div>
-                <h2 class="fw-bold mb-3" style="font-size:1.4rem; color:var(--green-deep); font-family:'Playfair Display',serif;">Cek E-Sertifikat</h2>
-
-                <input type="text" id="searchInput" class="ios-input" placeholder="Ketik Nama Lengkap Anda..." autocomplete="off">
-
-                <button class="ios-btn-premium" onclick="prosesCariSertifikat()">
-                    <span class="material-icons-outlined">search</span>
-                    <span class="btn-text-main">Cari Dokumen</span>
-                    <span class="material-icons-outlined" style="opacity: 0.7;">chevron_right</span>
-                </button>
-
-                <div id="loading" class="text-center d-none my-4 text-muted">
-                    <div class="spinner-border spinner-border-sm text-success me-2" role="status"></div>
-                    Menghubungkan ke database KUA...
-                </div>
-                <div id="resultArea" class="mt-4"></div>
-            </div>
         </div>
 
     </div>
@@ -801,30 +803,6 @@
             }
         }
 
-        function toggleDocList(event) {
-            event.stopPropagation();
-            const list = document.getElementById('innerDocList');
-            const chev = document.getElementById('docChevron');
-            if (list && chev) {
-                list.classList.toggle('show');
-                chev.style.transform = list.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
-            }
-        }
-
-        // CORE PAGE SWITCH SYSTEM
-        function bukaHalaman(idHalaman) {
-            const activePage = document.querySelector('.page-view:not(.d-none)');
-            if(activePage) activePage.classList.add('d-none');
-            
-            const targetPage = document.getElementById(idHalaman);
-            targetPage.classList.remove('d-none');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function kembaliKeMenu() {
-            bukaHalaman('menuPage');
-        }
-
         // UNIVERSAL FLOATING MODAL SYSTEM
         window.bukaModalFrame = function(url, judul) {
             const modal = document.getElementById('appModal');
@@ -847,6 +825,45 @@
                 modal.classList.remove('show');
                 document.body.style.overflow = ''; 
                 setTimeout(() => { frame.src = ""; }, 400); 
+            }
+        }
+
+        // SERTIFIKAT FLOATING MODAL CONTROLLER
+        window.bukaModalSertifikat = function() {
+            const modal = document.getElementById('searchModal');
+            if (modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => {
+                    document.getElementById('searchInput').focus();
+                }, 300);
+            }
+        }
+
+        window.tutupModalSertifikat = function() {
+            const modal = document.getElementById('searchModal');
+            if (modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
+                document.getElementById('searchInput').value = '';
+                document.getElementById('resultArea').innerHTML = '';
+            }
+        }
+
+        // BARU: BLANGKO FLOATING MODAL CONTROLLER
+        window.bukaModalBlanko = function() {
+            const modal = document.getElementById('blankoModal');
+            if (modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        window.tutupModalBlanko = function() {
+            const modal = document.getElementById('blankoModal');
+            if (modal) {
+                modal.classList.remove('show');
+                document.body.style.overflow = '';
             }
         }
 
