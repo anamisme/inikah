@@ -12,7 +12,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }, 2500);
 
-    // Restore theme preference
+    // Restore theme
     const saved = localStorage.getItem('inikah-theme');
     if (saved === 'dark') {
         document.body.classList.add('dark-mode');
@@ -41,7 +41,7 @@ function createSplashHearts() {
 }
 
 /* ══════════════════════════════════════════════
-   THEME TOGGLE — minimal, icon inside thumb
+   THEME TOGGLE
    ══════════════════════════════════════════════ */
 const toggleTrack = document.getElementById('themeToggle');
 const toggleIcon = document.getElementById('toggleIcon');
@@ -50,7 +50,6 @@ function updateToggleIcon(isDark) {
     toggleIcon.textContent = isDark ? 'dark_mode' : 'light_mode';
 }
 
-// Set initial icon
 updateToggleIcon(document.body.classList.contains('dark-mode'));
 
 toggleTrack.addEventListener('click', (e) => {
@@ -59,15 +58,10 @@ toggleTrack.addEventListener('click', (e) => {
     toggleTrack.classList.toggle('active');
     updateToggleIcon(isDark);
     localStorage.setItem('inikah-theme', isDark ? 'dark' : 'light');
-
-    // Trigger a reflow for smooth transitions
     document.body.style.transition = 'none';
-    requestAnimationFrame(() => {
-        document.body.style.transition = '';
-    });
+    requestAnimationFrame(() => { document.body.style.transition = ''; });
 });
 
-// Keyboard accessibility
 toggleTrack.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -100,7 +94,7 @@ function toggleBooks(e) {
 }
 
 /* ══════════════════════════════════════════════
-   MODAL: IFRAME
+   MODAL IFRAME
    ══════════════════════════════════════════════ */
 window.bukaModalFrame = function(url, judul) {
     const m = document.getElementById('appModal');
@@ -125,7 +119,7 @@ window.tutupModalFrame = function() {
 };
 
 /* ══════════════════════════════════════════════
-   MODAL: SERTIFIKAT
+   MODAL SERTIFIKAT
    ══════════════════════════════════════════════ */
 window.bukaModalSertifikat = function() {
     const m = document.getElementById('searchModal');
@@ -147,7 +141,7 @@ window.tutupModalSertifikat = function() {
 };
 
 /* ══════════════════════════════════════════════
-   MODAL: BLANGKO
+   MODAL BLANGKO
    ══════════════════════════════════════════════ */
 window.bukaModalBlanko = function() {
     const m = document.getElementById('blankoModal');
@@ -166,7 +160,7 @@ window.tutupModalBlanko = function() {
 };
 
 /* ══════════════════════════════════════════════
-   CLOSE ON BACKDROP CLICK
+   CLOSE MODAL ON BACKDROP
    ══════════════════════════════════════════════ */
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', e => {
