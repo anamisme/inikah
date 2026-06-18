@@ -21,6 +21,9 @@ window.addEventListener('DOMContentLoaded', () => {
     } else {
         updateToggleIcon(false);
     }
+
+    // Inisialisasi slider
+    initSlider();
 });
 
 function createSplashHearts() {
@@ -49,7 +52,6 @@ const toggleIcon = document.getElementById('toggleIcon');
 function updateToggleIcon(isDark) {
     toggleIcon.textContent = isDark ? 'dark_mode' : 'light_mode';
 }
-
 updateToggleIcon(document.body.classList.contains('dark-mode'));
 
 toggleTrack.addEventListener('click', (e) => {
@@ -61,13 +63,76 @@ toggleTrack.addEventListener('click', (e) => {
     document.body.style.transition = 'none';
     requestAnimationFrame(() => { document.body.style.transition = ''; });
 });
-
 toggleTrack.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         toggleTrack.click();
     }
 });
+
+/* ══════════════════════════════════════════════
+   SLIDER
+   ══════════════════════════════════════════════ */
+let currentSlide = 0;
+const totalSlides = 3;
+
+function initSlider() {
+    const track = document.getElementById('sliderTrack');
+    const dotsContainer = document.getElementById('sliderDots');
+    const prevBtn = document.getElementById('prevSlide');
+    const nextBtn = document.getElementById('nextSlide');
+
+    // Buat dot
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'slider-dot' + (i === 0 ? ' active' : '');
+        dot.dataset.index = i;
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+    }
+
+    prevBtn.addEventListener('click', () => {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        goToSlide(currentSlide);
+    });
+    nextBtn.addEventListener('click', () => {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        goToSlide(currentSlide);
+    });
+
+    // Keyboard arrow
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') { prevBtn.click(); }
+        else if (e.key === 'ArrowRight') { nextBtn.click(); }
+    });
+
+    // Touch / swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    track.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    track.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        const diff = touchStartX - touchEndX;
+        if (Math.abs(diff) > 40) {
+            if (diff > 0) nextBtn.click();
+            else prevBtn.click();
+        }
+    }, { passive: true });
+}
+
+function goToSlide(index) {
+    const track = document.getElementById('sliderTrack');
+    const dots = document.querySelectorAll('.slider-dot');
+    if (index < 0) index = totalSlides - 1;
+    if (index >= totalSlides) index = 0;
+    currentSlide = index;
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
+}
 
 /* ══════════════════════════════════════════════
    ACCORDION
@@ -218,7 +283,7 @@ function prosesCariSertifikat() {
                                     <p style="font-size:0.7rem;color:var(--muted);margin:0;">Sertifikat siap diunduh</p>
                                 </div>
                             </div>
-                            <span class="material-icons-outlined" style="font-size:22px;color:var(--emerald);">file_download</span>
+                            <span class="material-icons-outlined" style="font-size:22px;color:var(--primary);">file_download</span>
                         </a>`;
                 });
                 html += '</div>';
