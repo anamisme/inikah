@@ -1,23 +1,21 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
     <title>iNikah – KUA Karangdadap</title>
 
-    <!-- ===== EXTERNAL RESOURCES ===== -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- External Resources -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 
-    <!-- ===== YOUR CUSTOM CSS ===== -->
-    <link rel="stylesheet" href="css/style.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
 
-    <!-- ══════════════════════════════════════════════
-    SPLASH SCREEN
-    ══════════════════════════════════════════════ -->
+    <!-- ===== SPLASH SCREEN ===== -->
     <div id="splashScreen">
         <div class="splash-brand">
             <div class="splash-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></div>
@@ -26,9 +24,7 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-    NAVBAR — with minimal theme toggle
-    ══════════════════════════════════════════════ -->
+    <!-- ===== NAVBAR ===== -->
     <div class="ios-navbar" id="iosMainHeader">
         <div class="nav-brand">
             <h1 class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></h1>
@@ -43,9 +39,7 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-    MODAL: IFRAME
-    ══════════════════════════════════════════════ -->
+    <!-- ===== MODAL IFRAME ===== -->
     <div id="appModal" class="modal-overlay">
         <div class="modal-sheet modal-frame-h">
             <div class="modal-stripe ms-sky"></div>
@@ -59,9 +53,7 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-    MODAL: SERTIFIKAT
-    ══════════════════════════════════════════════ -->
+    <!-- ===== MODAL SERTIFIKAT ===== -->
     <div id="searchModal" class="modal-overlay">
         <div class="modal-sheet modal-scroll-h">
             <div class="modal-stripe ms-violet"></div>
@@ -78,10 +70,10 @@
                 </div>
             </div>
             <div class="modal-scroll-body">
-                <p style="font-size:0.78rem;color:var(--muted);margin-bottom:14px;line-height:1.6;transition:color 0.3s ease;">
+                <p style="font-size:0.78rem;color:var(--muted);margin-bottom:14px;line-height:1.6;">
                     Masukkan nama lengkap sesuai formulir post-test untuk mengunduh berkas lembar kelulusan Bimwin mandiri.
                 </p>
-                <input type="text" id="searchInput" class="ios-input" placeholder="Ketik Nama Lengkap Anda..." autocomplete="off">
+                <input type="text" id="searchInput" class="ios-input" placeholder="Ketik Nama Lengkap Anda..." autocomplete="off" />
                 <button class="search-btn" onclick="prosesCariSertifikat()">
                     <span class="material-icons-outlined" style="font-size:20px;">search</span>
                     <span style="flex:1;text-align:left;margin-left:10px;">Cari Dokumen</span>
@@ -96,9 +88,7 @@
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-    MODAL: BLANGKO DOKUMEN
-    ══════════════════════════════════════════════ -->
+    <!-- ===== MODAL BLANGKO ===== -->
     <div id="blankoModal" class="modal-overlay">
         <div class="modal-sheet modal-scroll-h">
             <div class="modal-stripe ms-amber"></div>
@@ -115,72 +105,58 @@
                 </div>
             </div>
             <div class="modal-scroll-body">
-                <p style="font-size:0.78rem;color:var(--muted);margin-bottom:14px;line-height:1.6;transition:color 0.3s ease;">
+                <p style="font-size:0.78rem;color:var(--muted);margin-bottom:14px;line-height:1.6;">
                     Klik pada dokumen yang Anda butuhkan untuk mengunduh template surat resmi N-1 sampai dengan N-6.
                 </p>
                 <ul class="doc-list">
-                    <li>
-                        <a href="https://drive.google.com/file/d/1tIgOPjhtj6E0YTvkmz4Rpwv31Ms8FXFk/view" target="_blank" class="doc-item">
-                            <div style="display:flex;align-items:center;gap:12px;">
-                                <div class="doc-num-badge">N-1</div>
-                                <span style="font-size:0.85rem;font-weight:600;">Surat Pengantar Perkawinan</span>
-                            </div>
-                            <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://drive.google.com/file/d/13NMRP1b2B32W0Al543gitZ6WBoUejFkT/view" target="_blank" class="doc-item">
-                            <div style="display:flex;align-items:center;gap:12px;">
-                                <div class="doc-num-badge">N-2</div>
-                                <span style="font-size:0.85rem;font-weight:600;">Permohonan Kehendak Nikah</span>
-                            </div>
-                            <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://drive.google.com/file/d/1SzchBL1MXRK7sobvWUjC26q1L9KFW_7w/view" target="_blank" class="doc-item">
-                            <div style="display:flex;align-items:center;gap:12px;">
-                                <div class="doc-num-badge">N-3</div>
-                                <span style="font-size:0.85rem;font-weight:600;">Surat Persetujuan Mempelai</span>
-                            </div>
-                            <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://drive.google.com/file/d/1ExN-VXponEhDIdwKxQdE0r9tR-QzxIFT/view" target="_blank" class="doc-item">
-                            <div style="display:flex;align-items:center;gap:12px;">
-                                <div class="doc-num-badge">N-4</div>
-                                <span style="font-size:0.85rem;font-weight:600;">Surat Izin Orang Tua</span>
-                            </div>
-                            <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://drive.google.com/file/d/1eG-rh5zqS4gwsnRT_BiXi0O1SqLBEtL2/view" target="_blank" class="doc-item">
-                            <div style="display:flex;align-items:center;gap:12px;">
-                                <div class="doc-num-badge">N-5</div>
-                                <span style="font-size:0.85rem;font-weight:600;">Surat Izin Pengadilan</span>
-                            </div>
-                            <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://drive.google.com/file/d/1edlVXp_XYzO9IHl7hXllvgkR2YxzJtKi/view" target="_blank" class="doc-item">
-                            <div style="display:flex;align-items:center;gap:12px;">
-                                <div class="doc-num-badge">N-6</div>
-                                <span style="font-size:0.85rem;font-weight:600;">Surat Kematian Pasangan</span>
-                            </div>
-                            <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
-                        </a>
-                    </li>
+                    <li><a href="https://drive.google.com/file/d/1tIgOPjhtj6E0YTvkmz4Rpwv31Ms8FXFk/view" target="_blank" class="doc-item">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div class="doc-num-badge">N-1</div>
+                            <span style="font-size:0.85rem;font-weight:600;">Surat Pengantar Perkawinan</span>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
+                    </a></li>
+                    <li><a href="https://drive.google.com/file/d/13NMRP1b2B32W0Al543gitZ6WBoUejFkT/view" target="_blank" class="doc-item">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div class="doc-num-badge">N-2</div>
+                            <span style="font-size:0.85rem;font-weight:600;">Permohonan Kehendak Nikah</span>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
+                    </a></li>
+                    <li><a href="https://drive.google.com/file/d/1SzchBL1MXRK7sobvWUjC26q1L9KFW_7w/view" target="_blank" class="doc-item">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div class="doc-num-badge">N-3</div>
+                            <span style="font-size:0.85rem;font-weight:600;">Surat Persetujuan Mempelai</span>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
+                    </a></li>
+                    <li><a href="https://drive.google.com/file/d/1ExN-VXponEhDIdwKxQdE0r9tR-QzxIFT/view" target="_blank" class="doc-item">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div class="doc-num-badge">N-4</div>
+                            <span style="font-size:0.85rem;font-weight:600;">Surat Izin Orang Tua</span>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
+                    </a></li>
+                    <li><a href="https://drive.google.com/file/d/1eG-rh5zqS4gwsnRT_BiXi0O1SqLBEtL2/view" target="_blank" class="doc-item">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div class="doc-num-badge">N-5</div>
+                            <span style="font-size:0.85rem;font-weight:600;">Surat Izin Pengadilan</span>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
+                    </a></li>
+                    <li><a href="https://drive.google.com/file/d/1edlVXp_XYzO9IHl7hXllvgkR2YxzJtKi/view" target="_blank" class="doc-item">
+                        <div style="display:flex;align-items:center;gap:12px;">
+                            <div class="doc-num-badge">N-6</div>
+                            <span style="font-size:0.85rem;font-weight:600;">Surat Kematian Pasangan</span>
+                        </div>
+                        <span class="material-icons-outlined" style="font-size:18px;color:var(--muted);">file_download</span>
+                    </a></li>
                 </ul>
             </div>
         </div>
     </div>
 
-    <!-- ══════════════════════════════════════════════
-    MAIN CONTENT
-    ══════════════════════════════════════════════ -->
+    <!-- ===== MAIN CONTENT ===== -->
     <div class="ios-container">
         <span class="section-label">Menu Layanan</span>
 
@@ -216,7 +192,7 @@
                             <span class="material-icons-outlined sub-chevron">open_in_new</span>
                         </a>
 
-                        <!-- STEP 2: BOOKSHELF TOGGLE -->
+                        <!-- STEP 2: BOOKSHELF -->
                         <div onclick="toggleBooks(event)" class="sub-item">
                             <div class="sub-left">
                                 <div class="step-badge sb-emerald">2</div>
@@ -228,7 +204,6 @@
                             <span class="material-icons-outlined expand-chevron" id="bookChevron">expand_more</span>
                         </div>
 
-                        <!-- BOOKSHELF GRID -->
                         <div class="books-wrap" id="innerBookshelf">
                             <div class="books-inner">
                                 <div class="books-grid">
@@ -305,7 +280,7 @@
             </div>
         </div>
 
-        <!-- CARD 2: JADWAL LAYANAN -->
+        <!-- CARD 2: JADWAL -->
         <div class="main-card" onclick="toggleCard('submenuJadwal','chevronJadwal')">
             <div class="card-stripe stripe-sky"></div>
             <div class="card-header-row">
@@ -324,39 +299,26 @@
             <div class="submenu-wrap" id="submenuJadwal">
                 <div class="submenu-inner" id="innerJadwal">
                     <div class="submenu-body" onclick="event.stopPropagation()">
-
                         <div onclick="bukaModalFrame('https://docs.google.com/spreadsheets/d/1_Ba5_CVCd6u9pI0-TBsQFzNYdBlImBaQ_s6IYxwd8Jw/preview?rm=minimal','Tabel Jadwal Akad Nikah')" class="sub-item">
                             <div class="sub-left">
-                                <div class="sb-icon">
-                                    <span class="material-icons-outlined" style="font-size:16px;">event</span>
-                                </div>
-                                <div>
-                                    <p class="sub-title">Cek Jadwal Akad Nikah</p>
-                                    <p class="sub-desc">Lihat lembar sinkronisasi data jadwal akad</p>
-                                </div>
+                                <div class="sb-icon"><span class="material-icons-outlined" style="font-size:16px;">event</span></div>
+                                <div><p class="sub-title">Cek Jadwal Akad Nikah</p><p class="sub-desc">Lihat lembar sinkronisasi data jadwal akad</p></div>
                             </div>
                             <span class="material-icons-outlined sub-chevron">chevron_right</span>
                         </div>
-
                         <div onclick="bukaModalFrame('https://docs.google.com/spreadsheets/d/1t_wFqRLwIv-HvHDLA04dofqmZy9jcBP0SHeV7zZt-R8/preview?rm=minimal','Tabel Petugas Penghulu')" class="sub-item">
                             <div class="sub-left">
-                                <div class="sb-icon">
-                                    <span class="material-icons-outlined" style="font-size:16px;">assignment_ind</span>
-                                </div>
-                                <div>
-                                    <p class="sub-title">Cek Petugas Penghulu</p>
-                                    <p class="sub-desc">Lihat surat penunjukan tugas Penghulu KUA</p>
-                                </div>
+                                <div class="sb-icon"><span class="material-icons-outlined" style="font-size:16px;">assignment_ind</span></div>
+                                <div><p class="sub-title">Cek Petugas Penghulu</p><p class="sub-desc">Lihat surat penunjukan tugas Penghulu KUA</p></div>
                             </div>
                             <span class="material-icons-outlined sub-chevron">chevron_right</span>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- CARD 3: INFORMASI & BANTUAN -->
+        <!-- CARD 3: BANTUAN -->
         <div class="main-card" onclick="toggleCard('submenuBantuan','chevronBantuan')">
             <div class="card-stripe stripe-amber"></div>
             <div class="card-header-row">
@@ -375,33 +337,20 @@
             <div class="submenu-wrap" id="submenuBantuan">
                 <div class="submenu-inner" id="innerBantuan">
                     <div class="submenu-body" onclick="event.stopPropagation()">
-
                         <div onclick="bukaModalBlanko()" class="sub-item">
                             <div class="sub-left">
-                                <div class="sb-icon-amber">
-                                    <span class="material-icons-outlined" style="font-size:16px;">description</span>
-                                </div>
-                                <div>
-                                    <p class="sub-title">Unduh Blangko Dokumen Nikah</p>
-                                    <p class="sub-desc">Template surat resmi N-1 sampai dengan N-6</p>
-                                </div>
+                                <div class="sb-icon-amber"><span class="material-icons-outlined" style="font-size:16px;">description</span></div>
+                                <div><p class="sub-title">Unduh Blangko Dokumen Nikah</p><p class="sub-desc">Template surat resmi N-1 sampai dengan N-6</p></div>
                             </div>
                             <span class="material-icons-outlined" style="font-size:18px;color:var(--amber);">chevron_right</span>
                         </div>
-
                         <a href="https://wa.me/6285226466464?text=Halo%20Penghulu%20KUA%20Karangdadap..." target="_blank" class="sub-item">
                             <div class="sub-left">
-                                <div class="sb-icon-green">
-                                    <span class="material-icons-outlined" style="font-size:16px;">chat</span>
-                                </div>
-                                <div>
-                                    <p class="sub-title">Tanya Layanan Penghulu</p>
-                                    <p class="sub-desc">Konsultasi interaktif via WhatsApp KUA</p>
-                                </div>
+                                <div class="sb-icon-green"><span class="material-icons-outlined" style="font-size:16px;">chat</span></div>
+                                <div><p class="sub-title">Tanya Layanan Penghulu</p><p class="sub-desc">Konsultasi interaktif via WhatsApp KUA</p></div>
                             </div>
                             <span class="material-icons-outlined sub-chevron">open_in_new</span>
                         </a>
-
                     </div>
                 </div>
             </div>
@@ -412,7 +361,7 @@
         </div>
     </div>
 
-    <!-- ===== YOUR CUSTOM JAVASCRIPT ===== -->
+    <!-- ===== JAVASCRIPT ===== -->
     <script src="js/script.js"></script>
 </body>
 </html>
