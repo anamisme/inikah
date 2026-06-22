@@ -63,8 +63,10 @@ function toggleMainMenu(idSubmenu, idChevron) {
     const submenu = document.getElementById(idSubmenu);
     const chevron = document.getElementById(idChevron);
     if (submenu && chevron) {
+        const card = submenu.closest('.ios-main-card');
         submenu.classList.toggle('active');
         chevron.classList.toggle('rotated');
+        if (card) card.classList.toggle('expanded');
     }
 }
 
