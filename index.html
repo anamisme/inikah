@@ -8,485 +8,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        :root {
-            --green-deep:    #064e3b;
-            --green-mid:     #0f766e;
-            --green-light:   #14b8a6;
-            --green-tint:    rgba(15, 118, 110, 0.06);
-            --gold:          #b45309;
-            --gold-light:    #f59e0b;
-            --gold-tint:     rgba(180, 83, 9, 0.08);
-            --bg:            #f2f5f3; 
-            --surface:       rgba(255, 255, 255, 0.85);
-            --border:        rgba(15, 118, 110, 0.08);
-            --text:          #0f172a;
-            --muted:         #64748b;
-        }
-
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--bg);
-            background-image:
-                radial-gradient(circle at 0% 0%, rgba(20, 184, 166, 0.15) 0%, transparent 45%),
-                radial-gradient(circle at 100% 100%, rgba(180, 83, 9, 0.08) 0%, transparent 50%),
-                radial-gradient(circle at 50% 50%, rgba(15, 118, 110, 0.05) 0%, transparent 70%);
-            background-attachment: fixed;
-            /* Menggunakan Susunan Font San Francisco */
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            color: var(--text);
-            -webkit-font-smoothing: antialiased;
-            padding-top: 160px; 
-            padding-bottom: 40px;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        body::before {
-            content: "";
-            position: fixed; inset: 0;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.4;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        }
-
-        /* ════════════════════════════════
-           SPLASH SCREEN
-        ════════════════════════════════ */
-        #splashScreen {
-            position: fixed; inset: 0;
-            background: var(--bg);
-            z-index: 10000;
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            transition: all 0.8s cubic-bezier(0.85, 0, 0.15, 1);
-        }
-        
-        .splash-brand { 
-            display: flex; flex-direction: column; align-items: center; gap: 10px; 
-            transform: scale(0); opacity: 0;
-            animation: zoomBounce 1.2s ease forwards 0.1s;
-        }
-        
-        @keyframes zoomBounce {
-            0%   { transform: scale(0); opacity: 0; }
-            50%  { transform: scale(1.15); opacity: 1; }
-            75%  { transform: scale(0.95); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* Font Logo Tetap Dipertahankan */
-        .splash-wordmark {
-            font-family: "Playfair Display", serif;
-            font-size: 4rem; 
-            color: var(--text);
-            letter-spacing: -1px;
-        }
-        .splash-wordmark .wi { font-style: italic; color: var(--gold); }
-        .splash-wordmark .wn { font-weight: 700; }
-        
-        .splash-sub {
-            font-size: 0.8rem; font-weight: 700; color: var(--muted);
-            text-transform: uppercase; letter-spacing: 3px;
-        }
-
-        .splash-heart {
-            position: absolute;
-            color: #ef4444;
-            pointer-events: none;
-            bottom: 40%; opacity: 0;
-            animation: flyUpHeart 2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
-        }
-
-        @keyframes flyUpHeart {
-            0% { transform: translateY(50px) scale(0.5) rotate(0deg); opacity: 0; }
-            20% { opacity: 0.8; transform: translateY(0) scale(1.2) rotate(10deg); }
-            100% { transform: translateY(-300px) scale(0.6) rotate(-20deg); opacity: 0; }
-        }
-
-        /* ════════════════════════════════
-           NAVBAR (HEADER KEMENAG)
-        ════════════════════════════════ */
-        .ios-navbar {
-            position: fixed; top: 1rem; left: 1rem; right: 1rem; z-index: 999;
-            padding: 10px 20px;
-            background: rgba(0, 102, 64, 0.85);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 18px;
-            box-shadow: 0 4px 16px rgba(0, 102, 64, 0.3), inset 0 1px 1px rgba(255,255,255,0.2);
-            display: flex; flex-direction: column;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        /* Font Logo Tetap Dipertahankan */
-        .logo-wordmark {
-            font-family: "Playfair Display", serif;
-            font-size: 1.4rem; line-height: 1; 
-            color: #ffffff; margin: 0; font-weight: normal;
-        }
-        .logo-wordmark .wi { font-style: italic; color: var(--gold-light); }
-        .logo-wordmark .wn { font-weight: 700; }
-        
-        .ios-subtitle {
-            font-size: 0.55rem; font-weight: 600; 
-            color: rgba(255, 255, 255, 0.9);
-            text-transform: uppercase; letter-spacing: 1.5px; margin-top: 2px;
-        }
-
-        /* ════════════════════════════════
-           KARTU MENU DENGAN EFEK 3D & GRADASI
-        ════════════════════════════════ */
-        .ios-container { width: 100%; max-width: 37.5rem; margin: 0 auto; padding: 0 16px; }
-
-        .ios-main-card {
-            background: 
-                linear-gradient(145deg, #ffffff 0%, #f4fdf8 100%) padding-box,
-                linear-gradient(135deg, rgba(20, 184, 166, 0.7) 0%, rgba(15, 118, 110, 0.05) 50%, rgba(6, 78, 59, 0.6) 100%) border-box;
-            border: 1.5px solid transparent;
-            border-radius: 28px;
-            padding: 20px;
-            margin-bottom: 28px;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            box-shadow: 
-                0 8px 0 rgba(15, 118, 110, 0.12),         
-                0 16px 24px rgba(6, 78, 59, 0.08),        
-                inset 0 2px 4px rgba(255, 255, 255, 1);   
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .ios-main-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            background: 
-                linear-gradient(145deg, #ffffff 0%, #f4fdf8 100%) padding-box,
-                linear-gradient(135deg, rgba(20, 184, 166, 1) 0%, rgba(15, 118, 110, 0.2) 50%, rgba(6, 78, 59, 0.9) 100%) border-box;
-            box-shadow: 
-                0 12px 0 rgba(15, 118, 110, 0.15),
-                0 24px 32px rgba(6, 78, 59, 0.12),
-                inset 0 2px 4px rgba(255, 255, 255, 1);
-        }
-
-        .ios-main-card:active {
-            transform: translateY(8px) scale(0.99); 
-            box-shadow: 
-                0 0 0 rgba(15, 118, 110, 0.12),          
-                0 4px 8px rgba(6, 78, 59, 0.06),         
-                inset 0 4px 8px rgba(0, 0, 0, 0.06);     
-        }
-        
-        .ios-card-header {
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .ios-card-icon-title { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 0; }
-
-        /* ════════════════════════════════
-           IKON MENU EFEK 3D
-        ════════════════════════════════ */
-        .ios-card-icon {
-            width: 50px; height: 50px; border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; 
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border-top: 1px solid rgba(255, 255, 255, 0.5);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-        }
-        
-        .ios-main-card:hover .ios-card-icon {
-            transform: translateY(-5px) scale(1.08) rotate(4deg);
-        }
-        
-        .icon-cating {
-            background: linear-gradient(145deg, var(--green-mid), var(--green-deep));
-            color: #fff; 
-            box-shadow: 
-                0 12px 20px -6px rgba(6, 78, 59, 0.6),             
-                inset 0 4px 6px rgba(255, 255, 255, 0.3),          
-                inset 0 -4px 6px rgba(0, 0, 0, 0.3);               
-        }
-        
-        .icon-jadwal {
-            background: linear-gradient(145deg, var(--green-light), var(--green-mid));
-            color: #fff; 
-            box-shadow: 
-                0 12px 20px -6px rgba(15, 118, 110, 0.6),
-                inset 0 4px 6px rgba(255, 255, 255, 0.4),
-                inset 0 -4px 6px rgba(0, 0, 0, 0.2);
-        }
-        
-        .icon-bantuan {
-            background: linear-gradient(145deg, var(--gold-light), var(--gold));
-            color: #fff; 
-            box-shadow: 
-                0 12px 20px -6px rgba(180, 83, 9, 0.6),
-                inset 0 4px 6px rgba(255, 255, 255, 0.4),
-                inset 0 -4px 6px rgba(0, 0, 0, 0.25);
-        }
-
-        .ios-card-title { font-size: 1.05rem; font-weight: 700; color: var(--text); margin: 0; }
-        .ios-card-desc { font-size: 0.8rem; color: var(--muted); margin-top: 2px; display: block; }
-
-        .chevron-main {
-            font-size: 22px; color: #94a3b8;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
-        }
-        .chevron-main.rotated { transform: rotate(90deg); color: var(--green-mid); }
-
-        /* ════════════════════════════════
-           FLUID ACCORDION MULTI-LEVEL
-        ════════════════════════════════ */
-        .ios-submenu-wrapper {
-            display: grid; grid-template-rows: 0fr;
-            transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .ios-submenu-wrapper.active { grid-template-rows: 1fr; }
-        .ios-submenu-inner { 
-            overflow: hidden; opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .ios-submenu-wrapper.active .ios-submenu-inner { 
-            opacity: 1; margin-top: 16px; padding-top: 12px;
-            border-top: 1px solid var(--border);
-        }
-
-        .sub-list-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px; border-radius: 16px;
-            text-decoration: none; color: inherit; margin-bottom: 4px;
-            transition: all 0.2s ease;
-        }
-        .sub-list-item:hover { 
-            background: var(--green-tint); 
-            transform: translateX(4px);
-        }
-        .sub-list-item:active { transform: scale(0.98); }
-
-        .sub-list-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
-
-        .sub-badge {
-            width: 32px; height: 32px; border-radius: 10px;
-            font-size: 0.85rem; font-weight: 700;
-            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-        }
-        .badge-1 { background: rgba(6, 78, 59, 0.1); color: var(--green-deep); }
-        .badge-2 { background: rgba(15, 118, 110, 0.1); color: var(--green-mid); }
-        .badge-3 { background: rgba(20, 184, 166, 0.1); color: var(--green-light); }
-        .badge-4 { background: rgba(180, 83, 9, 0.1); color: var(--gold); }
-        .badge-icon { background: var(--green-tint); color: var(--green-mid); }
-        .badge-icon-gold { background: var(--gold-tint); color: var(--gold); }
-
-        .sub-title-box { display: flex; flex-direction: column; min-width: 0; }
-        .sub-title { font-size: 0.9rem; font-weight: 600; color: var(--text); }
-        .sub-desc { font-size: 0.75rem; color: var(--muted); margin-top: 1px; }
-
-        /* ════════════════════════════════
-           DIGITAL BOOKSHELF SYSTEM
-        ════════════════════════════════ */
-        .apple-books-container { 
-            display: grid; grid-template-rows: 0fr;
-            transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .apple-books-container.show { grid-template-rows: 1fr; }
-        .apple-books-inner { overflow: hidden; }
-        
-        .bookshelf-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px 10px;
-            padding: 16px 12px; background: var(--green-tint);
-            border-radius: 20px; margin: 8px 0;
-        }
-        @media (max-width: 26.25rem) {
-            .bookshelf-grid { grid-template-columns: repeat(2, 1fr); }
-            body { padding-top: 140px; }
-            .logo-wordmark { font-size: 1.25rem; }
-        }
-
-        .book-item {
-            text-decoration: none; display: flex; flex-direction: column;
-            align-items: center; text-align: center; transition: all 0.25s ease;
-        }
-        .book-item:hover { transform: translateY(-4px) scale(1.03); }
-
-        .book-cover {
-            width: 100%; max-width: 6.25rem; aspect-ratio: 3/4;
-            border-radius: 4px 12px 12px 4px;
-            box-shadow: 0 8px 16px rgba(6, 78, 59, 0.15), inset -4px 0 6px rgba(0,0,0,0.15);
-            position: relative; display: flex; flex-direction: column;
-            justify-content: space-between; padding: 10px 8px; overflow: hidden;
-            border-left: 4px solid rgba(0,0,0,0.25);
-        }
-
-        .cover-1  { background: linear-gradient(145deg, #064e3b, #022c22); }
-        .cover-2  { background: linear-gradient(145deg, #0f766e, #115e59); }
-        .cover-3  { background: linear-gradient(145deg, #115e59, #134e4a); }
-        .cover-4  { background: linear-gradient(145deg, #0369a1, #0c4a6e); }
-        .cover-5  { background: linear-gradient(145deg, #1d4ed8, #1e3a8a); }
-        .cover-6  { background: linear-gradient(145deg, #6d28d9, #4c1d95); }
-        .cover-7  { background: linear-gradient(145deg, #be185d, #831843); }
-        .cover-8  { background: linear-gradient(145deg, #b45309, #78350f); }
-        .cover-9  { background: linear-gradient(145deg, #334155, #0f172a); }
-        .cover-10 { background: linear-gradient(145deg, #1e293b, #020617); }
-
-        .book-badge { font-size: 0.5rem; font-weight: 800; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; }
-        .book-cover-title { font-size: 0.65rem; font-weight: 700; color: #FFF; line-height: 1.3; text-align: left; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-        .book-label-title { font-size: 0.75rem; font-weight: 700; color: var(--text); margin-top: 6px; }
-
-        /* ════════════════════════════════
-           UNIVERSAL FLOATING MODAL (OVERLAY)
-        ════════════════════════════════ */
-        .app-modal-overlay {
-            position: fixed; inset: 0;
-            background: rgba(15, 23, 42, 0.35);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            z-index: 2000;
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none;
-            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            padding: 20px;
-        }
-        .app-modal-overlay.show { opacity: 1; pointer-events: auto; }
-        
-        .app-modal-content {
-            background: #ffffff;
-            width: 100%; max-width: 53.125rem;
-            height: 82vh; height: 82dvh;
-            border-radius: 28px;
-            box-shadow: 0 30px 70px rgba(6, 78, 59, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            display: flex; flex-direction: column;
-            position: relative;
-            transform: translateY(30px) scale(0.96);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            overflow: hidden;
-        }
-        .app-modal-overlay.show .app-modal-content { transform: translateY(0) scale(1); }
-
-        .app-modal-close {
-            position: absolute; top: 16px; right: 16px;
-            width: 36px; height: 36px; border-radius: 50%;
-            background: rgba(15, 118, 110, 0.08); border: none;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--green-deep); cursor: pointer; z-index: 10;
-            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .app-modal-close:hover {
-            background: #ef4444; color: #ffffff;
-            transform: rotate(90deg) scale(1.05);
-        }
-        
-        /* Font Modal Judul Tetap Menggunakan Playfair Display Sesuai Kode Awal */
-        .app-modal-title {
-            font-family: "Playfair Display", serif;
-            font-size: 1.15rem; font-weight: 700; color: var(--text);
-            padding: 20px 64px 16px 24px; margin: 0;
-            border-bottom: 1px solid var(--border);
-            text-overflow: ellipsis; overflow: hidden; white-space: nowrap;
-        }
-        .app-modal-body { flex: 1; position: relative; background: #f8fafc; }
-        .app-modal-body iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
-
-        /* ════════════════════════════════
-           BLANGKO DOCUMENTS
-        ════════════════════════════════ */
-        .doc-list-group { background: var(--green-tint); border-radius: 20px; overflow: hidden; padding: 6px; list-style: none; margin: 0;}
-        .doc-list-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 12px; text-decoration: none; color: inherit;
-            border-radius: 14px; transition: background-color 0.2s;
-        }
-        .doc-list-item:hover { background: rgba(15, 118, 110, 0.08); }
-        .doc-badge {
-            width: 38px; height: 24px; border-radius: 8px;
-            font-size: 0.65rem; font-weight: 800;
-            display: flex; align-items: center; justify-content: center;
-            background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
-            color: #FFF; flex-shrink: 0;
-        }
-
-        /* ════════════════════════════════
-           FORMS & BUTTONS
-        ════════════════════════════════ */
-        .ios-input {
-            width: 100%; padding: 16px 20px; border-radius: 16px;
-            border: 1.5px solid var(--border);
-            background: rgba(255, 255, 255, 0.6);
-            font-size: 1rem; font-family: inherit; font-weight: 500;
-            margin-bottom: 16px; outline: none;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .ios-input:focus {
-            background: #ffffff; border-color: var(--green-mid);
-            box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
-        }
-
-        .ios-btn-premium {
-            width: 100%; padding: 16px 24px; border-radius: 16px; border: none;
-            background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%);
-            color: #FFFFFF; font-size: 1rem; font-weight: 700; font-family: inherit;
-            display: flex; align-items: center; justify-content: space-between;
-            box-shadow: 0 10px 25px rgba(6, 78, 59, 0.2);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .ios-btn-premium:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 14px 30px rgba(6, 78, 59, 0.28);
-            filter: brightness(1.05);
-        }
-        .ios-btn-premium:active { transform: scale(0.98); }
-        .btn-text-main { flex-grow: 1; text-align: left; margin-left: 12px; }
-
-        /* ════════════════════════════════
-           DYNAMIC SEARCH RESULTS LIST
-        ════════════════════════════════ */
-        .ios-list-group { background: #FFFFFF; border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-        .ios-list-item {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 14px 18px; text-decoration: none; color: inherit;
-            border-bottom: 1px solid rgba(0,0,0,0.03); transition: background-color 0.2s;
-        }
-        .ios-list-item:last-child { border-bottom: none; }
-        .ios-list-item:hover { background: #f8fafc; }
-        .ios-list-left { display: flex; align-items: center; gap: 14px; }
-        .ios-list-title-box { display: flex; flex-direction: column; }
-        .ios-list-badge {
-            padding: 4px 10px; border-radius: 8px;
-            font-size: 0.65rem; font-weight: 800;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            color: #FFF;
-        }
-        .ios-list-main-title { font-size: 0.9rem; font-weight: 700; color: var(--text); }
-
-        /* ════════════════════════════════
-           FLUID PAGE SWITCH SYSTEM
-        ════════════════════════════════ */
-        .page-view {
-            opacity: 1; transform: translateY(0) scale(1);
-            transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        .page-view.d-none { display: none !important; opacity: 0; transform: translateY(24px) scale(0.97); }
-
-        .page-footer {
-            text-align: center; padding: 32px 16px 10px;
-            font-size: 0.75rem; color: var(--muted); font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-        .page-footer::before {
-            content: ''; display: block; width: 40px; height: 2px;
-            background: var(--gold); border-radius: 2px; opacity: 0.3; margin: 0 auto 16px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -500,8 +22,15 @@
 
     <!-- STICKY KEMENAG NAVBAR -->
     <div class="ios-navbar" id="iosMainHeader">
-        <h1 class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></h1>
-        <p class="ios-subtitle">Informasi Pernikahan · KUA Karangdadap</p>
+        <div class="nav-row">
+            <div class="nav-brand">
+                <h1 class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></h1>
+                <p class="ios-subtitle">Informasi Pernikahan · KUA Karangdadap</p>
+            </div>
+            <div class="theme-toggle" id="themeToggle" role="button" aria-label="Toggle dark mode" tabindex="0">
+                <span class="material-icons-outlined" id="toggleIcon">dark_mode</span>
+            </div>
+        </div>
     </div>
 
     <!-- UNIVERSAL FLOATING MODAL (UNTUK EBOOK & SPREADSHEET JADWAL) -->
@@ -517,7 +46,7 @@
         </div>
     </div>
 
-    <!-- FLOATING MODAL PENCERIAN SERTIFIKAT -->
+    <!-- FLOATING MODAL PENCARIAN SERTIFIKAT -->
     <div id="searchModal" class="app-modal-overlay">
         <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
             <button class="app-modal-close" onclick="tutupModalSertifikat()" title="Tutup">
@@ -544,7 +73,7 @@
         </div>
     </div>
 
-    <!-- BARU: FLOATING MODAL UNTUK UNDUH BLANGKO DOKUMEN NIKAH -->
+    <!-- FLOATING MODAL UNTUK UNDUH BLANGKO DOKUMEN NIKAH -->
     <div id="blankoModal" class="app-modal-overlay">
         <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
             <button class="app-modal-close" onclick="tutupModalBlanko()" title="Tutup">
@@ -572,7 +101,7 @@
         <!-- DASHBOARD MENU PAGE -->
         <div id="menuPage" class="page-view">
 
-            <!-- CARD 1: TAHAPAN CATIN (3D Card) -->
+            <!-- CARD 1: TAHAPAN CATIN -->
             <div class="ios-main-card" onclick="toggleMainMenu('catingSubmenu','catingChevron')">
                 <div class="ios-card-header">
                     <div class="ios-card-icon-title">
@@ -656,7 +185,7 @@
                 </div>
             </div>
 
-            <!-- CARD 2: JADWAL LAYANAN (3D Card) -->
+            <!-- CARD 2: JADWAL LAYANAN -->
             <div class="ios-main-card" onclick="toggleMainMenu('jadwalSubmenu','jadwalChevron')">
                 <div class="ios-card-header">
                     <div class="ios-card-icon-title">
@@ -702,7 +231,7 @@
                 </div>
             </div>
 
-            <!-- CARD 3: DOKUMEN & BANTUAN (3D Card) -->
+            <!-- CARD 3: DOKUMEN & BANTUAN -->
             <div class="ios-main-card" onclick="toggleMainMenu('bantuanSubmenu','bantuanChevron')">
                 <div class="ios-card-header">
                     <div class="ios-card-icon-title">
@@ -720,7 +249,6 @@
                 <div class="ios-submenu-wrapper" id="bantuanSubmenu">
                     <div class="ios-submenu-inner" onclick="event.stopPropagation()">
 
-                        <!-- PERBAIKAN: Diubah untuk memicu floating modal bukaModalBlanko() -->
                         <div onclick="bukaModalBlanko()" class="sub-list-item" style="cursor:pointer;">
                             <div class="sub-list-left">
                                 <div class="sub-badge badge-icon-gold">
@@ -756,193 +284,6 @@
 
     </div>
 
-    <script>
-        // SPLASH SCREEN & HEARTS EFFECT
-        window.addEventListener('DOMContentLoaded', () => {
-            const splash = document.getElementById('splashScreen');
-            setTimeout(() => { createSplashHearts(); }, 500);
-
-            setTimeout(() => {
-                if (splash) {
-                    splash.style.opacity = '0';
-                    splash.style.transform = 'scale(1.06)';
-                    setTimeout(() => splash.style.display = 'none', 800);
-                }
-            }, 2600);
-        });
-
-        function createSplashHearts() {
-            const splash = document.getElementById('splashScreen');
-            const icons = ['favorite', 'favorite_border'];
-            for (let i = 0; i < 10; i++) {
-                setTimeout(() => {
-                    if(!splash || splash.style.display === 'none') return;
-                    const heart = document.createElement('span');
-                    heart.className = 'material-icons-outlined splash-heart';
-                    heart.innerText = icons[Math.floor(Math.random() * icons.length)];
-                    heart.style.left = `${Math.floor(Math.random() * 60) + 20}%`;
-                    heart.style.fontSize = `${Math.floor(Math.random() * 12) + 16}px`;
-                    splash.appendChild(heart);
-                    setTimeout(() => heart.remove(), 2000);
-                }, i * 140);
-            }
-        }
-
-        // ACCORDION NAVIGATION COLLAPSIBLE
-        function toggleMainMenu(idSubmenu, idChevron) {
-            const submenu = document.getElementById(idSubmenu);
-            const chevron = document.getElementById(idChevron);
-            if (submenu && chevron) {
-                submenu.classList.toggle('active');
-                chevron.classList.toggle('rotated');
-            }
-        }
-
-        function toggleBookShelf(event) {
-            event.stopPropagation();
-            const shelf = document.getElementById('innerBookshelf');
-            const chev  = document.getElementById('bookChevron');
-            if (shelf && chev) {
-                shelf.classList.toggle('show');
-                chev.style.transform = shelf.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
-            }
-        }
-
-        // UNIVERSAL FLOATING MODAL SYSTEM
-        window.bukaModalFrame = function(url, judul) {
-            const modal = document.getElementById('appModal');
-            const frame = document.getElementById('appModalFrame');
-            const title = document.getElementById('appModalTitle');
-            
-            if (modal && frame && title) {
-                title.innerText = judul;
-                frame.src = url;
-                modal.classList.add('show');
-                document.body.style.overflow = 'hidden'; 
-            }
-        }
-
-        window.tutupModalFrame = function() {
-            const modal = document.getElementById('appModal');
-            const frame = document.getElementById('appModalFrame');
-            
-            if (modal && frame) {
-                modal.classList.remove('show');
-                document.body.style.overflow = ''; 
-                setTimeout(() => { frame.src = ""; }, 400); 
-            }
-        }
-
-        // SERTIFIKAT FLOATING MODAL CONTROLLER
-        window.bukaModalSertifikat = function() {
-            const modal = document.getElementById('searchModal');
-            if (modal) {
-                modal.classList.add('show');
-                document.body.style.overflow = 'hidden';
-                setTimeout(() => {
-                    document.getElementById('searchInput').focus();
-                }, 300);
-            }
-        }
-
-        window.tutupModalSertifikat = function() {
-            const modal = document.getElementById('searchModal');
-            if (modal) {
-                modal.classList.remove('show');
-                document.body.style.overflow = '';
-                document.getElementById('searchInput').value = '';
-                document.getElementById('resultArea').innerHTML = '';
-            }
-        }
-
-        // BARU: BLANGKO FLOATING MODAL CONTROLLER
-        window.bukaModalBlanko = function() {
-            const modal = document.getElementById('blankoModal');
-            if (modal) {
-                modal.classList.add('show');
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        window.tutupModalBlanko = function() {
-            const modal = document.getElementById('blankoModal');
-            if (modal) {
-                modal.classList.remove('show');
-                document.body.style.overflow = '';
-            }
-        }
-
-        // CLOSE MODAL ON BACKDROP CLICK
-        document.querySelectorAll('.app-modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', e => {
-                if (e.target !== overlay) return;
-                overlay.classList.remove('show');
-                document.body.style.overflow = '';
-                const frame = overlay.querySelector('iframe');
-                if (frame) setTimeout(() => { frame.src = ''; }, 400);
-                const inp = overlay.querySelector('#searchInput');
-                const ra = overlay.querySelector('#resultArea');
-                if (inp) inp.value = '';
-                if (ra) ra.innerHTML = '';
-            });
-        });
-
-        // CERTIFICATE DATABASE QUERY EXECUTION
-        function prosesCariSertifikat() {
-            const input      = document.getElementById('searchInput').value.trim();
-            const loading    = document.getElementById('loading');
-            const resultArea = document.getElementById('resultArea');
-
-            if (!input) return alert('Silakan masukkan nama lengkap!');
-
-            loading.classList.remove('d-none');
-            resultArea.innerHTML = '';
-
-            const urlWebApp = "https://script.google.com/macros/s/AKfycbzSsypF03AF6k9b9N2s_rmQsk6-kLVuErjwGSPQdX3fC6zBhiUsCuMMwkpTnoRBq450Dg/exec?q=" + encodeURIComponent(input);
-
-            fetch(urlWebApp)
-                .then(r => r.json())
-                .then(data => {
-                    loading.classList.add('d-none');
-                    if (data.length === 0) {
-                        resultArea.innerHTML = `
-                            <div class="text-center text-muted p-4 page-view">
-                                <span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">search_off</span>
-                                <p class="mt-2" style="font-size:0.9rem;">Sertifikat belum terbit atau nama salah.<br><small>Pastikan nama sesuai dengan form Post-Test.</small></p>
-                            </div>`;
-                    } else {
-                        let html = `<div class="ios-list-group page-view">`;
-                        data.forEach(item => {
-                            // Sanitasi output untuk mencegah XSS
-                            const safeNama = document.createElement('span');
-                            safeNama.textContent = item.nama || '';
-                            const safeLink = (item.link || '').replace(/[^a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%]/g, '');
-                            html += `
-                                <a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="ios-list-item">
-                                    <div class="ios-list-left">
-                                        <div class="ios-list-badge">E-CERT</div>
-                                        <div class="ios-list-title-box">
-                                            <span class="ios-list-main-title" style="text-transform:uppercase;">${safeNama.innerHTML}</span>
-                                            <span style="font-size:0.75rem;color:var(--muted);">Sertifikat Siap Diunduh</span>
-                                        </div>
-                                    </div>
-                                    <span class="material-icons-outlined" style="color:var(--green-mid);">file_download</span>
-                                </a>`;
-                        });
-                        html += `</div>`;
-                        resultArea.innerHTML = html;
-                    }
-                })
-                .catch(err => {
-                    loading.classList.add('d-none');
-                    alert('Gagal memuat data. Periksa kembali koneksi internet Anda.');
-                    console.error(err);
-                });
-        }
-
-        document.getElementById("searchInput").addEventListener("keypress", e => {
-            if (e.key === "Enter") prosesCariSertifikat();
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
