@@ -145,7 +145,13 @@ function toggleCard(subId, chevId) {
     sub.classList.toggle('open');
     chev.classList.toggle('open');
     const inner = sub.querySelector('.submenu-inner');
-    if (inner && !isOpen) inner.classList.add('has-border');
+    if (inner) {
+        if (!isOpen) {
+            inner.classList.add('has-border');
+        } else {
+            inner.classList.remove('has-border');
+        }
+    }
 }
 
 function toggleBooks(e) {
@@ -274,16 +280,20 @@ function prosesCariSertifikat() {
             } else {
                 let html = '<div class="result-list">';
                 data.forEach(item => {
+                    // Sanitasi output untuk mencegah XSS
+                    const safeNama = document.createElement('span');
+                    safeNama.textContent = item.nama || '';
+                    const safeLink = (item.link || '').replace(/[^a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%]/g, '');
                     html += `
-                        <a href="${item.link}" target="_blank" class="result-item">
+                        <a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="result-item">
                             <div style="display:flex;align-items:center;gap:12px;">
                                 <div class="result-badge">E-CERT</div>
                                 <div>
-                                    <p style="font-size:0.87rem;font-weight:700;margin:0;text-transform:uppercase;">${item.nama}</p>
+                                    <p style="font-size:0.87rem;font-weight:700;margin:0;text-transform:uppercase;">${safeNama.innerHTML}</p>
                                     <p style="font-size:0.7rem;color:var(--muted);margin:0;">Sertifikat siap diunduh</p>
                                 </div>
                             </div>
-                            <span class="material-icons-outlined" style="font-size:22px;color:var(--primary);">file_download</span>
+                            <span class="material-icons-outlined" style="font-size:22px;color:var(--emerald);">file_download</span>
                         </a>`;
                 });
                 html += '</div>';
