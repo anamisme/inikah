@@ -227,7 +227,6 @@ window.bukaModalNotif = function() {
     if (modal) {
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
-        markAllRead();
     }
 }
 
@@ -271,11 +270,17 @@ function renderNotifList(data) {
         safeTitle.textContent = item.judul || '';
         const safeMsg = document.createElement('span');
         safeMsg.textContent = item.pesan || '';
+        // Format tanggal
+        let tgl = item.tanggal || '';
+        if (tgl && tgl.includes('T')) {
+            const d = new Date(tgl);
+            tgl = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
         html += `
             <div class="notif-item unread">
                 <div class="notif-item-title">${safeTitle.innerHTML}</div>
                 <div class="notif-item-msg">${safeMsg.innerHTML}</div>
-                <div class="notif-item-date">${item.tanggal || ''}</div>
+                <div class="notif-item-date">${tgl}</div>
             </div>`;
     });
     container.innerHTML = html;
