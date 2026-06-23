@@ -3,11 +3,17 @@
 ## Langkah 1: Buat Google Sheets
 1. Buka https://sheets.google.com → buat spreadsheet baru
 2. Beri nama: **iNikah Notifikasi**
-3. Di Sheet1, buat header di baris 1:
+3. Di **Sheet1**, buat header di baris 1:
    - A1: `id`
    - B1: `judul`
    - C1: `pesan`
    - D1: `tanggal`
+4. Tambahkan sheet baru bernama **Banners**, buat header di baris 1:
+   - A1: `id`
+   - B1: `judul`
+   - C1: `tag`
+   - D1: `link`
+   - E1: `warna`
 
 ## Langkah 2: Buat Google Apps Script
 1. Dari spreadsheet, klik **Extensions** → **Apps Script**

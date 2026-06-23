@@ -72,6 +72,31 @@
             <div id="adminNotifList"><p style="color:var(--muted);font-size:0.85rem;">Memuat...</p></div>
         </div>
 
+        <!-- FORM BANNER -->
+        <div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);margin-top:20px;">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">🖼️ Kelola Banner (maks. 3)</h3>
+            <input type="text" id="bannerJudul" placeholder="Judul banner..." style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+            <input type="text" id="bannerTag" placeholder="Tag (opsional, misal: PENGUMUMAN)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+            <input type="url" id="bannerLink" placeholder="Link tujuan (opsional, misal: https://...)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+            <select id="bannerWarna" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:12px;background:#fff;">
+                <option value="">Pilih warna background...</option>
+                <option value="linear-gradient(145deg, #064e3b, #0f766e)">Hijau Tua</option>
+                <option value="linear-gradient(145deg, #0369a1, #0c4a6e)">Biru</option>
+                <option value="linear-gradient(145deg, #7c3aed, #4c1d95)">Ungu</option>
+                <option value="linear-gradient(145deg, #be185d, #831843)">Merah Muda</option>
+                <option value="linear-gradient(145deg, #b45309, #78350f)">Emas</option>
+                <option value="linear-gradient(145deg, #1d4ed8, #1e3a8a)">Biru Tua</option>
+            </select>
+            <button onclick="tambahBanner()" id="btnBanner" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#7c3aed,#4c1d95);color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;">Tambah Banner</button>
+            <p id="bannerStatus" style="font-size:0.8rem;margin-top:10px;display:none;"></p>
+        </div>
+
+        <!-- DAFTAR BANNER -->
+        <div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);margin-top:20px;">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">📋 Banner Aktif</h3>
+            <div id="adminBannerList"><p style="color:var(--muted);font-size:0.85rem;">Memuat...</p></div>
+        </div>
+
         <p style="text-align:center;margin-top:20px;font-size:0.75rem;color:var(--muted);">
             <a href="index.html" style="color:var(--green-mid);text-decoration:none;font-weight:600;">← Kembali ke Beranda</a>
         </p>
@@ -87,6 +112,7 @@
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('adminPanel').style.display = 'block';
                 loadAdminNotifs();
+                loadAdminBanners();
             } else {
                 document.getElementById('loginError').style.display = 'block';
             }
@@ -171,6 +197,90 @@
             const div = document.createElement('div');
             div.textContent = text || '';
             return div.innerHTML;
+        }
+
+        // BANNER FUNCTIONS
+        function tambahBanner() {
+            const judul = document.getElementById('bannerJudul').value.trim();
+            const tag = document.getElementById('bannerTag').value.trim() || 'INFO';
+            const link = document.getElementById('bannerLink').value.trim();
+            const warna = document.getElementById('bannerWarna').value;
+            const status = document.getElementById('bannerStatus');
+            const btn = document.getElementById('btnBanner');
+
+            if (!judul) {
+                status.textContent = 'Judul banner wajib diisi!';
+                status.style.color = '#ef4444';
+                status.style.display = 'block';
+                return;
+            }
+
+            btn.textContent = 'Menambahkan...';
+            btn.disabled = true;
+
+            let url = NOTIF_SCRIPT_URL + '?action=addBanner&judul=' + encodeURIComponent(judul) + '&tag=' + encodeURIComponent(tag);
+            if (link) url += '&link=' + encodeURIComponent(link);
+            if (warna) url += '&warna=' + encodeURIComponent(warna);
+
+            fetch(url)
+                .then(r => r.json())
+                .then(res => {
+                    if (res.error) {
+                        status.textContent = res.error;
+                        status.style.color = '#ef4444';
+                    } else {
+                        status.textContent = 'Banner berhasil ditambahkan!';
+                        status.style.color = '#059669';
+                        document.getElementById('bannerJudul').value = '';
+                        document.getElementById('bannerTag').value = '';
+                        document.getElementById('bannerLink').value = '';
+                        document.getElementById('bannerWarna').value = '';
+                        loadAdminBanners();
+                    }
+                    status.style.display = 'block';
+                    btn.textContent = 'Tambah Banner';
+                    btn.disabled = false;
+                })
+                .catch(() => {
+                    status.textContent = 'Gagal menambahkan. Periksa koneksi.';
+                    status.style.color = '#ef4444';
+                    status.style.display = 'block';
+                    btn.textContent = 'Tambah Banner';
+                    btn.disabled = false;
+                });
+        }
+
+        function loadAdminBanners() {
+            fetch(NOTIF_SCRIPT_URL + '?action=getBanners')
+                .then(r => r.json())
+                .then(data => {
+                    const container = document.getElementById('adminBannerList');
+                    if (!data || data.length === 0) {
+                        container.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">Belum ada banner.</p>';
+                        return;
+                    }
+                    let html = '';
+                    data.forEach(item => {
+                        html += '<div style="padding:12px 14px;border-radius:12px;background:var(--bg);margin-bottom:8px;border:1px solid var(--border);">';
+                        html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
+                        html += '<div><p style="font-size:0.85rem;font-weight:700;margin-bottom:3px;">' + escapeHtml(item.judul) + '</p>';
+                        html += '<p style="font-size:0.7rem;color:var(--muted);">Tag: ' + escapeHtml(item.tag) + (item.link ? ' · <a href="' + escapeHtml(item.link) + '" target="_blank" style="color:var(--green-mid);">Link</a>' : '') + '</p></div>';
+                        html += '<button onclick="hapusBanner(\'' + item.id + '\')" style="background:#fee2e2;border:none;border-radius:8px;padding:6px 8px;cursor:pointer;color:#ef4444;font-size:0.7rem;font-weight:700;flex-shrink:0;">Hapus</button>';
+                        html += '</div></div>';
+                    });
+                    container.innerHTML = html;
+                })
+                .catch(() => {
+                    document.getElementById('adminBannerList').innerHTML = '<p style="color:#ef4444;font-size:0.85rem;">Gagal memuat data.</p>';
+                });
+        }
+
+        function hapusBanner(id) {
+            if (!confirm('Hapus banner ini?')) return;
+            fetch(NOTIF_SCRIPT_URL + '?action=deleteBanner&id=' + encodeURIComponent(id))
+                .then(r => r.json())
+                .then(() => loadAdminBanners())
+                .catch(() => alert('Gagal menghapus.'));
         }
     </script>
 </body>
