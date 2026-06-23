@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petugas KUA – iNikah</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-deep: #064e3b;
+            --green-mid: #0f766e;
+            --green-light: #14b8a6;
+            --bg: #f2f5f3;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: rgba(15, 118, 110, 0.08);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+            background: var(--bg); color: var(--text);
+            padding: 20px; min-height: 100vh;
+        }
+        .admin-container { max-width: 600px; margin: 0 auto; }
+        .admin-header { text-align: center; padding: 24px 0 20px; }
+        .admin-logo { font-family: "Playfair Display", serif; font-size: 1.8rem; }
+        .admin-logo .wi { font-style: italic; color: #b45309; }
+        .admin-logo .wn { font-weight: 700; }
+        .admin-sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; font-weight: 600; }
+        .card {
+            background: #fff; border-radius: 20px; padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06); border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+        .card .note {
+            font-size: 0.72rem; color: #ef4444; font-weight: 600;
+            margin-bottom: 16px; padding: 8px 12px; background: #fef2f2;
+            border-radius: 8px; border: 1px solid #fecaca;
+        }
+        .form-group { margin-bottom: 12px; }
+        .form-group label {
+            display: block; font-size: 0.8rem; font-weight: 600;
+            margin-bottom: 5px; color: var(--text);
+        }
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group input[type="file"] {
+            width: 100%; padding: 12px 16px; border-radius: 12px;
+            border: 1.5px solid var(--border); font-size: 0.9rem;
+            outline: none; background: #fff;
+        }
+        .form-group input:focus {
+            border-color: var(--green-mid);
+            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.08);
+        }
+        .btn-submit {
+            width: 100%; padding: 14px; border-radius: 12px; border: none;
+            background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+            color: #fff; font-size: 0.95rem; font-weight: 700; cursor: pointer;
+            margin-top: 8px;
+        }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+        .status-msg { font-size: 0.8rem; margin-top: 10px; display: none; }
+        .data-list { margin-top: 12px; }
+        .data-item {
+            padding: 12px 14px; border-radius: 12px; background: var(--bg);
+            margin-bottom: 8px; border: 1px solid var(--border);
+        }
+        .data-item .data-row {
+            display: flex; justify-content: space-between; align-items: start;
+        }
+        .data-item p { font-size: 0.82rem; margin-bottom: 2px; }
+        .data-item .label { color: var(--muted); font-size: 0.72rem; }
+        .btn-hapus {
+            background: #fee2e2; border: none; border-radius: 8px;
+            padding: 6px 10px; cursor: pointer; color: #ef4444;
+            font-size: 0.7rem; font-weight: 700; flex-shrink: 0;
+        }
+        .petugas-foto {
+            width: 60px; height: 60px; border-radius: 10px;
+            object-fit: cover; margin-right: 12px; border: 1px solid var(--border);
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="admin-container">
+        <div class="admin-header">
+            <div class="admin-logo"><span class="wi">i</span><span class="wn">Nikah</span></div>
+            <p class="admin-sub">Panel Petugas KUA</p>
+        </div>
+        <div class="card">
+            <h3>🔐 Login Petugas</h3>
+            <div class="form-group" style="margin-top:16px;">
+                <input type="password" id="petugasPass" placeholder="Masukkan password petugas..." onkeypress="if(event.key==='Enter')loginPetugas()">
+            </div>
+            <button onclick="loginPetugas()" class="btn-submit">Masuk</button>
+            <p id="loginError" class="status-msg" style="color:#ef4444;">Password salah!</p>
+        </div>
+    </div>
+
+    <!-- PANEL PETUGAS -->
+    <div id="petugasPanel" class="admin-container" style="display:none;">
+        <div class="admin-header">
+            <div class="admin-logo"><span class="wi">i</span><span class="wn">Nikah</span></div>
+            <p class="admin-sub">Panel Petugas KUA</p>
+        </div>
+
+        <!-- FORM 1: DATA AKAD NIKAH -->
+        <div class="card">
+            <h3>📋 Form Data Akad Nikah</h3>
+            <div class="note">⚠️ FORMULIR INI HANYA BOLEH DIISI OLEH PETUGAS KUA KARANGDADAP</div>
+
+            <div class="form-group">
+                <label>Tanggal Akad</label>
+                <input type="date" id="jadwalTanggal" required>
+            </div>
+            <div class="form-group">
+                <label>Jam Akad</label>
+                <input type="text" id="jadwalWaktu" placeholder="Contoh: 8.30" required>
+            </div>
+            <div class="form-group">
+                <label>Nama Calon Pengantin Laki-Laki</label>
+                <input type="text" id="jadwalPria" required>
+            </div>
+            <div class="form-group">
+                <label>Nama Calon Pengantin Perempuan</label>
+                <input type="text" id="jadwalWanita" required>
+            </div>
+            <div class="form-group">
+                <label>Alamat Pelaksanaan Akad</label>
+                <input type="text" id="jadwalDesa" required>
+            </div>
+            <button onclick="submitJadwal()" id="btnJadwal" class="btn-submit">Simpan Data Jadwal</button>
+            <p id="jadwalStatus" class="status-msg"></p>
+        </div>
+
+        <!-- DAFTAR JADWAL -->
+        <div class="card">
+            <h3>📅 Daftar Jadwal Akad</h3>
+            <div id="jadwalList" class="data-list">
+                <p style="color:var(--muted);font-size:0.85rem;">Memuat...</p>
+            </div>
+        </div>
+
+        <!-- FORM 2: DATA PETUGAS -->
+        <div class="card">
+            <h3>👤 Data Petugas Akad Nikah</h3>
+            <div class="note">⚠️ DATA INI DIISI KHUSUS OLEH PETUGAS KUA KARANGDADAP</div>
+
+            <div class="form-group">
+                <label>Nama Petugas</label>
+                <input type="text" id="petugasNama" required>
+            </div>
+            <div class="form-group">
+                <label>Tanggal</label>
+                <input type="date" id="petugasTanggal" required>
+            </div>
+            <div class="form-group">
+                <label>Jam Akad</label>
+                <input type="text" id="petugasWaktu" placeholder="Contoh: 8.30" required>
+            </div>
+            <div class="form-group">
+                <label>Nama Calon Pengantin Laki-Laki</label>
+                <input type="text" id="petugasPria" required>
+            </div>
+            <div class="form-group">
+                <label>Nama Calon Pengantin Perempuan</label>
+                <input type="text" id="petugasWanita" required>
+            </div>
+            <div class="form-group">
+                <label>Foto</label>
+                <input type="file" id="petugasFoto" accept="image/*" required>
+            </div>
+            <button onclick="submitPetugas()" id="btnPetugas" class="btn-submit">Simpan Data Petugas</button>
+            <p id="petugasStatus" class="status-msg"></p>
+        </div>
+
+        <!-- DAFTAR PETUGAS -->
+        <div class="card">
+            <h3>👥 Daftar Petugas Akad</h3>
+            <div id="petugasList" class="data-list">
+                <p style="color:var(--muted);font-size:0.85rem;">Memuat...</p>
+            </div>
+        </div>
+
+        <p style="text-align:center;margin-top:20px;font-size:0.75rem;color:var(--muted);">
+            <a href="index.html" style="color:var(--green-mid);text-decoration:none;font-weight:600;">← Kembali ke Beranda</a>
+        </p>
+    </div>
+
+    <script>
+        const PETUGAS_PASSWORD = 'petugaskua2024';
+        const API_URL = 'api/jadwal-api.php';
+
+        function loginPetugas() {
+            const pass = document.getElementById('petugasPass').value;
+            if (pass === PETUGAS_PASSWORD) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('petugasPanel').style.display = 'block';
+                loadJadwal();
+                loadPetugas();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        // ===== JADWAL =====
+        function submitJadwal() {
+            const tanggal = document.getElementById('jadwalTanggal').value;
+            const waktu = document.getElementById('jadwalWaktu').value.trim();
+            const pria = document.getElementById('jadwalPria').value.trim();
+            const wanita = document.getElementById('jadwalWanita').value.trim();
+            const desa = document.getElementById('jadwalDesa').value.trim();
+            const status = document.getElementById('jadwalStatus');
+            const btn = document.getElementById('btnJadwal');
+
+            if (!tanggal || !waktu || !pria || !wanita || !desa) {
+                status.textContent = 'Semua field wajib diisi!';
+                status.style.color = '#ef4444';
+                status.style.display = 'block';
+                return;
+            }
+
+            btn.textContent = 'Menyimpan...';
+            btn.disabled = true;
+
+            fetch(API_URL + '?action=addJadwal', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    tanggal_akad: tanggal,
+                    waktu: waktu,
+                    nama_pria: pria,
+                    nama_wanita: wanita,
+                    desa: desa
+                })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    status.textContent = 'Data jadwal berhasil disimpan!';
+                    status.style.color = '#059669';
+                    document.getElementById('jadwalTanggal').value = '';
+                    document.getElementById('jadwalWaktu').value = '';
+                    document.getElementById('jadwalPria').value = '';
+                    document.getElementById('jadwalWanita').value = '';
+                    document.getElementById('jadwalDesa').value = '';
+                    loadJadwal();
+                } else {
+                    status.textContent = res.error || 'Gagal menyimpan.';
+                    status.style.color = '#ef4444';
+                }
+                status.style.display = 'block';
+                btn.textContent = 'Simpan Data Jadwal';
+                btn.disabled = false;
+            })
+            .catch(() => {
+                status.textContent = 'Gagal menyimpan. Periksa koneksi.';
+                status.style.color = '#ef4444';
+                status.style.display = 'block';
+                btn.textContent = 'Simpan Data Jadwal';
+                btn.disabled = false;
+            });
+        }
+
+        function loadJadwal() {
+            fetch(API_URL + '?action=getJadwal')
+                .then(r => r.json())
+                .then(data => {
+                    const container = document.getElementById('jadwalList');
+                    if (!data || data.length === 0) {
+                        container.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">Belum ada data jadwal.</p>';
+                        return;
+                    }
+                    let html = '';
+                    data.forEach(item => {
+                        html += '<div class="data-item"><div class="data-row"><div>';
+                        html += '<p style="font-weight:700;">' + escapeHtml(item.nama_pria) + ' & ' + escapeHtml(item.nama_wanita) + '</p>';
+                        html += '<p class="label">📅 ' + escapeHtml(item.tanggal_akad) + ' · ⏰ ' + escapeHtml(item.waktu) + '</p>';
+                        html += '<p class="label">📍 ' + escapeHtml(item.desa) + '</p>';
+                        html += '</div>';
+                        html += '<button onclick="hapusJadwal(' + item.id + ')" class="btn-hapus">Hapus</button>';
+                        html += '</div></div>';
+                    });
+                    container.innerHTML = html;
+                })
+                .catch(() => {
+                    document.getElementById('jadwalList').innerHTML = '<p style="color:#ef4444;font-size:0.85rem;">Gagal memuat data.</p>';
+                });
+        }
+
+        function hapusJadwal(id) {
+            if (!confirm('Hapus data jadwal ini?')) return;
+            fetch(API_URL + '?action=deleteJadwal&id=' + id)
+                .then(r => r.json())
+                .then(() => loadJadwal())
+                .catch(() => alert('Gagal menghapus.'));
+        }
+
+        // ===== PETUGAS =====
+        function submitPetugas() {
+            const nama = document.getElementById('petugasNama').value.trim();
+            const tanggal = document.getElementById('petugasTanggal').value;
+            const waktu = document.getElementById('petugasWaktu').value.trim();
+            const pria = document.getElementById('petugasPria').value.trim();
+            const wanita = document.getElementById('petugasWanita').value.trim();
+            const foto = document.getElementById('petugasFoto').files[0];
+            const status = document.getElementById('petugasStatus');
+            const btn = document.getElementById('btnPetugas');
+
+            if (!nama || !tanggal || !waktu || !pria || !wanita || !foto) {
+                status.textContent = 'Semua field wajib diisi termasuk foto!';
+                status.style.color = '#ef4444';
+                status.style.display = 'block';
+                return;
+            }
+
+            btn.textContent = 'Menyimpan...';
+            btn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('nama_petugas', nama);
+            formData.append('tanggal', tanggal);
+            formData.append('waktu', waktu);
+            formData.append('nama_pria', pria);
+            formData.append('nama_wanita', wanita);
+            formData.append('foto', foto);
+
+            fetch(API_URL + '?action=addPetugas', {
+                method: 'POST',
+                body: formData
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    status.textContent = 'Data petugas berhasil disimpan!';
+                    status.style.color = '#059669';
+                    document.getElementById('petugasNama').value = '';
+                    document.getElementById('petugasTanggal').value = '';
+                    document.getElementById('petugasWaktu').value = '';
+                    document.getElementById('petugasPria').value = '';
+                    document.getElementById('petugasWanita').value = '';
+                    document.getElementById('petugasFoto').value = '';
+                    loadPetugas();
+                } else {
+                    status.textContent = res.error || 'Gagal menyimpan.';
+                    status.style.color = '#ef4444';
+                }
+                status.style.display = 'block';
+                btn.textContent = 'Simpan Data Petugas';
+                btn.disabled = false;
+            })
+            .catch(() => {
+                status.textContent = 'Gagal menyimpan. Periksa koneksi.';
+                status.style.color = '#ef4444';
+                status.style.display = 'block';
+                btn.textContent = 'Simpan Data Petugas';
+                btn.disabled = false;
+            });
+        }
+
+        function loadPetugas() {
+            fetch(API_URL + '?action=getPetugas')
+                .then(r => r.json())
+                .then(data => {
+                    const container = document.getElementById('petugasList');
+                    if (!data || data.length === 0) {
+                        container.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">Belum ada data petugas.</p>';
+                        return;
+                    }
+                    let html = '';
+                    data.forEach(item => {
+                        html += '<div class="data-item"><div class="data-row">';
+                        if (item.foto) {
+                            html += '<img src="' + escapeHtml(item.foto) + '" class="petugas-foto" alt="Foto Petugas">';
+                        }
+                        html += '<div style="flex:1;">';
+                        html += '<p style="font-weight:700;">' + escapeHtml(item.nama_petugas) + '</p>';
+                        html += '<p class="label">📅 ' + escapeHtml(item.tanggal) + ' · ⏰ ' + escapeHtml(item.waktu) + '</p>';
+                        html += '<p class="label">👤 ' + escapeHtml(item.nama_pria) + ' & ' + escapeHtml(item.nama_wanita) + '</p>';
+                        html += '</div>';
+                        html += '<button onclick="hapusPetugas(' + item.id + ')" class="btn-hapus">Hapus</button>';
+                        html += '</div></div>';
+                    });
+                    container.innerHTML = html;
+                })
+                .catch(() => {
+                    document.getElementById('petugasList').innerHTML = '<p style="color:#ef4444;font-size:0.85rem;">Gagal memuat data.</p>';
+                });
+        }
+
+        function hapusPetugas(id) {
+            if (!confirm('Hapus data petugas ini?')) return;
+            fetch(API_URL + '?action=deletePetugas&id=' + id)
+                .then(r => r.json())
+                .then(() => loadPetugas())
+                .catch(() => alert('Gagal menghapus.'));
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text || '';
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

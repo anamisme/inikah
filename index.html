@@ -66,6 +66,44 @@
         </div>
     </div>
 
+    <!-- MODAL JADWAL AKAD NIKAH -->
+    <div id="jadwalModal" class="app-modal-overlay">
+        <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
+            <button class="app-modal-close" onclick="tutupModalJadwal()" title="Tutup">
+                <span class="material-icons-outlined">close</span>
+            </button>
+            <h3 class="app-modal-title">Jadwal Akad Nikah</h3>
+            <div class="p-4" style="background: #f8fafc;">
+                <p class="text-muted small mb-3">Data jadwal akad nikah KUA Karangdadap.</p>
+                <div id="jadwalModalContent">
+                    <div class="text-center text-muted p-4">
+                        <div class="spinner-border spinner-border-sm text-success me-2" role="status"></div>
+                        Memuat data jadwal...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PETUGAS PENGHULU -->
+    <div id="petugasModal" class="app-modal-overlay">
+        <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
+            <button class="app-modal-close" onclick="tutupModalPetugas()" title="Tutup">
+                <span class="material-icons-outlined">close</span>
+            </button>
+            <h3 class="app-modal-title">Petugas Penghulu</h3>
+            <div class="p-4" style="background: #f8fafc;">
+                <p class="text-muted small mb-3">Data penunjukan petugas penghulu KUA Karangdadap.</p>
+                <div id="petugasModalContent">
+                    <div class="text-center text-muted p-4">
+                        <div class="spinner-border spinner-border-sm text-success me-2" role="status"></div>
+                        Memuat data petugas...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- FLOATING MODAL PENCARIAN SERTIFIKAT -->
     <div id="searchModal" class="app-modal-overlay">
         <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
@@ -104,12 +142,12 @@
                 <p class="text-muted small mb-3">Silakan klik pada dokumen yang Anda butuhkan untuk mengunduh template surat resmi N-1 sampai dengan N-6.</p>
                 
                 <ul class="doc-list-group">
-                    <li><a href="https://drive.google.com/file/d/1tIgOPjhtj6E0YTvkmz4Rpwv31Ms8FXFk/view" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-1</div><span style="font-size:0.85rem;font-weight:600;">Surat Pengantar Perkawinan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
-                    <li><a href="https://drive.google.com/file/d/13NMRP1b2B32W0Al543gitZ6WBoUejFkT/view" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-2</div><span style="font-size:0.85rem;font-weight:600;">Permohonan Kehendak Nikah</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
-                    <li><a href="https://drive.google.com/file/d/1SzchBL1MXRK7sobvWUjC26q1L9KFW_7w/view" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-3</div><span style="font-size:0.85rem;font-weight:600;">Surat Persetujuan Mempelai</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
-                    <li><a href="https://drive.google.com/file/d/1ExN-VXponEhDIdwKxQdE0r9tR-QzxIFT/view" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-4</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Orang Tua</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
-                    <li><a href="https://drive.google.com/file/d/1eG-rh5zqS4gwsnRT_BiXi0O1SqLBEtL2/view" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-5</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Pengadilan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
-                    <li><a href="https://drive.google.com/file/d/1edlVXp_XYzO9IHl7hXllvgkR2YxzJtKi/view" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-6</div><span style="font-size:0.85rem;font-weight:600;">Surat Kematian Pasangan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="uploads/blangko/FORMULIR N-1.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-1</div><span style="font-size:0.85rem;font-weight:600;">Surat Pengantar Perkawinan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="uploads/blangko/FORMULIR N-2.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-2</div><span style="font-size:0.85rem;font-weight:600;">Permohonan Kehendak Nikah</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="uploads/blangko/FORMULIR N-3.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-3</div><span style="font-size:0.85rem;font-weight:600;">Surat Persetujuan Mempelai</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="uploads/blangko/FORMULIR N-4.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-4</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Orang Tua</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="uploads/blangko/FORMULIR N-5.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-5</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Pengadilan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="uploads/blangko/FORMULIR N-6.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-6</div><span style="font-size:0.85rem;font-weight:600;">Surat Kematian Pasangan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
                 </ul>
             </div>
         </div>
@@ -145,7 +183,7 @@
                 <div class="ios-submenu-wrapper" id="catingSubmenu">
                     <div class="ios-submenu-inner" onclick="event.stopPropagation()">
 
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdAwd8-399As0Y8he1LFd7Lh4v13rGmovCHiOC9kLudJtiwiQ/viewform" target="_blank" rel="noopener noreferrer" class="sub-list-item">
+                        <a href="pretest.html" class="sub-list-item">
                             <div class="sub-list-left">
                                 <div class="sub-badge badge-1">1</div>
                                 <div class="sub-title-box">
@@ -153,7 +191,7 @@
                                     <span class="sub-desc">Wajib diisi sebelum membaca materi bimbingan</span>
                                 </div>
                             </div>
-                            <span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">open_in_new</span>
+                            <span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">chevron_right</span>
                         </a>
 
                         <div onclick="toggleBookShelf(event)" class="sub-list-item" style="cursor:pointer;">
@@ -171,21 +209,21 @@
                         <div class="apple-books-container" id="innerBookshelf">
                             <div class="apple-books-inner">
                                 <div class="bookshelf-grid">
-                                    <div onclick="bukaModalFrame('https://drive.google.com/file/d/1Z_27vFPRH5jduQWD9WAidb-7aPOHOE0d/preview', 'Bab 1 - Membangun Landasan Keluarga Sakinah')" class="book-item"><div class="book-cover cover-1"><span class="book-badge">Bimwin</span><span class="book-cover-title">Membangun Landasan Keluarga Sakinah</span></div><span class="book-label-title">Bab 1</span></div>
-                                    <div onclick="bukaModalFrame('https://drive.google.com/file/d/1y4cgJcZJefTgw0HT4EQ0euxIYpWmpbjK/preview', 'Bab 2 - Merencanakan Perkawinan Kokoh')" class="book-item"><div class="book-cover cover-2"><span class="book-badge">Bimwin</span><span class="book-cover-title">Merencanakan Perkawinan Kokoh</span></div><span class="book-label-title">Bab 2</span></div>
-                                    <div onclick="bukaModalFrame('https://drive.google.com/file/d/1E243FXTaJLI0pUOJQYgSl_UpgsGSrvn2/preview', 'Bab 3 - Dinamika Perkawinan')" class="book-item"><div class="book-cover cover-3"><span class="book-badge">Bimwin</span><span class="book-cover-title">Dinamika Perkawinan</span></div><span class="book-label-title">Bab 3</span></div>
-                                    <div onclick="bukaModalFrame('https://drive.google.com/file/d/1XyCT40nC0i0gd-R_GoKZLqLs3H2_L_Eq/preview', 'Bab 4 - Kebutuhan Keluarga')" class="book-item"><div class="book-cover cover-4"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kebutuhan Keluarga</span></div><span class="book-label-title">Bab 4</span></div>
-                                    <div onclick="bukaModalFrame('https://drive.google.com/file/d/1hsBuxsj8Qx9OKdxCr-ovuWWDHC0nqeEg/preview', 'Bab 5 - Kesehatan Keluarga')" class="book-item"><div class="book-cover cover-5"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kesehatan Keluarga</span></div><span class="book-label-title">Bab 5</span></div>
-                                    <div onclick="bukaModalFrame('https://drive.google.com/file/d/12c87keH8b3ZROkDhmwnhSGTeZdzllR6S/preview', 'Bab 6 - Generasi Berkualitas')" class="book-item"><div class="book-cover cover-6"><span class="book-badge">Bimwin</span><span class="book-cover-title">Generasi Berkualitas</span></div><span class="book-label-title">Bab 6</span></div>
-                                    <div onclick="bukaModalFrame('https://drive.google.com/file/d/1Mx4sx6eRezzvThD5uWaldCbkGRg0NLKR/preview', 'Bab 7 - Ketahanan Keluarga Masa Kini')" class="book-item"><div class="book-cover cover-7"><span class="book-badge">Bimwin</span><span class="book-cover-title">Ketahanan Keluarga Masa Kini</span></div><span class="book-label-title">Bab 7</span></div>
-                                    <div onclick="bukaModalFrame('https://drive.google.com/file/d/1oD41mimrN32gTXKwNb_lZSHvRtk73t23/preview', 'Bab 8 - Mengenali Hukum')" class="book-item"><div class="book-cover cover-8"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengenali Hukum</span></div><span class="book-label-title">Bab 8</span></div>
-                                    <div onclick="bukaModalFrame('https://drive.google.com/file/d/1VBTqLSArAg3oeBsXiqYLttHNwlDd0QEo/preview', 'Bab 9 - Mengelola Konflik')" class="book-item"><div class="book-cover cover-9"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengelola Konflik</span></div><span class="book-label-title">Bab 9</span></div>
-                                    <div onclick="bukaModalFrame('https://drive.google.com/file/d/1KlV24vihDnBrzcW4UHMy_mD3sS8bvNN5/preview', 'Bab 10 - Prosedur Pendaftaran NR')" class="book-item"><div class="book-cover cover-10"><span class="book-badge">Bimwin</span><span class="book-cover-title">Prosedur Pendaftaran NR</span></div><span class="book-label-title">Bab 10</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 1.pdf', 'Bab 1 - Membangun Landasan Keluarga Sakinah')" class="book-item"><div class="book-cover cover-1"><span class="book-badge">Bimwin</span><span class="book-cover-title">Membangun Landasan Keluarga Sakinah</span></div><span class="book-label-title">Bab 1</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 2.pdf', 'Bab 2 - Merencanakan Perkawinan Kokoh')" class="book-item"><div class="book-cover cover-2"><span class="book-badge">Bimwin</span><span class="book-cover-title">Merencanakan Perkawinan Kokoh</span></div><span class="book-label-title">Bab 2</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 3.pdf', 'Bab 3 - Dinamika Perkawinan')" class="book-item"><div class="book-cover cover-3"><span class="book-badge">Bimwin</span><span class="book-cover-title">Dinamika Perkawinan</span></div><span class="book-label-title">Bab 3</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 4.pdf', 'Bab 4 - Kebutuhan Keluarga')" class="book-item"><div class="book-cover cover-4"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kebutuhan Keluarga</span></div><span class="book-label-title">Bab 4</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 5.pdf', 'Bab 5 - Kesehatan Keluarga')" class="book-item"><div class="book-cover cover-5"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kesehatan Keluarga</span></div><span class="book-label-title">Bab 5</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 6.pdf', 'Bab 6 - Generasi Berkualitas')" class="book-item"><div class="book-cover cover-6"><span class="book-badge">Bimwin</span><span class="book-cover-title">Generasi Berkualitas</span></div><span class="book-label-title">Bab 6</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 7.pdf', 'Bab 7 - Ketahanan Keluarga Masa Kini')" class="book-item"><div class="book-cover cover-7"><span class="book-badge">Bimwin</span><span class="book-cover-title">Ketahanan Keluarga Masa Kini</span></div><span class="book-label-title">Bab 7</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 8.pdf', 'Bab 8 - Mengenali Hukum')" class="book-item"><div class="book-cover cover-8"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengenali Hukum</span></div><span class="book-label-title">Bab 8</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 9.pdf', 'Bab 9 - Mengelola Konflik')" class="book-item"><div class="book-cover cover-9"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengelola Konflik</span></div><span class="book-label-title">Bab 9</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 10.pdf', 'Bab 10 - Prosedur Pendaftaran NR')" class="book-item"><div class="book-cover cover-10"><span class="book-badge">Bimwin</span><span class="book-cover-title">Prosedur Pendaftaran NR</span></div><span class="book-label-title">Bab 10</span></div>
                                 </div>
                             </div>
                         </div>
 
-                        <a href="https://docs.google.com/forms/d/e/1FAIpQLScX3EdfUwP9f0vGi2FX26X3aOucvfklb0smHGPnGTa8xfeobQ/viewform" target="_blank" rel="noopener noreferrer" class="sub-list-item">
+                        <a href="posttest.html" class="sub-list-item">
                             <div class="sub-list-left">
                                 <div class="sub-badge badge-3">3</div>
                                 <div class="sub-title-box">
@@ -193,7 +231,7 @@
                                     <span class="sub-desc">Wajib diisi setelah selesai membaca materi bimbingan</span>
                                 </div>
                             </div>
-                            <span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">open_in_new</span>
+                            <span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">chevron_right</span>
                         </a>
 
                         <div onclick="bukaModalSertifikat()" class="sub-list-item" style="cursor:pointer;">
@@ -228,20 +266,20 @@
 
                 <div class="ios-submenu-wrapper" id="jadwalSubmenu">
                     <div class="ios-submenu-inner" onclick="event.stopPropagation()">
-                        <div onclick="bukaModalFrame('https://docs.google.com/spreadsheets/d/1_Ba5_CVCd6u9pI0-TBsQFzNYdBlImBaQ_s6IYxwd8Jw/preview?rm=minimal', 'Tabel Jadwal Akad Nikah')" class="sub-list-item" style="cursor:pointer;">
+                        <div onclick="bukaModalJadwal()" class="sub-list-item" style="cursor:pointer;">
                             <div class="sub-list-left">
                                 <div class="sub-badge badge-icon">
                                     <span class="material-icons-outlined" style="font-size:16px;">event</span>
                                 </div>
                                 <div class="sub-title-box">
                                     <span class="sub-title">Cek Jadwal Akad Nikah</span>
-                                    <span class="sub-desc">Lihat lembar sinkronisasi data jadwal akad nikah</span>
+                                    <span class="sub-desc">Lihat data jadwal akad nikah KUA Karangdadap</span>
                                 </div>
                             </div>
                             <span class="material-icons-outlined" style="font-size:20px;color:#94a3b8;">chevron_right</span>
                         </div>
 
-                        <div onclick="bukaModalFrame('https://docs.google.com/spreadsheets/d/1t_wFqRLwIv-HvHDLA04dofqmZy9jcBP0SHeV7zZt-R8/preview?rm=minimal', 'Tabel Petugas Penghulu')" class="sub-list-item" style="cursor:pointer;">
+                        <div onclick="bukaModalPetugas()" class="sub-list-item" style="cursor:pointer;">
                             <div class="sub-list-left">
                                 <div class="sub-badge badge-icon">
                                     <span class="material-icons-outlined" style="font-size:16px;">assignment_ind</span>

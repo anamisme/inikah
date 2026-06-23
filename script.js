@@ -144,6 +144,119 @@ window.tutupModalBlanko = function() {
     }
 }
 
+// JADWAL MODAL CONTROLLER
+window.bukaModalJadwal = function() {
+    const modal = document.getElementById('jadwalModal');
+    if (modal) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        loadJadwalModal();
+    }
+}
+
+window.tutupModalJadwal = function() {
+    const modal = document.getElementById('jadwalModal');
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+}
+
+function loadJadwalModal() {
+    const container = document.getElementById('jadwalModalContent');
+    container.innerHTML = '<div class="text-center text-muted p-4"><div class="spinner-border spinner-border-sm text-success me-2" role="status"></div> Memuat data jadwal...</div>';
+
+    fetch('api/jadwal-api.php?action=getJadwal')
+        .then(r => r.json())
+        .then(data => {
+            if (!data || data.length === 0) {
+                container.innerHTML = '<div class="text-center text-muted p-4"><span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">event_busy</span><p class="mt-2" style="font-size:0.9rem;">Belum ada data jadwal akad.</p></div>';
+                return;
+            }
+            let html = '<div style="display:flex;flex-direction:column;gap:10px;">';
+            data.forEach(item => {
+                const safeNama = escapeHtmlSafe(item.nama_pria) + ' & ' + escapeHtmlSafe(item.nama_wanita);
+                const safeTanggal = escapeHtmlSafe(item.tanggal_akad);
+                const safeWaktu = escapeHtmlSafe(item.waktu);
+                const safeDesa = escapeHtmlSafe(item.desa);
+                html += '<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid rgba(15,118,110,0.08);">';
+                html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:4px;">' + safeNama + '</p>';
+                html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + safeTanggal + ' · ⏰ ' + safeWaktu + '</p>';
+                html += '<p style="font-size:0.78rem;color:#64748b;">📍 ' + safeDesa + '</p>';
+                html += '</div>';
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        })
+        .catch(() => {
+            container.innerHTML = '<div class="text-center p-4" style="color:#ef4444;font-size:0.9rem;">Gagal memuat data. Periksa koneksi internet.</div>';
+        });
+}
+
+// PETUGAS MODAL CONTROLLER
+window.bukaModalPetugas = function() {
+    const modal = document.getElementById('petugasModal');
+    if (modal) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        loadPetugasModal();
+    }
+}
+
+window.tutupModalPetugas = function() {
+    const modal = document.getElementById('petugasModal');
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+}
+
+function loadPetugasModal() {
+    const container = document.getElementById('petugasModalContent');
+    container.innerHTML = '<div class="text-center text-muted p-4"><div class="spinner-border spinner-border-sm text-success me-2" role="status"></div> Memuat data petugas...</div>';
+
+    fetch('api/jadwal-api.php?action=getPetugas')
+        .then(r => r.json())
+        .then(data => {
+            if (!data || data.length === 0) {
+                container.innerHTML = '<div class="text-center text-muted p-4"><span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">person_off</span><p class="mt-2" style="font-size:0.9rem;">Belum ada data petugas.</p></div>';
+                return;
+            }
+            let html = '<div style="display:flex;flex-direction:column;gap:12px;">';
+            data.forEach(item => {
+                const safeNama = escapeHtmlSafe(item.nama_petugas);
+                const safePria = escapeHtmlSafe(item.nama_pria);
+                const safeWanita = escapeHtmlSafe(item.nama_wanita);
+                const safeTanggal = escapeHtmlSafe(item.tanggal);
+                const safeWaktu = escapeHtmlSafe(item.waktu);
+                const safeFoto = item.foto ? escapeHtmlSafe(item.foto) : '';
+                html += '<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid rgba(15,118,110,0.08);display:flex;align-items:center;gap:12px;">';
+                if (safeFoto) {
+                    html += '<img src="' + safeFoto + '" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid rgba(15,118,110,0.08);flex-shrink:0;" alt="Foto Petugas">';
+                } else {
+                    html += '<div style="width:56px;height:56px;border-radius:12px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-icons-outlined" style="color:#94a3b8;">person</span></div>';
+                }
+                html += '<div style="flex:1;min-width:0;">';
+                html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:3px;">' + safeNama + '</p>';
+                html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + safeTanggal + ' · ⏰ ' + safeWaktu + '</p>';
+                html += '<p style="font-size:0.78rem;color:#64748b;">👤 ' + safePria + ' & ' + safeWanita + '</p>';
+                html += '</div></div>';
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        })
+        .catch(() => {
+            container.innerHTML = '<div class="text-center p-4" style="color:#ef4444;font-size:0.9rem;">Gagal memuat data. Periksa koneksi internet.</div>';
+        });
+}
+
+// Helper: safe HTML escape for modal rendering
+function escapeHtmlSafe(text) {
+    const div = document.createElement('div');
+    div.textContent = text || '';
+    return div.innerHTML;
+}
+
 // CLOSE MODAL ON BACKDROP CLICK
 document.querySelectorAll('.app-modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', e => {
@@ -170,7 +283,7 @@ function prosesCariSertifikat() {
     loading.classList.remove('d-none');
     resultArea.innerHTML = '';
 
-    const urlWebApp = "https://script.google.com/macros/s/AKfycbzSsypF03AF6k9b9N2s_rmQsk6-kLVuErjwGSPQdX3fC6zBhiUsCuMMwkpTnoRBq450Dg/exec?q=" + encodeURIComponent(input);
+    const urlWebApp = "api/sertifikat.php?q=" + encodeURIComponent(input);
 
     fetch(urlWebApp)
         .then(r => r.json())
@@ -220,7 +333,7 @@ document.getElementById("searchInput").addEventListener("keypress", e => {
 // ════════════════════════════════
 // NOTIFIKASI SYSTEM
 // ════════════════════════════════
-const NOTIF_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4TWRNB8tmdmob5nD0uxL8Vnq0fJt832u4wktfZUEpUfZ75GwNYNLbEy3iO6Xy3EwgQQ/exec';
+const NOTIF_SCRIPT_URL = 'api/notifikasi.php';
 
 window.bukaModalNotif = function() {
     const modal = document.getElementById('notifModal');

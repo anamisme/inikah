@@ -1,0 +1,14 @@
+# Hanya izinkan akses file PDF dan gambar
+<FilesMatch "\.(php|php5|phtml|sh|py|pl|cgi)$">
+    Deny from all
+</FilesMatch>
+
+# Nonaktifkan eksekusi PHP di folder uploads
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+# Izinkan file statis
+<FilesMatch "\.(pdf|jpg|jpeg|png|gif|webp)$">
+    Allow from all
+</FilesMatch>

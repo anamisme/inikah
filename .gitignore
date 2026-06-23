@@ -2,3 +2,6 @@
 *.pem
 *.jks
 .vscode/
+.DS_Store
+api/config.php
+api/fonts/
