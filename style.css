@@ -91,7 +91,7 @@ body {
 ════════════════════════════════ */
 .ios-navbar {
     position: fixed; top: 1rem; left: 1rem; right: 1rem; z-index: 999;
-    padding: 10px 20px;
+    padding: 12px 20px;
     background: rgba(0, 102, 64, 0.85);
     backdrop-filter: blur(24px) saturate(180%);
     -webkit-backdrop-filter: blur(24px) saturate(180%);
