@@ -78,8 +78,10 @@
             <input type="text" id="bannerJudul" placeholder="Judul banner..." style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
             <input type="text" id="bannerTag" placeholder="Tag (opsional, misal: PENGUMUMAN)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
             <input type="url" id="bannerLink" placeholder="Link tujuan (opsional, misal: https://...)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+            <input type="text" id="bannerGambar" placeholder="ID file Google Drive (misal: 1aBcDeF...)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+            <p style="font-size:0.7rem;color:var(--muted);margin:-6px 0 10px 4px;">Ukuran ideal: 1200x525px. Pastikan sharing file Drive = "Anyone with the link"</p>
             <select id="bannerWarna" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:12px;background:#fff;">
-                <option value="">Pilih warna background...</option>
+                <option value="">Warna fallback (jika tanpa gambar)...</option>
                 <option value="linear-gradient(145deg, #064e3b, #0f766e)">Hijau Tua</option>
                 <option value="linear-gradient(145deg, #0369a1, #0c4a6e)">Biru</option>
                 <option value="linear-gradient(145deg, #7c3aed, #4c1d95)">Ungu</option>
@@ -204,6 +206,7 @@
             const judul = document.getElementById('bannerJudul').value.trim();
             const tag = document.getElementById('bannerTag').value.trim() || 'INFO';
             const link = document.getElementById('bannerLink').value.trim();
+            const gambar = document.getElementById('bannerGambar').value.trim();
             const warna = document.getElementById('bannerWarna').value;
             const status = document.getElementById('bannerStatus');
             const btn = document.getElementById('btnBanner');
@@ -221,6 +224,7 @@
             let url = NOTIF_SCRIPT_URL + '?action=addBanner&judul=' + encodeURIComponent(judul) + '&tag=' + encodeURIComponent(tag);
             if (link) url += '&link=' + encodeURIComponent(link);
             if (warna) url += '&warna=' + encodeURIComponent(warna);
+            if (gambar) url += '&gambar=' + encodeURIComponent(gambar);
 
             fetch(url)
                 .then(r => r.json())
@@ -234,6 +238,7 @@
                         document.getElementById('bannerJudul').value = '';
                         document.getElementById('bannerTag').value = '';
                         document.getElementById('bannerLink').value = '';
+                        document.getElementById('bannerGambar').value = '';
                         document.getElementById('bannerWarna').value = '';
                         loadAdminBanners();
                     }

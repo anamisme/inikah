@@ -338,7 +338,9 @@ function renderBanners(data) {
     let dotsHtml = '';
 
     data.forEach((item, i) => {
-        const bg = item.warna || BANNER_COLORS[i % BANNER_COLORS.length];
+        const bg = item.gambar 
+            ? `background-image:url('${item.gambar}');background-size:cover;background-position:center;`
+            : `background:${item.warna || BANNER_COLORS[i % BANNER_COLORS.length]};`;
         const safeTitle = document.createElement('span');
         safeTitle.textContent = item.judul || '';
         const safeTag = document.createElement('span');
@@ -347,7 +349,7 @@ function renderBanners(data) {
 
         trackHtml += `
             <div class="banner-slide">
-                <div class="banner-card" style="background:${bg};" ${link}>
+                <div class="banner-card" style="${bg}" ${link}>
                     <div class="banner-card-content">
                         <div class="banner-tag">${safeTag.innerHTML}</div>
                         <div class="banner-title">${safeTitle.innerHTML}</div>
