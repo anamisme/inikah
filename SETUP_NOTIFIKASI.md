@@ -14,7 +14,7 @@
 2. Hapus isi default, paste kode berikut:
 
 ```javascript
-const SHEET_ID = 'GANTI_DENGAN_ID_SPREADSHEET_ANDA';
+const SHEET_ID = '1vffB-1WXlSqtY_yCOw9iiv3ZTPNst_4_QVHxBl91N1o';
 
 function doGet(e) {
   const action = e.parameter.action;

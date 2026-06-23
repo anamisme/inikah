@@ -220,7 +220,7 @@ document.getElementById("searchInput").addEventListener("keypress", e => {
 // ════════════════════════════════
 // NOTIFIKASI SYSTEM
 // ════════════════════════════════
-const NOTIF_SCRIPT_URL = 'https://script.google.com/macros/s/GANTI_DENGAN_DEPLOY_URL_ANDA/exec';
+const NOTIF_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4TWRNB8tmdmob5nD0uxL8Vnq0fJt832u4wktfZUEpUfZ75GwNYNLbEy3iO6Xy3EwgQQ/exec';
 
 window.bukaModalNotif = function() {
     const modal = document.getElementById('notifModal');
