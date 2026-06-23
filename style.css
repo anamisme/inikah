@@ -768,6 +768,15 @@ body.dark-mode .notif-item {
     background: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.06);
 }
+body.dark-mode .notif-item .notif-item-title {
+    color: #f1f5f9;
+}
+body.dark-mode .notif-item .notif-item-msg {
+    color: #94a3b8;
+}
+body.dark-mode .notif-item .notif-item-date {
+    color: #64748b;
+}
 body.dark-mode .notif-item.unread {
     background: rgba(15, 118, 110, 0.1);
     border-left-color: var(--green-light);
@@ -838,6 +847,13 @@ body.dark-mode .app-modal-body {
     background: #0f1117;
 }
 
+body.dark-mode .app-modal-content .p-4 {
+    background: #12141f !important;
+}
+body.dark-mode .app-modal-content .text-muted {
+    color: #94a3b8 !important;
+}
+
 body.dark-mode .ios-input {
     background: rgba(255, 255, 255, 0.04);
     border-color: rgba(255, 255, 255, 0.08);
@@ -862,6 +878,12 @@ body.dark-mode .ios-list-item:hover {
 
 body.dark-mode .doc-list-group {
     background: rgba(15, 118, 110, 0.08);
+}
+body.dark-mode .doc-list-item {
+    color: #f1f5f9;
+}
+body.dark-mode .doc-list-item span {
+    color: #f1f5f9;
 }
 body.dark-mode .doc-list-item:hover {
     background: rgba(15, 118, 110, 0.12);
