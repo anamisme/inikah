@@ -1,0 +1,40 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.nucleapp.na_76ba41'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.nucleapp.na_76ba41"
+        minSdk 23
+        targetSdk 34
+        versionCode 2
+        versionName "2.0.0"
+
+        // TWA host dan path
+        manifestPlaceholders = [
+            hostName    : "inikah.pages.dev",
+            defaultUrl  : "https://inikah.pages.dev/",
+            launcherName: "iNikah",
+            assetStatements: '[{ "relation": ["delegate_permission/common.handle_all_urls"], "target": { "namespace": "web", "site": "https://inikah.pages.dev" } }]'
+        ]
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.browser:browser:1.7.0'
+}
