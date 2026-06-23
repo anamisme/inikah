@@ -78,8 +78,11 @@
             <input type="text" id="bannerJudul" placeholder="Judul banner..." style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
             <input type="text" id="bannerTag" placeholder="Tag (opsional, misal: PENGUMUMAN)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
             <input type="url" id="bannerLink" placeholder="Link tujuan (opsional, misal: https://...)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
-            <input type="text" id="bannerGambar" placeholder="ID file Google Drive (misal: 1aBcDeF...)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
-            <p style="font-size:0.7rem;color:var(--muted);margin:-6px 0 10px 4px;">Ukuran ideal: 1200x525px. Pastikan sharing file Drive = "Anyone with the link"</p>
+            <input type="text" id="bannerGambar" placeholder="Link atau ID file Google Drive" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:6px;">
+            <div id="bannerPreview" style="display:none;margin-bottom:10px;border-radius:12px;overflow:hidden;border:1px solid var(--border);">
+                <img id="bannerPreviewImg" src="" style="width:100%;aspect-ratio:16/7;object-fit:cover;display:block;">
+            </div>
+            <p style="font-size:0.7rem;color:var(--muted);margin:0 0 10px 4px;">Ukuran ideal: 1200x525px. Paste link Drive atau ID file. Pastikan sharing = "Anyone with the link"</p>
             <select id="bannerWarna" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:12px;background:#fff;">
                 <option value="">Warna fallback (jika tanpa gambar)...</option>
                 <option value="linear-gradient(145deg, #064e3b, #0f766e)">Hijau Tua</option>
@@ -206,7 +209,7 @@
             const judul = document.getElementById('bannerJudul').value.trim();
             const tag = document.getElementById('bannerTag').value.trim() || 'INFO';
             const link = document.getElementById('bannerLink').value.trim();
-            const gambar = document.getElementById('bannerGambar').value.trim();
+            const gambar = document.getElementById('bannerGambar').dataset.extractedId || extractDriveId(document.getElementById('bannerGambar').value.trim());
             const warna = document.getElementById('bannerWarna').value;
             const status = document.getElementById('bannerStatus');
             const btn = document.getElementById('btnBanner');
@@ -239,6 +242,8 @@
                         document.getElementById('bannerTag').value = '';
                         document.getElementById('bannerLink').value = '';
                         document.getElementById('bannerGambar').value = '';
+                        document.getElementById('bannerGambar').dataset.extractedId = '';
+                        document.getElementById('bannerPreview').style.display = 'none';
                         document.getElementById('bannerWarna').value = '';
                         loadAdminBanners();
                     }
@@ -266,7 +271,12 @@
                     }
                     let html = '';
                     data.forEach(item => {
+                        var thumbHtml = '';
+                        if (item.gambar) {
+                            thumbHtml = '<img src="' + escapeHtml(item.gambar) + '" style="width:100%;height:60px;object-fit:cover;border-radius:8px;margin-bottom:8px;">';
+                        }
                         html += '<div style="padding:12px 14px;border-radius:12px;background:var(--bg);margin-bottom:8px;border:1px solid var(--border);">';
+                        html += thumbHtml;
                         html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
                         html += '<div><p style="font-size:0.85rem;font-weight:700;margin-bottom:3px;">' + escapeHtml(item.judul) + '</p>';
                         html += '<p style="font-size:0.7rem;color:var(--muted);">Tag: ' + escapeHtml(item.tag) + (item.link ? ' · <a href="' + escapeHtml(item.link) + '" target="_blank" style="color:var(--green-mid);">Link</a>' : '') + '</p></div>';
@@ -287,6 +297,46 @@
                 .then(() => loadAdminBanners())
                 .catch(() => alert('Gagal menghapus.'));
         }
+
+        // AUTO CONVERT & PREVIEW GOOGLE DRIVE LINK
+        function extractDriveId(input) {
+            if (!input) return '';
+            // Format: https://drive.google.com/file/d/FILE_ID/view...
+            var match = input.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (match) return match[1];
+            // Format: https://drive.google.com/open?id=FILE_ID
+            match = input.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (match) return match[1];
+            // Format: https://lh3.googleusercontent.com/d/FILE_ID
+            match = input.match(/googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/);
+            if (match) return match[1];
+            // Anggap itu langsung ID
+            if (/^[a-zA-Z0-9_-]{10,}$/.test(input.trim())) return input.trim();
+            return '';
+        }
+
+        function getDriveThumbnail(fileId) {
+            return 'https://lh3.googleusercontent.com/d/' + fileId + '=w1200';
+        }
+
+        document.getElementById('bannerGambar').addEventListener('input', function() {
+            const val = this.value.trim();
+            const fileId = extractDriveId(val);
+            const preview = document.getElementById('bannerPreview');
+            const img = document.getElementById('bannerPreviewImg');
+
+            if (fileId) {
+                const thumbUrl = getDriveThumbnail(fileId);
+                img.src = thumbUrl;
+                preview.style.display = 'block';
+                // Simpan ID yang sudah di-extract
+                this.dataset.extractedId = fileId;
+            } else {
+                preview.style.display = 'none';
+                img.src = '';
+                this.dataset.extractedId = '';
+            }
+        });
     </script>
 </body>
 </html>
