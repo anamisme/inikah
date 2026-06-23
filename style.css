@@ -900,3 +900,47 @@ body.dark-mode .book-label-title {
 body.dark-mode .page-footer {
     color: #64748b;
 }
+
+/* Dark mode badge submenu */
+body.dark-mode .badge-1 {
+    background: rgba(6, 78, 59, 0.25);
+    color: #34d399;
+}
+body.dark-mode .badge-2 {
+    background: rgba(15, 118, 110, 0.25);
+    color: #2dd4bf;
+}
+body.dark-mode .badge-3 {
+    background: rgba(20, 184, 166, 0.25);
+    color: #5eead4;
+}
+body.dark-mode .badge-4 {
+    background: rgba(180, 83, 9, 0.25);
+    color: #fcd34d;
+}
+body.dark-mode .badge-icon {
+    background: rgba(15, 118, 110, 0.2);
+    color: #2dd4bf;
+}
+body.dark-mode .badge-icon-gold {
+    background: rgba(180, 83, 9, 0.2);
+    color: #fcd34d;
+}
+
+/* Dark mode chevron submenu */
+body.dark-mode .chevron-main {
+    color: #475569;
+}
+body.dark-mode .chevron-main.rotated {
+    color: #2dd4bf;
+}
+
+/* Dark mode input placeholder */
+body.dark-mode .ios-input::placeholder {
+    color: #475569;
+}
+
+/* Dark mode search result text */
+body.dark-mode .ios-list-main-title {
+    color: #f1f5f9;
+}
