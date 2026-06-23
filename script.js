@@ -404,3 +404,134 @@ function resetBannerInterval() {
 
 // Load banners
 setTimeout(loadBanners, 1500);
+
+
+// ════════════════════════════════
+// ELASTIC OVERSCROLL EFFECT (Menu Cards)
+// ════════════════════════════════
+(function() {
+    let startY = 0;
+    let currentY = 0;
+    let isDragging = false;
+    let isOverscrolling = false;
+    let elasticOffset = 0;
+    let velocity = 0;
+    let lastY = 0;
+    let lastTime = 0;
+    let animFrame = null;
+
+    const getCards = () => document.querySelectorAll('.ios-main-card');
+    const container = document;
+
+    function applyElastic(offset) {
+        const cards = getCards();
+        cards.forEach((card, i) => {
+            const delay = i * 0.06;
+            const individual = offset * (1 - delay);
+            card.style.transform = `translateY(${individual}px)`;
+            card.style.transition = 'none';
+        });
+    }
+
+    function releaseElastic() {
+        const cards = getCards();
+        cards.forEach((card, i) => {
+            const delay = i * 40;
+            setTimeout(() => {
+                card.style.transition = `transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)`;
+                card.style.transform = 'translateY(0px)';
+                setTimeout(() => { card.style.transition = ''; card.style.transform = ''; }, 700);
+            }, delay);
+        });
+    }
+
+    function isAtTop() {
+        return window.scrollY <= 0;
+    }
+
+    function isAtBottom() {
+        return (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 2;
+    }
+
+    window.addEventListener('touchstart', (e) => {
+        startY = e.touches[0].clientY;
+        lastY = startY;
+        lastTime = Date.now();
+        isDragging = true;
+        isOverscrolling = false;
+        velocity = 0;
+        if (animFrame) cancelAnimationFrame(animFrame);
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        currentY = e.touches[0].clientY;
+        const diff = currentY - startY;
+        const now = Date.now();
+        velocity = (currentY - lastY) / (now - lastTime || 1);
+        lastY = currentY;
+        lastTime = now;
+
+        // Overscroll atas (tarik ke bawah saat sudah di top)
+        if (isAtTop() && diff > 0) {
+            isOverscrolling = true;
+            elasticOffset = Math.pow(diff, 0.7);
+            applyElastic(elasticOffset);
+        }
+        // Overscroll bawah (tarik ke atas saat sudah di bottom)
+        else if (isAtBottom() && diff < 0) {
+            isOverscrolling = true;
+            elasticOffset = -Math.pow(Math.abs(diff), 0.7);
+            applyElastic(elasticOffset);
+        }
+        else if (isOverscrolling) {
+            // Masih overscroll tapi arah berubah
+            elasticOffset = diff > 0 ? Math.pow(Math.abs(diff), 0.7) : -Math.pow(Math.abs(diff), 0.7);
+            applyElastic(elasticOffset);
+        }
+    }, { passive: true });
+
+    window.addEventListener('touchend', () => {
+        isDragging = false;
+        if (isOverscrolling) {
+            isOverscrolling = false;
+            // Bounce back with velocity
+            if (Math.abs(velocity) > 0.5) {
+                const bounce = velocity * 30;
+                const cards = getCards();
+                cards.forEach((card, i) => {
+                    const delay = i * 0.06;
+                    const individual = bounce * (1 - delay);
+                    card.style.transition = 'transform 0.2s ease-out';
+                    card.style.transform = `translateY(${elasticOffset + individual}px)`;
+                });
+                setTimeout(releaseElastic, 180);
+            } else {
+                releaseElastic();
+            }
+            elasticOffset = 0;
+        }
+    }, { passive: true });
+
+    // Mouse wheel overscroll for desktop
+    let wheelTimeout = null;
+    let wheelAccum = 0;
+
+    window.addEventListener('wheel', (e) => {
+        const atTop = isAtTop() && e.deltaY < 0;
+        const atBottom = isAtBottom() && e.deltaY > 0;
+
+        if (atTop || atBottom) {
+            wheelAccum += e.deltaY * 0.3;
+            wheelAccum = Math.max(-80, Math.min(80, wheelAccum));
+            const offset = -wheelAccum;
+            applyElastic(offset);
+
+            if (wheelTimeout) clearTimeout(wheelTimeout);
+            wheelTimeout = setTimeout(() => {
+                releaseElastic();
+                wheelAccum = 0;
+            }, 150);
+        }
+    }, { passive: true });
+})();
