@@ -105,7 +105,16 @@ body {
 .nav-row {
     display: flex; align-items: center; justify-content: space-between;
 }
-.nav-brand { display: flex; flex-direction: column; }
+.nav-brand-center {
+    display: flex; flex-direction: column; align-items: center;
+    flex: 1;
+}
+
+.ios-subtitle {
+    font-size: 0.5rem; font-weight: 600; 
+    color: rgba(255, 255, 255, 0.75);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-top: 1px;
+}
 
 .logo-wordmark {
     font-family: "Playfair Display", serif;
@@ -114,12 +123,6 @@ body {
 }
 .logo-wordmark .wi { font-style: italic; color: var(--gold-light); }
 .logo-wordmark .wn { font-weight: 700; }
-
-.ios-subtitle {
-    font-size: 0.55rem; font-weight: 600; 
-    color: rgba(255, 255, 255, 0.9);
-    text-transform: uppercase; letter-spacing: 1.5px; margin-top: 2px;
-}
 
 /* ════════════════════════════════
    BANNER CAROUSEL (Apple Books style)
@@ -660,11 +663,6 @@ body.dark-mode .theme-toggle {
 /* ════════════════════════════════
    NAV ACTIONS & NOTIFICATION BELL
 ════════════════════════════════ */
-.nav-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
 
 .notif-bell {
     width: 24px; height: 24px; border-radius: 50%;
