@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Notifikasi – iNikah</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-deep: #064e3b;
+            --green-mid: #0f766e;
+            --green-light: #14b8a6;
+            --bg: #f2f5f3;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: rgba(15, 118, 110, 0.08);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+            background: var(--bg); color: var(--text);
+            padding: 20px; min-height: 100vh;
+        }
+        .admin-container { max-width: 600px; margin: 0 auto; }
+        .admin-header {
+            text-align: center; padding: 24px 0 20px;
+        }
+        .admin-logo {
+            font-family: "Playfair Display", serif;
+            font-size: 1.8rem;
+        }
+        .admin-logo .wi { font-style: italic; color: #b45309; }
+        .admin-logo .wn { font-weight: 700; }
+        .admin-sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; font-weight: 600; }
+</style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="admin-container">
+        <div class="admin-header">
+            <div class="admin-logo"><span class="wi">i</span><span class="wn">Nikah</span></div>
+            <p class="admin-sub">Panel Admin Notifikasi</p>
+        </div>
+        <div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">🔐 Login Admin</h3>
+            <input type="password" id="adminPass" placeholder="Masukkan password admin..." style="width:100%;padding:14px 18px;border-radius:12px;border:1.5px solid var(--border);font-size:0.95rem;outline:none;margin-bottom:12px;">
+            <button onclick="loginAdmin()" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--green-deep),var(--green-mid));color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;">Masuk</button>
+            <p id="loginError" style="color:#ef4444;font-size:0.8rem;margin-top:10px;display:none;">Password salah!</p>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel" class="admin-container" style="display:none;">
+        <div class="admin-header">
+            <div class="admin-logo"><span class="wi">i</span><span class="wn">Nikah</span></div>
+            <p class="admin-sub">Panel Admin Notifikasi</p>
+        </div>
+
+        <!-- FORM KIRIM NOTIFIKASI -->
+        <div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);margin-bottom:20px;">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">📢 Kirim Notifikasi Baru</h3>
+            <input type="text" id="notifJudul" placeholder="Judul notifikasi..." style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+            <textarea id="notifPesan" placeholder="Isi pesan notifikasi..." rows="3" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:12px;resize:vertical;font-family:inherit;"></textarea>
+            <button onclick="kirimNotif()" id="btnKirim" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--green-deep),var(--green-mid));color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;">Kirim Notifikasi</button>
+            <p id="statusMsg" style="font-size:0.8rem;margin-top:10px;display:none;"></p>
+        </div>
+
+        <!-- DAFTAR NOTIFIKASI -->
+        <div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">📋 Daftar Notifikasi</h3>
+            <div id="adminNotifList"><p style="color:var(--muted);font-size:0.85rem;">Memuat...</p></div>
+        </div>
+
+        <p style="text-align:center;margin-top:20px;font-size:0.75rem;color:var(--muted);">
+            <a href="index.html" style="color:var(--green-mid);text-decoration:none;font-weight:600;">← Kembali ke Beranda</a>
+        </p>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = 'kuakarangdadap2024';
+        const NOTIF_SCRIPT_URL = 'https://script.google.com/macros/s/GANTI_DENGAN_DEPLOY_URL_ANDA/exec';
+
+        function loginAdmin() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === ADMIN_PASSWORD) {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                loadAdminNotifs();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        document.getElementById('adminPass').addEventListener('keypress', e => {
+            if (e.key === 'Enter') loginAdmin();
+        });
+
+        function kirimNotif() {
+            const judul = document.getElementById('notifJudul').value.trim();
+            const pesan = document.getElementById('notifPesan').value.trim();
+            const statusMsg = document.getElementById('statusMsg');
+            const btn = document.getElementById('btnKirim');
+
+            if (!judul || !pesan) {
+                statusMsg.textContent = 'Judul dan pesan wajib diisi!';
+                statusMsg.style.color = '#ef4444';
+                statusMsg.style.display = 'block';
+                return;
+            }
+
+            btn.textContent = 'Mengirim...';
+            btn.disabled = true;
+
+            fetch(NOTIF_SCRIPT_URL + '?action=add&judul=' + encodeURIComponent(judul) + '&pesan=' + encodeURIComponent(pesan))
+                .then(r => r.json())
+                .then(res => {
+                    statusMsg.textContent = 'Notifikasi berhasil dikirim!';
+                    statusMsg.style.color = '#059669';
+                    statusMsg.style.display = 'block';
+                    document.getElementById('notifJudul').value = '';
+                    document.getElementById('notifPesan').value = '';
+                    btn.textContent = 'Kirim Notifikasi';
+                    btn.disabled = false;
+                    loadAdminNotifs();
+                })
+                .catch(err => {
+                    statusMsg.textContent = 'Gagal mengirim. Periksa koneksi.';
+                    statusMsg.style.color = '#ef4444';
+                    statusMsg.style.display = 'block';
+                    btn.textContent = 'Kirim Notifikasi';
+                    btn.disabled = false;
+                });
+        }
+
+        function loadAdminNotifs() {
+            fetch(NOTIF_SCRIPT_URL + '?action=get')
+                .then(r => r.json())
+                .then(data => {
+                    const container = document.getElementById('adminNotifList');
+                    if (!data || data.length === 0) {
+                        container.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">Belum ada notifikasi.</p>';
+                        return;
+                    }
+                    let html = '';
+                    data.forEach(item => {
+                        html += '<div style="padding:12px 14px;border-radius:12px;background:var(--bg);margin-bottom:8px;border:1px solid var(--border);">';
+                        html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
+                        html += '<div><p style="font-size:0.85rem;font-weight:700;margin-bottom:3px;">' + escapeHtml(item.judul) + '</p>';
+                        html += '<p style="font-size:0.78rem;color:var(--muted);">' + escapeHtml(item.pesan) + '</p>';
+                        html += '<p style="font-size:0.65rem;color:#94a3b8;margin-top:4px;">' + escapeHtml(item.tanggal) + '</p></div>';
+                        html += '<button onclick="hapusNotif(\'' + item.id + '\')" style="background:#fee2e2;border:none;border-radius:8px;padding:6px 8px;cursor:pointer;color:#ef4444;font-size:0.7rem;font-weight:700;flex-shrink:0;">Hapus</button>';
+                        html += '</div></div>';
+                    });
+                    container.innerHTML = html;
+                })
+                .catch(() => {
+                    document.getElementById('adminNotifList').innerHTML = '<p style="color:#ef4444;font-size:0.85rem;">Gagal memuat data.</p>';
+                });
+        }
+
+        function hapusNotif(id) {
+            if (!confirm('Hapus notifikasi ini?')) return;
+            fetch(NOTIF_SCRIPT_URL + '?action=delete&id=' + encodeURIComponent(id))
+                .then(r => r.json())
+                .then(() => loadAdminNotifs())
+                .catch(() => alert('Gagal menghapus.'));
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text || '';
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

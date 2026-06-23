@@ -551,6 +551,101 @@ body.dark-mode .theme-toggle {
     color: #fcd34d;
 }
 
+/* ════════════════════════════════
+   NAV ACTIONS & NOTIFICATION BELL
+════════════════════════════════ */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notif-bell {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0;
+    color: #ffffff;
+    position: relative;
+    transition: all 0.3s ease;
+}
+.notif-bell:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.1);
+}
+.notif-bell:active {
+    transform: scale(0.95);
+}
+.notif-bell .material-icons-outlined {
+    font-size: 14px;
+}
+
+.notif-badge {
+    position: absolute;
+    top: -4px; right: -4px;
+    min-width: 14px; height: 14px;
+    border-radius: 7px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 0.55rem;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 3px;
+    line-height: 1;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.4);
+    animation: notifPulse 2s ease-in-out infinite;
+}
+
+@keyframes notifPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+body.dark-mode .notif-bell {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #f1f5f9;
+}
+
+/* Notifikasi items dalam modal */
+.notif-item {
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    margin-bottom: 10px;
+    transition: all 0.2s ease;
+}
+.notif-item:last-child { margin-bottom: 0; }
+.notif-item:hover { transform: translateX(3px); }
+.notif-item-title {
+    font-size: 0.9rem; font-weight: 700; color: var(--text);
+    margin-bottom: 4px;
+}
+.notif-item-msg {
+    font-size: 0.8rem; color: var(--muted);
+    line-height: 1.5;
+}
+.notif-item-date {
+    font-size: 0.65rem; color: #94a3b8;
+    margin-top: 6px;
+    font-weight: 600;
+}
+.notif-item.unread {
+    border-left: 3px solid var(--green-mid);
+    background: var(--green-tint);
+}
+
+body.dark-mode .notif-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.06);
+}
+body.dark-mode .notif-item.unread {
+    background: rgba(15, 118, 110, 0.1);
+    border-left-color: var(--green-light);
+}
+
 body.dark-mode .ios-main-card {
     background: 
         linear-gradient(145deg, #1a1c2e 0%, #16182a 100%) padding-box,

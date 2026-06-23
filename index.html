@@ -26,8 +26,30 @@
             <div class="nav-brand">
                 <h1 class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></h1>
             </div>
-            <div class="theme-toggle" id="themeToggle" role="button" aria-label="Toggle dark mode" tabindex="0">
-                <span class="material-icons-outlined" id="toggleIcon">dark_mode</span>
+            <div class="nav-actions">
+                <div class="notif-bell" id="notifBell" role="button" aria-label="Notifikasi" tabindex="0" onclick="bukaModalNotif()">
+                    <span class="material-icons-outlined">notifications</span>
+                    <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+                </div>
+                <div class="theme-toggle" id="themeToggle" role="button" aria-label="Toggle dark mode" tabindex="0">
+                    <span class="material-icons-outlined" id="toggleIcon">dark_mode</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOTIFIKASI -->
+    <div id="notifModal" class="app-modal-overlay">
+        <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
+            <button class="app-modal-close" onclick="tutupModalNotif()" title="Tutup">
+                <span class="material-icons-outlined">close</span>
+            </button>
+            <h3 class="app-modal-title">Notifikasi</h3>
+            <div class="p-4" style="background: #f8fafc;" id="notifList">
+                <div class="text-center text-muted p-4">
+                    <span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">notifications_off</span>
+                    <p class="mt-2" style="font-size:0.9rem;">Belum ada notifikasi.</p>
+                </div>
             </div>
         </div>
     </div>

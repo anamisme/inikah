@@ -215,3 +215,96 @@ function prosesCariSertifikat() {
 document.getElementById("searchInput").addEventListener("keypress", e => {
     if (e.key === "Enter") prosesCariSertifikat();
 });
+
+
+// ════════════════════════════════
+// NOTIFIKASI SYSTEM
+// ════════════════════════════════
+const NOTIF_SCRIPT_URL = 'https://script.google.com/macros/s/GANTI_DENGAN_DEPLOY_URL_ANDA/exec';
+
+window.bukaModalNotif = function() {
+    const modal = document.getElementById('notifModal');
+    if (modal) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        markAllRead();
+    }
+}
+
+window.tutupModalNotif = function() {
+    const modal = document.getElementById('notifModal');
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+}
+
+function loadNotifications() {
+    fetch(NOTIF_SCRIPT_URL + '?action=get')
+        .then(r => r.json())
+        .then(data => {
+            if (!data || data.length === 0) return;
+            renderNotifList(data);
+            updateBadge(data);
+        })
+        .catch(err => console.log('Notif fetch skipped:', err.message));
+}
+
+function renderNotifList(data) {
+    const container = document.getElementById('notifList');
+    const readIds = JSON.parse(localStorage.getItem('inikah-notif-read') || '[]');
+
+    if (data.length === 0) {
+        container.innerHTML = `
+            <div class="text-center text-muted p-4">
+                <span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">notifications_off</span>
+                <p class="mt-2" style="font-size:0.9rem;">Belum ada notifikasi.</p>
+            </div>`;
+        return;
+    }
+
+    let html = '';
+    data.forEach(item => {
+        const isUnread = !readIds.includes(item.id);
+        const safeTitle = document.createElement('span');
+        safeTitle.textContent = item.judul || '';
+        const safeMsg = document.createElement('span');
+        safeMsg.textContent = item.pesan || '';
+        html += `
+            <div class="notif-item ${isUnread ? 'unread' : ''}">
+                <div class="notif-item-title">${safeTitle.innerHTML}</div>
+                <div class="notif-item-msg">${safeMsg.innerHTML}</div>
+                <div class="notif-item-date">${item.tanggal || ''}</div>
+            </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function updateBadge(data) {
+    const badge = document.getElementById('notifBadge');
+    const readIds = JSON.parse(localStorage.getItem('inikah-notif-read') || '[]');
+    const unreadCount = data.filter(item => !readIds.includes(item.id)).length;
+
+    if (unreadCount > 0) {
+        badge.textContent = unreadCount > 9 ? '9+' : unreadCount;
+        badge.style.display = 'flex';
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+function markAllRead() {
+    fetch(NOTIF_SCRIPT_URL + '?action=get')
+        .then(r => r.json())
+        .then(data => {
+            if (!data || data.length === 0) return;
+            const allIds = data.map(item => item.id);
+            localStorage.setItem('inikah-notif-read', JSON.stringify(allIds));
+            document.getElementById('notifBadge').style.display = 'none';
+            renderNotifList(data);
+        })
+        .catch(() => {});
+}
+
+// Load notifikasi saat halaman siap
+setTimeout(loadNotifications, 3000);
