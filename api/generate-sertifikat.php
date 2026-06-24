@@ -65,8 +65,8 @@ $bulanIndo = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus'
 $tanggalFormatted = date('j') . ' ' . $bulanIndo[date('n')-1] . ' ' . date('Y');
 $tahun = date('Y');
 
-// Nomor sertifikat: /Kua.11.26.08/BA.00/TAHUN
-$nomorSert = '/Kua.11.26.08/BA.00/' . $tahun;
+// Nomor sertifikat: hanya tahun di paling akhir (sesuai template: /Kua.11.26.08/BA.00/TAHUN)
+$nomorSert = $tahun;
 
 // Font - gunakan font default GD (angka 1-5) atau TrueType jika tersedia
 // Coba cari font di sistem
@@ -77,41 +77,43 @@ $fontRegular = __DIR__ . '/fonts/Inter_28pt-Regular.ttf';
 $useTTF = file_exists($fontBold) && file_exists($fontRegular);
 
 if ($useTTF) {
-    // ─── POSISI TEXT (sesuai template ~1024x576) ───
-    // Nama peserta - tengah, di dalam segi enam
-    $namaSize = 22;
+    // ─── POSISI TEXT (template 1280x720) ───
+    
+    // Nama peserta - tengah, di dalam segi enam (area sekitar y=38%)
+    $namaSize = 28;
     $bbox = imagettfbbox($namaSize, 0, $fontBold, $nama);
     $namaX = ($width - ($bbox[2] - $bbox[0])) / 2;
-    $namaY = $height * 0.39;
+    $namaY = (int)($height * 0.40);
     imagettftext($img, $namaSize, 0, (int)$namaX, (int)$namaY, $colorDark, $fontBold, $nama);
 
-    // NIK
+    // NIK - di bawah "NIK :" (sekitar y=47%)
     $nikText = $nik;
-    $nikSize = 12;
-    $bbox = imagettfbbox($nikSize, 0, $fontRegular, $nikText);
+    $nikSize = 14;
+    $bbox = imagettfbbox($nikSize, 0, $fontBold, $nikText);
     $nikX = ($width - ($bbox[2] - $bbox[0])) / 2;
-    $nikY = $height * 0.47;
-    imagettftext($img, $nikSize, 0, (int)$nikX, (int)$nikY, $colorDark, $fontRegular, $nikText);
+    $nikY = (int)($height * 0.49);
+    imagettftext($img, $nikSize, 0, (int)$nikX, (int)$nikY, $colorDark, $fontBold, $nikText);
 
-    // Skor
+    // Skor - di bawah "Skor Nilai :" (sekitar y=54%)
     $skorText = (string)$skor;
-    $skorSize = 12;
-    $bbox = imagettfbbox($skorSize, 0, $fontRegular, $skorText);
+    $skorSize = 14;
+    $bbox = imagettfbbox($skorSize, 0, $fontBold, $skorText);
     $skorX = ($width - ($bbox[2] - $bbox[0])) / 2;
-    $skorY = $height * 0.53;
-    imagettftext($img, $skorSize, 0, (int)$skorX, (int)$skorY, $colorDark, $fontRegular, $skorText);
+    $skorY = (int)($height * 0.56);
+    imagettftext($img, $skorSize, 0, (int)$skorX, (int)$skorY, $colorDark, $fontBold, $skorText);
 
-    // Nomor sertifikat (di bawah tulisan "SERTIFIKAT")
-    $nomorSize = 10;
-    $bbox = imagettfbbox($nomorSize, 0, $fontRegular, $nomorSert);
-    $nomorX = ($width - ($bbox[2] - $bbox[0])) / 2 + ($width * 0.05);
-    $nomorY = $height * 0.235;
-    imagettftext($img, $nomorSize, 0, (int)$nomorX, (int)$nomorY, $colorDark, $fontRegular, $nomorSert);
+    // Nomor sertifikat - setelah "Nomor :" di bawah SERTIFIKAT (sekitar y=23%)
+    $nomorSize = 11;
+    $nomorFullText = $nomorSert;
+    $bbox = imagettfbbox($nomorSize, 0, $fontRegular, $nomorFullText);
+    $nomorX = (int)($width * 0.52);
+    $nomorY = (int)($height * 0.235);
+    imagettftext($img, $nomorSize, 0, (int)$nomorX, (int)$nomorY, $colorDark, $fontRegular, $nomorFullText);
 
-    // Tanggal (kanan bawah, setelah "Karangdadap,")
-    $tglSize = 10;
-    $tglX = $width * 0.60;
-    $tglY = $height * 0.72;
+    // Tanggal - kanan bawah setelah "Karangdadap," (sekitar x=60%, y=72%)
+    $tglSize = 11;
+    $tglX = (int)($width * 0.62);
+    $tglY = (int)($height * 0.73);
     imagettftext($img, $tglSize, 0, (int)$tglX, (int)$tglY, $colorDark, $fontRegular, $tanggalFormatted);
 
 } else {
