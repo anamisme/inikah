@@ -9,8 +9,12 @@ deployment:
     - /bin/cp -R pretest.html $DEPLOYPATH/
     - /bin/cp -R posttest.html $DEPLOYPATH/
     - /bin/cp -R petugas.html $DEPLOYPATH/
+    - /bin/cp -R laporan.html $DEPLOYPATH/
     - /bin/cp -R privacy-policy.html $DEPLOYPATH/
     - /bin/cp -R terms-of-service.html $DEPLOYPATH/
     - /bin/cp -R api/*.php $DEPLOYPATH/api/
     - /bin/cp -R api/.htaccess $DEPLOYPATH/api/
+    - /bin/mkdir -p $DEPLOYPATH/api/fonts
+    - /bin/cp -R api/fonts/*.ttf $DEPLOYPATH/api/fonts/ 2>/dev/null || true
     - /bin/cp -R uploads/.htaccess $DEPLOYPATH/uploads/
+    - /bin/cp -R .well-known $DEPLOYPATH/

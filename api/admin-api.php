@@ -18,6 +18,23 @@
  */
 
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/auth.php';
+
+header('Content-Type: application/json');
+
+// Fungsi cek token untuk aksi write
+function requireAdminAuth() {
+    $token = $_GET['token'] ?? $_POST['token'] ?? '';
+    if (!$token) {
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        $token = str_replace('Bearer ', '', $authHeader);
+    }
+    if (!verifyToken($token)) {
+        http_response_code(401);
+        echo json_encode(['error' => 'Akses ditolak. Silakan login ulang.']);
+        exit;
+    }
+}
 
 $action = $_GET['action'] ?? $_POST['action'] ?? '';
 
@@ -31,6 +48,7 @@ switch ($action) {
         break;
 
     case 'addSertifikat':
+        requireAdminAuth();
         $nama = clean($_POST['nama'] ?? $_GET['nama'] ?? '');
         $link = clean($_POST['link'] ?? $_GET['link'] ?? '');
 
@@ -45,6 +63,7 @@ switch ($action) {
         break;
 
     case 'deleteSertifikat':
+        requireAdminAuth();
         $id = intval($_GET['id'] ?? 0);
         if ($id <= 0) { echo json_encode(['error' => 'ID tidak valid']); break; }
 
@@ -61,6 +80,7 @@ switch ($action) {
         break;
 
     case 'addJadwal':
+        requireAdminAuth();
         $tanggal   = clean($_POST['tanggal_akad'] ?? $_GET['tanggal_akad'] ?? '');
         $waktu     = clean($_POST['waktu'] ?? $_GET['waktu'] ?? '');
         $pria      = clean($_POST['nama_pria'] ?? $_GET['nama_pria'] ?? '');
@@ -80,6 +100,7 @@ switch ($action) {
         break;
 
     case 'deleteJadwal':
+        requireAdminAuth();
         $id = intval($_GET['id'] ?? 0);
         if ($id <= 0) { echo json_encode(['error' => 'ID tidak valid']); break; }
 

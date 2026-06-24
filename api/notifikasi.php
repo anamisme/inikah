@@ -5,13 +5,17 @@
  */
 
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/auth.php';
+
+header('Content-Type: application/json');
 
 // Fungsi cek token untuk aksi yang butuh autentikasi
 function requireAuth() {
-    $token = $_GET['token'] ?? $_POST['token'] ?? ($_SERVER['HTTP_AUTHORIZATION'] ?? '');
-    $token = str_replace('Bearer ', '', $token);
-    
-    require_once __DIR__ . '/auth.php';
+    $token = $_GET['token'] ?? $_POST['token'] ?? '';
+    if (!$token) {
+        $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        $token = str_replace('Bearer ', '', $authHeader);
+    }
     if (!verifyToken($token)) {
         http_response_code(401);
         echo json_encode(['error' => 'Akses ditolak. Silakan login ulang.']);

@@ -12,6 +12,7 @@
 // DEBUG MODE
 if (isset($_GET['debug'])) {
     require_once __DIR__ . '/config.php';
+    header('Content-Type: application/json');
     $templatePath = __DIR__ . '/../uploads/sertifikat/template.png';
     $outputDir = __DIR__ . '/../uploads/sertifikat/';
     $fontPath = __DIR__ . '/fonts/Inter_28pt-Bold.ttf';
@@ -37,6 +38,8 @@ if (isset($_GET['test'])) {
 }
 
 require_once __DIR__ . '/config.php';
+
+header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['error' => 'Method harus POST']);

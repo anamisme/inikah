@@ -6,6 +6,8 @@
 
 require_once __DIR__ . '/config.php';
 
+header('Content-Type: application/json');
+
 $query = trim($_GET['q'] ?? '');
 
 if (!$query) {
