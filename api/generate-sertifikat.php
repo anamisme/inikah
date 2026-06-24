@@ -1,10 +1,24 @@
 <?php
 /**
- * API Generate Sertifikat - iNikah
- * Generate sertifikat PNG dari template gambar + overlay text
+ * API Generate Sertifikat HTML - iNikah
+ * Generate sertifikat sebagai halaman HTML dengan background template
  * 
  * POST body: { nama, skor, nik }
  */
+
+// DEBUG MODE - hapus setelah selesai testing
+if (isset($_GET['debug'])) {
+    require_once __DIR__ . '/config.php';
+    $templatePath = __DIR__ . '/../uploads/sertifikat/template.png';
+    $outputDir = __DIR__ . '/../uploads/sertifikat/';
+    echo json_encode([
+        'template_exists' => file_exists($templatePath),
+        'output_dir_exists' => is_dir($outputDir),
+        'output_dir_writable' => is_writable($outputDir),
+        'php_version' => phpversion()
+    ]);
+    exit;
+}
 
 require_once __DIR__ . '/config.php';
 
@@ -33,128 +47,70 @@ if ($existing) {
     exit;
 }
 
-// Path template
-$templatePath = __DIR__ . '/../uploads/sertifikat/template.png';
-if (!file_exists($templatePath)) {
-    echo json_encode(['error' => 'Template sertifikat belum diupload']);
-    exit;
-}
-
 // Buat folder output jika belum ada
 $outputDir = __DIR__ . '/../uploads/sertifikat/';
 if (!is_dir($outputDir)) {
     mkdir($outputDir, 0755, true);
 }
 
-// Load template
-$img = imagecreatefrompng($templatePath);
-if (!$img) {
-    echo json_encode(['error' => 'Gagal memuat template']);
-    exit;
-}
-
-$width = imagesx($img);
-$height = imagesy($img);
-
-// Warna teks
-$colorDark = imagecolorallocate($img, 15, 23, 42);       // #0f172a - hitam gelap
-$colorGreen = imagecolorallocate($img, 6, 78, 59);       // #064e3b - hijau tua
-
 // Tanggal & tahun
 $bulanIndo = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 $tanggalFormatted = date('j') . ' ' . $bulanIndo[date('n')-1] . ' ' . date('Y');
 $tahun = date('Y');
 
-// Nomor sertifikat: hanya tahun di paling akhir (sesuai template: /Kua.11.26.08/BA.00/TAHUN)
-$nomorSert = $tahun;
-
-// Font - gunakan font default GD (angka 1-5) atau TrueType jika tersedia
-// Coba cari font di sistem
-$fontBold = __DIR__ . '/fonts/Inter_28pt-Bold.ttf';
-$fontRegular = __DIR__ . '/fonts/Inter_28pt-Regular.ttf';
-
-// Jika font TTF tidak ada, pakai built-in GD fonts
-$useTTF = file_exists($fontBold) && file_exists($fontRegular);
-
-if ($useTTF) {
-    // ─── POSISI TEXT (template 1280x720) ───
-    
-    // Nama peserta - center horizontal, di dalam hexagon
-    $namaSize = 26;
-    $bbox = imagettfbbox($namaSize, 0, $fontBold, $nama);
-    $namaX = ($width - ($bbox[2] - $bbox[0])) / 2;
-    $namaY = (int)($height * 0.345);
-    imagettftext($img, $namaSize, 0, (int)$namaX, (int)$namaY, $colorDark, $fontBold, $nama);
-
-    // NIK - setelah teks "NIK :" di template (geser ke kanan dari center)
-    $nikText = $nik;
-    $nikSize = 13;
-    $nikX = (int)($width * 0.42);
-    $nikY = (int)($height * 0.435);
-    imagettftext($img, $nikSize, 0, (int)$nikX, (int)$nikY, $colorDark, $fontBold, $nikText);
-
-    // Skor - setelah teks "Skor Nilai :" di template
-    $skorText = (string)$skor;
-    $skorSize = 13;
-    $skorX = (int)($width * 0.445);
-    $skorY = (int)($height * 0.505);
-    imagettftext($img, $skorSize, 0, (int)$skorX, (int)$skorY, $colorDark, $fontBold, $skorText);
-
-    // Tahun - paling akhir baris nomor (setelah /Kua.11.26.08/BA.00/)
-    $nomorSize = 12;
-    $nomorX = (int)($width * 0.495);
-    $nomorY = (int)($height * 0.265);
-    imagettftext($img, $nomorSize, 0, (int)$nomorX, (int)$nomorY, $colorDark, $fontRegular, $nomorSert);
-
-    // Tanggal - setelah "Karangdadap," di area kanan bawah
-    $tglSize = 11;
-    $tglX = (int)($width * 0.635);
-    $tglY = (int)($height * 0.655);
-    imagettftext($img, $tglSize, 0, (int)$tglX, (int)$tglY, $colorDark, $fontRegular, $tanggalFormatted);
-
-} else {
-    // ─── FALLBACK: pakai built-in GD fonts ───
-    // Font size 5 = terbesar di GD built-in (~13px)
-    
-    // Nama peserta - tengah
-    $namaW = imagefontwidth(5) * strlen($nama);
-    $namaX = ($width - $namaW) / 2;
-    $namaY = $height * 0.36;
-    imagestring($img, 5, (int)$namaX, (int)$namaY, $nama, $colorDark);
-
-    // NIK
-    $nikText = $nik;
-    $nikW = imagefontwidth(4) * strlen($nikText);
-    $nikX = ($width - $nikW) / 2;
-    $nikY = $height * 0.45;
-    imagestring($img, 4, (int)$nikX, (int)$nikY, $nikText, $colorDark);
-
-    // Skor
-    $skorText = (string)$skor;
-    $skorW = imagefontwidth(4) * strlen($skorText);
-    $skorX = ($width - $skorW) / 2;
-    $skorY = $height * 0.51;
-    imagestring($img, 4, (int)$skorX, (int)$skorY, $skorText, $colorDark);
-
-    // Nomor sertifikat
-    $nomorW = imagefontwidth(3) * strlen($nomorSert);
-    $nomorX = ($width - $nomorW) / 2 + ($width * 0.05);
-    $nomorY = $height * 0.215;
-    imagestring($img, 3, (int)$nomorX, (int)$nomorY, $nomorSert, $colorDark);
-
-    // Tanggal
-    $tglX = $width * 0.60;
-    $tglY = $height * 0.70;
-    imagestring($img, 3, (int)$tglX, (int)$tglY, $tanggalFormatted, $colorDark);
-}
-
-// Simpan output
-$filename = 'sertifikat_' . preg_replace('/[^a-zA-Z0-9]/', '_', strtolower($nama)) . '_' . time() . '.png';
-$outputPath = $outputDir . $filename;
+// Generate HTML sertifikat
+$filename = 'sertifikat_' . preg_replace('/[^a-zA-Z0-9]/', '_', strtolower($nama)) . '_' . time() . '.html';
+$filepath = $outputDir . $filename;
 $link = 'uploads/sertifikat/' . $filename;
 
-imagepng($img, $outputPath);
-imagedestroy($img);
+$htmlCert = '<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E-Sertifikat - ' . htmlspecialchars($nama) . '</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #e2e8f0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; }
+.cert-wrapper { position: relative; width: 100%; max-width: 900px; aspect-ratio: 1280/720; background-image: url("template.png"); background-size: cover; background-position: center; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden; }
+.cert-text { position: absolute; font-weight: 700; color: #1a1a1a; }
+.cert-nama { top: 28%; left: 50%; transform: translateX(-50%); font-size: clamp(1.2rem, 3vw, 2rem); text-align: center; white-space: nowrap; }
+.cert-nik { top: 39.5%; left: 50%; transform: translateX(-50%); font-size: clamp(0.7rem, 1.4vw, 1rem); text-align: center; letter-spacing: 1px; }
+.cert-skor { top: 46.5%; left: 50%; transform: translateX(-50%); font-size: clamp(0.7rem, 1.4vw, 1rem); text-align: center; }
+.cert-tahun { top: 20.5%; left: 50.5%; font-size: clamp(0.6rem, 1.2vw, 0.85rem); font-weight: 400; }
+.cert-tanggal { top: 62%; left: 61%; font-size: clamp(0.55rem, 1.1vw, 0.8rem); font-weight: 400; }
+.btn-area { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.btn-cert { padding: 14px 28px; border-radius: 12px; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.btn-print { background: #064e3b; color: #fff; }
+.btn-back { background: #fff; color: #064e3b; border: 2px solid #064e3b; }
+.btn-cert:hover { opacity: 0.85; }
+@media print {
+    body { background: #fff; padding: 0; }
+    .cert-wrapper { max-width: 100%; border-radius: 0; box-shadow: none; }
+    .btn-area { display: none; }
+}
+@media (max-width: 600px) {
+    .cert-wrapper { aspect-ratio: auto; height: auto; padding-bottom: 56.25%; }
+}
+</style>
+</head>
+<body>
+<div class="cert-wrapper">
+    <div class="cert-text cert-nama">' . htmlspecialchars($nama) . '</div>
+    <div class="cert-text cert-nik">' . htmlspecialchars($nik) . '</div>
+    <div class="cert-text cert-skor">' . $skor . '</div>
+    <div class="cert-text cert-tahun">' . $tahun . '</div>
+    <div class="cert-text cert-tanggal">' . $tanggalFormatted . '</div>
+</div>
+<div class="btn-area">
+    <button class="btn-cert btn-print" onclick="window.print()">🖨️ Cetak / Save PDF</button>
+    <a href="../index.html" class="btn-cert btn-back">← Kembali ke Beranda</a>
+</div>
+</body>
+</html>';
+
+// Simpan file
+file_put_contents($filepath, $htmlCert);
 
 // Simpan ke database
 $stmt = $pdo->prepare("INSERT INTO sertifikat (nama, link) VALUES (?, ?)");

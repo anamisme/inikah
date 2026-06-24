@@ -570,7 +570,11 @@
             <span class="material-icons-outlined">check_circle</span>
             <h3 style="margin-top:16px;">Post-Test Berhasil Dikirim!</h3>
             <p style="color:var(--muted);margin-top:8px;">Skor Anda: <strong id="skorDisplay">0</strong> / 100</p>
-            <p style="color:var(--muted);margin-top:4px;font-size:0.8rem;">Selamat! E-Sertifikat Anda sudah tersedia. Silakan klaim di halaman utama melalui menu <strong>"Klaim & Ambil E-Sertifikat"</strong> dengan memasukkan nama lengkap Anda.</p>
+            <p style="color:var(--muted);margin-top:4px;font-size:0.8rem;">Selamat! E-Sertifikat Anda sudah tersedia.</p>
+            <a href="#" id="sertifikatLink" target="_blank" style="display:none;margin-top:16px;padding:14px 24px;background:linear-gradient(135deg,#064e3b,#0f766e);color:#fff;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.9rem;display:inline-flex;align-items:center;gap:6px;">
+                📄 Buka & Cetak Sertifikat
+            </a>
+            <p style="color:var(--muted);margin-top:12px;font-size:0.75rem;">Atau klaim nanti di halaman utama → menu "Klaim & Ambil E-Sertifikat"</p>
         </div>
 
         <a href="index.html" class="back-link">← Kembali ke Beranda</a>
@@ -649,6 +653,12 @@
                 document.getElementById('pretestForm').style.display = 'none';
                 document.getElementById('skorDisplay').textContent = skor;
                 document.getElementById('successMsg').style.display = 'block';
+                // Show certificate link
+                if (res.link) {
+                    const certLink = document.getElementById('sertifikatLink');
+                    certLink.href = res.link;
+                    certLink.style.display = 'inline-flex';
+                }
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             })
             .catch(err => {
