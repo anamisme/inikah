@@ -74,11 +74,11 @@ $htmlCert = '<!DOCTYPE html>
 body { background: #e2e8f0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif; }
 .cert-wrapper { position: relative; width: 100%; max-width: 900px; aspect-ratio: 1280/720; background-image: url("template.png"); background-size: cover; background-position: center; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); overflow: hidden; }
 .cert-text { position: absolute; font-weight: 700; color: #1a1a1a; }
-.cert-nama { top: 28%; left: 50%; transform: translateX(-50%); font-size: clamp(1.2rem, 3vw, 2rem); text-align: center; white-space: nowrap; }
-.cert-nik { top: 39.5%; left: 50%; transform: translateX(-50%); font-size: clamp(0.7rem, 1.4vw, 1rem); text-align: center; letter-spacing: 1px; }
-.cert-skor { top: 46.5%; left: 50%; transform: translateX(-50%); font-size: clamp(0.7rem, 1.4vw, 1rem); text-align: center; }
-.cert-tahun { top: 20.5%; left: 50.5%; font-size: clamp(0.6rem, 1.2vw, 0.85rem); font-weight: 400; }
-.cert-tanggal { top: 62%; left: 61%; font-size: clamp(0.55rem, 1.1vw, 0.8rem); font-weight: 400; }
+.cert-nama { top: 33.5%; left: 50%; transform: translateX(-50%); font-size: clamp(1.2rem, 3vw, 2rem); text-align: center; white-space: nowrap; }
+.cert-nik { top: 43%; left: 50%; transform: translateX(-50%); font-size: clamp(0.7rem, 1.4vw, 1rem); text-align: center; letter-spacing: 1px; }
+.cert-skor { top: 50%; left: 50%; transform: translateX(-50%); font-size: clamp(0.7rem, 1.4vw, 1rem); text-align: center; }
+.cert-tahun { top: 27.5%; right: 28%; font-size: clamp(0.6rem, 1.2vw, 0.85rem); font-weight: 400; }
+.cert-tanggal { top: 66%; right: 22%; font-size: clamp(0.55rem, 1.1vw, 0.8rem); font-weight: 400; }
 .btn-area { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 .btn-cert { padding: 14px 28px; border-radius: 12px; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 .btn-print { background: #064e3b; color: #fff; }
