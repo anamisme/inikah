@@ -82,6 +82,11 @@ function toggleBookShelf(event) {
 
 // UNIVERSAL FLOATING MODAL SYSTEM
 window.bukaModalFrame = function(url, judul) {
+    // PDF files: open in new tab (better mobile support for multi-page)
+    if (url.toLowerCase().endsWith('.pdf')) {
+        window.open(url, '_blank');
+        return;
+    }
     const modal = document.getElementById('appModal');
     const frame = document.getElementById('appModalFrame');
     const title = document.getElementById('appModalTitle');
