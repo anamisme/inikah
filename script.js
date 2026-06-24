@@ -160,18 +160,53 @@ function loadJadwalModal() {
                 container.innerHTML = '<div class="text-center text-muted p-4"><span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">event_busy</span><p class="mt-2" style="font-size:0.9rem;">Belum ada data jadwal akad.</p></div>';
                 return;
             }
-            let html = '<div style="display:flex;flex-direction:column;gap:10px;">';
-            data.forEach(item => {
-                html += '<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid rgba(15,118,110,0.08);">';
-                html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:4px;">' + _esc(item.nama_pria) + ' & ' + _esc(item.nama_wanita) + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + _esc(item.tanggal_akad) + ' · ⏰ ' + _esc(item.waktu || '') + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">📍 ' + _esc(item.desa || '') + '</p>';
-                html += '</div>';
-            });
-            html += '</div>';
-            container.innerHTML = html;
+            window._jadwalData = data;
+            renderJadwalList(data, container);
         })
         .catch(() => { container.innerHTML = '<div class="text-center p-4" style="color:#ef4444;font-size:0.9rem;">Gagal memuat data.</div>'; });
+}
+
+function renderJadwalList(data, container) {
+    let html = '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;">';
+    html += '<input type="text" id="jadwalSearchInput" placeholder="🔍 Cari nama..." style="flex:1;min-width:140px;padding:12px 16px;border-radius:12px;border:1.5px solid rgba(15,118,110,0.08);font-size:0.85rem;outline:none;background:#fff;">';
+    html += '<input type="date" id="jadwalDateFilter" style="padding:12px 16px;border-radius:12px;border:1.5px solid rgba(15,118,110,0.08);font-size:0.85rem;outline:none;background:#fff;">';
+    html += '</div>';
+    html += '<div id="jadwalListContainer">';
+    html += buildJadwalItems(data);
+    html += '</div>';
+    container.innerHTML = html;
+
+    document.getElementById('jadwalSearchInput').addEventListener('input', filterJadwal);
+    document.getElementById('jadwalDateFilter').addEventListener('change', filterJadwal);
+}
+
+function filterJadwal() {
+    const query = (document.getElementById('jadwalSearchInput').value || '').toLowerCase().trim();
+    const dateVal = document.getElementById('jadwalDateFilter').value || '';
+    const filtered = window._jadwalData.filter(item => {
+        const pria = (item.nama_pria || '').toLowerCase();
+        const wanita = (item.nama_wanita || '').toLowerCase();
+        const matchName = !query || pria.includes(query) || wanita.includes(query);
+        const matchDate = !dateVal || item.tanggal_akad === dateVal;
+        return matchName && matchDate;
+    });
+    document.getElementById('jadwalListContainer').innerHTML = buildJadwalItems(filtered);
+}
+
+function buildJadwalItems(data) {
+    if (!data || data.length === 0) {
+        return '<div style="text-align:center;padding:20px;color:#64748b;font-size:0.85rem;">Tidak ada data yang cocok.</div>';
+    }
+    let html = '<div style="display:flex;flex-direction:column;gap:10px;">';
+    data.forEach(item => {
+        html += '<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid rgba(15,118,110,0.08);">';
+        html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:4px;">' + _esc(item.nama_pria) + ' & ' + _esc(item.nama_wanita) + '</p>';
+        html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + _esc(item.tanggal_akad) + ' · ⏰ ' + _esc(item.waktu || '') + '</p>';
+        html += '<p style="font-size:0.78rem;color:#64748b;">📍 ' + _esc(item.desa || '') + '</p>';
+        html += '</div>';
+    });
+    html += '</div>';
+    return html;
 }
 
 // PETUGAS MODAL CONTROLLER
@@ -195,24 +230,60 @@ function loadPetugasModal() {
                 container.innerHTML = '<div class="text-center text-muted p-4"><span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">person_off</span><p class="mt-2" style="font-size:0.9rem;">Belum ada data petugas.</p></div>';
                 return;
             }
-            let html = '<div style="display:flex;flex-direction:column;gap:12px;">';
-            data.forEach(item => {
-                html += '<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid rgba(15,118,110,0.08);display:flex;align-items:center;gap:12px;">';
-                if (item.foto) {
-                    html += '<img src="' + _esc(item.foto) + '" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid rgba(15,118,110,0.08);flex-shrink:0;" alt="Foto">';
-                } else {
-                    html += '<div style="width:56px;height:56px;border-radius:12px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-icons-outlined" style="color:#94a3b8;">person</span></div>';
-                }
-                html += '<div style="flex:1;min-width:0;">';
-                html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:3px;">' + _esc(item.nama_petugas) + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + _esc(item.tanggal) + ' · ⏰ ' + _esc(item.waktu || '') + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">👤 ' + _esc(item.nama_pria) + ' & ' + _esc(item.nama_wanita) + '</p>';
-                html += '</div></div>';
-            });
-            html += '</div>';
-            container.innerHTML = html;
+            window._petugasData = data;
+            renderPetugasList(data, container);
         })
         .catch(() => { container.innerHTML = '<div class="text-center p-4" style="color:#ef4444;font-size:0.9rem;">Gagal memuat data.</div>'; });
+}
+
+function renderPetugasList(data, container) {
+    let html = '<div style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;">';
+    html += '<input type="text" id="petugasSearchInput" placeholder="🔍 Cari nama..." style="flex:1;min-width:140px;padding:12px 16px;border-radius:12px;border:1.5px solid rgba(15,118,110,0.08);font-size:0.85rem;outline:none;background:#fff;">';
+    html += '<input type="date" id="petugasDateFilter" style="padding:12px 16px;border-radius:12px;border:1.5px solid rgba(15,118,110,0.08);font-size:0.85rem;outline:none;background:#fff;">';
+    html += '</div>';
+    html += '<div id="petugasListContainer">';
+    html += buildPetugasItems(data);
+    html += '</div>';
+    container.innerHTML = html;
+
+    document.getElementById('petugasSearchInput').addEventListener('input', filterPetugas);
+    document.getElementById('petugasDateFilter').addEventListener('change', filterPetugas);
+}
+
+function filterPetugas() {
+    const query = (document.getElementById('petugasSearchInput').value || '').toLowerCase().trim();
+    const dateVal = document.getElementById('petugasDateFilter').value || '';
+    const filtered = window._petugasData.filter(item => {
+        const petugas = (item.nama_petugas || '').toLowerCase();
+        const pria = (item.nama_pria || '').toLowerCase();
+        const wanita = (item.nama_wanita || '').toLowerCase();
+        const matchName = !query || petugas.includes(query) || pria.includes(query) || wanita.includes(query);
+        const matchDate = !dateVal || item.tanggal === dateVal;
+        return matchName && matchDate;
+    });
+    document.getElementById('petugasListContainer').innerHTML = buildPetugasItems(filtered);
+}
+
+function buildPetugasItems(data) {
+    if (!data || data.length === 0) {
+        return '<div style="text-align:center;padding:20px;color:#64748b;font-size:0.85rem;">Tidak ada data yang cocok.</div>';
+    }
+    let html = '<div style="display:flex;flex-direction:column;gap:12px;">';
+    data.forEach(item => {
+        html += '<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid rgba(15,118,110,0.08);display:flex;align-items:center;gap:12px;">';
+        if (item.foto) {
+            html += '<img src="' + _esc(item.foto) + '" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid rgba(15,118,110,0.08);flex-shrink:0;" alt="Foto">';
+        } else {
+            html += '<div style="width:56px;height:56px;border-radius:12px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-icons-outlined" style="color:#94a3b8;">person</span></div>';
+        }
+        html += '<div style="flex:1;min-width:0;">';
+        html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:3px;">' + _esc(item.nama_petugas) + '</p>';
+        html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + _esc(item.tanggal) + ' · ⏰ ' + _esc(item.waktu || '') + '</p>';
+        html += '<p style="font-size:0.78rem;color:#64748b;">👤 ' + _esc(item.nama_pria) + ' & ' + _esc(item.nama_wanita) + '</p>';
+        html += '</div></div>';
+    });
+    html += '</div>';
+    return html;
 }
 
 // HTML escape helper
