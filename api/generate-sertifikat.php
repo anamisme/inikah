@@ -79,41 +79,37 @@ $useTTF = file_exists($fontBold) && file_exists($fontRegular);
 if ($useTTF) {
     // ─── POSISI TEXT (template 1280x720) ───
     
-    // Nama peserta - tengah, di dalam segi enam (area sekitar y=38%)
-    $namaSize = 28;
+    // Nama peserta - center horizontal, di dalam hexagon
+    $namaSize = 26;
     $bbox = imagettfbbox($namaSize, 0, $fontBold, $nama);
     $namaX = ($width - ($bbox[2] - $bbox[0])) / 2;
-    $namaY = (int)($height * 0.40);
+    $namaY = (int)($height * 0.345);
     imagettftext($img, $namaSize, 0, (int)$namaX, (int)$namaY, $colorDark, $fontBold, $nama);
 
-    // NIK - di bawah "NIK :" (sekitar y=47%)
+    // NIK - setelah teks "NIK :" di template (geser ke kanan dari center)
     $nikText = $nik;
-    $nikSize = 14;
-    $bbox = imagettfbbox($nikSize, 0, $fontBold, $nikText);
-    $nikX = ($width - ($bbox[2] - $bbox[0])) / 2;
-    $nikY = (int)($height * 0.49);
+    $nikSize = 13;
+    $nikX = (int)($width * 0.42);
+    $nikY = (int)($height * 0.435);
     imagettftext($img, $nikSize, 0, (int)$nikX, (int)$nikY, $colorDark, $fontBold, $nikText);
 
-    // Skor - di bawah "Skor Nilai :" (sekitar y=54%)
+    // Skor - setelah teks "Skor Nilai :" di template
     $skorText = (string)$skor;
-    $skorSize = 14;
-    $bbox = imagettfbbox($skorSize, 0, $fontBold, $skorText);
-    $skorX = ($width - ($bbox[2] - $bbox[0])) / 2;
-    $skorY = (int)($height * 0.56);
+    $skorSize = 13;
+    $skorX = (int)($width * 0.445);
+    $skorY = (int)($height * 0.505);
     imagettftext($img, $skorSize, 0, (int)$skorX, (int)$skorY, $colorDark, $fontBold, $skorText);
 
-    // Nomor sertifikat - setelah "Nomor :" di bawah SERTIFIKAT (sekitar y=23%)
-    $nomorSize = 11;
-    $nomorFullText = $nomorSert;
-    $bbox = imagettfbbox($nomorSize, 0, $fontRegular, $nomorFullText);
-    $nomorX = (int)($width * 0.52);
-    $nomorY = (int)($height * 0.235);
-    imagettftext($img, $nomorSize, 0, (int)$nomorX, (int)$nomorY, $colorDark, $fontRegular, $nomorFullText);
+    // Tahun - paling akhir baris nomor (setelah /Kua.11.26.08/BA.00/)
+    $nomorSize = 12;
+    $nomorX = (int)($width * 0.495);
+    $nomorY = (int)($height * 0.265);
+    imagettftext($img, $nomorSize, 0, (int)$nomorX, (int)$nomorY, $colorDark, $fontRegular, $nomorSert);
 
-    // Tanggal - kanan bawah setelah "Karangdadap," (sekitar x=60%, y=72%)
+    // Tanggal - setelah "Karangdadap," di area kanan bawah
     $tglSize = 11;
-    $tglX = (int)($width * 0.62);
-    $tglY = (int)($height * 0.73);
+    $tglX = (int)($width * 0.635);
+    $tglY = (int)($height * 0.655);
     imagettftext($img, $tglSize, 0, (int)$tglX, (int)$tglY, $colorDark, $fontRegular, $tanggalFormatted);
 
 } else {
