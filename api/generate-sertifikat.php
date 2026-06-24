@@ -31,9 +31,9 @@ if (isset($_GET['debug'])) {
 // TEST MODE
 if (isset($_GET['test'])) {
     require_once __DIR__ . '/config.php';
-    $nama = 'TEST GD SERTIFIKAT';
-    $skor = 92;
-    $nik = '3326059999990001';
+    $nama = 'AHMAD FAUZI';
+    $skor = 88;
+    $nik = '3326051234567890';
     goto GENERATE;
 }
 
@@ -133,25 +133,20 @@ function drawText($img, $size, $x, $y, $color, $font, $text) {
     imagettftext($img, $size, 0, $x, $y, $color, $font, $text);
 }
 
-// ──── NAMA (tengah, besar, bold) ────
-// Posisi Y sekitar 37.5% dari 720 = ~270px
-drawCenteredText($img, 28, 270, $black, $fontBold, $nama, $imgWidth);
+// ──── NAMA (tengah, di band kosong antara baris "Nomor :" dan "NIK :") ────
+drawCenteredText($img, 22, 318, $black, $fontBold, $nama, $imgWidth);
 
-// ──── NIK (tengah, di bawah label "NIK :") ────
-// Posisi Y sekitar 44% dari 720 = ~317px
-drawCenteredText($img, 14, 317, $darkGray, file_exists($fontRegular) ? $fontRegular : $fontBold, $nik, $imgWidth);
+// ──── NIK (di sebelah kanan label "NIK :") ────
+drawText($img, 13, 660, 362, $darkGray, file_exists($fontRegular) ? $fontRegular : $fontBold, $nik);
 
-// ──── SKOR (tengah, di bawah label "Skor Nilai :") ────
-// Posisi Y sekitar 48% dari 720 = ~346px
-drawCenteredText($img, 16, 346, $black, $fontBold, (string)$skor, $imgWidth);
+// ──── SKOR (di sebelah kanan label "Skor Nilai :") ────
+drawText($img, 13, 690, 386, $black, $fontBold, (string)$skor);
 
-// ──── TAHUN (di area nomor surat, kanan atas setelah "SERTIFIKAT") ────
-// Posisi: sekitar x=62% dari 1280 = ~794px, y=32% dari 720 = ~230px
-drawText($img, 12, 794, 230, $black, $fontBold, $tahun);
+// ──── TAHUN (setelah "...BA.00/" pada baris Nomor) ────
+drawText($img, 11, 745, 252, $black, $fontBold, $tahun);
 
-// ──── TANGGAL (area tanda tangan, kanan bawah) ────
-// Posisi: sekitar x=68% dari 1280 = ~870px, y=50% dari 720 = ~360px
-drawText($img, 11, 870, 360, $darkGray, file_exists($fontRegular) ? $fontRegular : $fontBold, $tanggalFormatted);
+// ──── TANGGAL (setelah "Karangdadap," di area tanda tangan) ────
+drawText($img, 11, 1080, 499, $darkGray, file_exists($fontRegular) ? $fontRegular : $fontBold, $tanggalFormatted);
 
 // ════════════════════════════════════════════════════════
 // SIMPAN OUTPUT
