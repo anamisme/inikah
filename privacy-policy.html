@@ -28,40 +28,54 @@
         <p class="subtitle">KUA Karangdadap</p>
 
         <h1>Kebijakan Privasi</h1>
-        <p class="updated">Terakhir diperbarui: 23 Juni 2026</p>
+        <p class="updated">Terakhir diperbarui: 24 Juni 2026</p>
 
         <p>Aplikasi iNikah ("Aplikasi") dikembangkan oleh KUA Karangdadap, Kabupaten Pekalongan. Kami menghormati privasi pengguna dan berkomitmen melindungi data pribadi Anda.</p>
 
         <h2>1. Data yang Kami Kumpulkan</h2>
-        <p>Aplikasi ini tidak mengumpulkan data pribadi secara langsung. Namun, layanan pihak ketiga yang digunakan dapat mengumpulkan informasi berikut:</p>
+        <p>Aplikasi ini mengumpulkan data berikut saat Anda menggunakan layanan kami:</p>
         <ul>
-            <li>Nama lengkap (saat pencarian sertifikat melalui Google Forms/Sheets)</li>
-            <li>Data perangkat standar (melalui Cloudflare Pages dan Google APIs)</li>
+            <li>Nama lengkap dan Nomor KTP (saat mengisi Pre-Test dan Post-Test)</li>
+            <li>Alamat email (saat mengisi Post-Test)</li>
+            <li>Jawaban evaluasi Pre-Test dan Post-Test beserta skor</li>
+            <li>Nama lengkap (saat pencarian sertifikat)</li>
         </ul>
 
         <h2>2. Penggunaan Data</h2>
         <p>Data yang dikumpulkan hanya digunakan untuk:</p>
         <ul>
-            <li>Menyediakan layanan pencarian sertifikat kelulusan Bimwin</li>
-            <li>Menampilkan informasi jadwal dan layanan KUA</li>
-            <li>Mengirimkan notifikasi terkait layanan pernikahan</li>
+            <li>Mengevaluasi pemahaman peserta bimbingan perkawinan</li>
+            <li>Menerbitkan e-sertifikat kelulusan Bimwin</li>
+            <li>Menampilkan informasi jadwal akad nikah dan petugas penghulu</li>
+            <li>Mengirimkan notifikasi terkait layanan KUA</li>
         </ul>
 
-        <h2>3. Penyimpanan Lokal</h2>
-        <p>Aplikasi menyimpan preferensi tema (terang/gelap) di penyimpanan lokal perangkat Anda (localStorage). Data ini tidak dikirim ke server manapun.</p>
+        <h2>3. Penyimpanan Data</h2>
+        <p>Data disimpan di server hosting yang dikelola oleh KUA Karangdadap dengan perlindungan sebagai berikut:</p>
+        <ul>
+            <li>Database dilindungi dengan autentikasi dan akses terbatas</li>
+            <li>API dilindungi dengan token autentikasi untuk aksi sensitif</li>
+            <li>Koneksi menggunakan HTTPS (terenkripsi)</li>
+        </ul>
+        <p>Aplikasi juga menyimpan preferensi tema (terang/gelap) di penyimpanan lokal perangkat Anda (localStorage). Data ini tidak dikirim ke server.</p>
 
         <h2>4. Layanan Pihak Ketiga</h2>
         <p>Aplikasi menggunakan layanan pihak ketiga berikut:</p>
         <ul>
-            <li>Google Sheets/Apps Script — untuk database sertifikat dan notifikasi</li>
-            <li>Google Drive — untuk penyimpanan materi bimbingan</li>
-            <li>Google Forms — untuk evaluasi pre-test dan post-test</li>
-            <li>Cloudflare Pages — untuk hosting website</li>
+            <li>Cloudflare — untuk CDN dan proteksi keamanan</li>
+            <li>Google Fonts — untuk tampilan huruf (tidak mengumpulkan data pribadi)</li>
         </ul>
-        <p>Masing-masing layanan memiliki kebijakan privasi tersendiri.</p>
+        <p>Data pribadi Anda <strong>tidak dibagikan</strong> ke pihak ketiga manapun.</p>
 
         <h2>5. Keamanan</h2>
-        <p>Kami menggunakan koneksi HTTPS untuk melindungi data yang ditransmisikan. Namun, tidak ada metode transmisi data melalui internet yang 100% aman.</p>
+        <p>Kami menerapkan langkah-langkah keamanan berikut:</p>
+        <ul>
+            <li>Koneksi HTTPS untuk seluruh transmisi data</li>
+            <li>Autentikasi berbasis token untuk panel admin dan petugas</li>
+            <li>Proteksi terhadap SQL injection dan XSS</li>
+            <li>Pembatasan akses file dan direktori di server</li>
+        </ul>
+        <p>Namun, tidak ada metode transmisi data melalui internet yang 100% aman.</p>
 
         <h2>6. Hak Pengguna</h2>
         <p>Anda berhak untuk:</p>
