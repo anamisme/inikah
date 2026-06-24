@@ -70,8 +70,8 @@ $nomorSert = '/Kua.11.26.08/BA.00/' . $tahun;
 
 // Font - gunakan font default GD (angka 1-5) atau TrueType jika tersedia
 // Coba cari font di sistem
-$fontBold = __DIR__ . '/fonts/Inter-Bold.ttf';
-$fontRegular = __DIR__ . '/fonts/Inter-Regular.ttf';
+$fontBold = __DIR__ . '/fonts/Inter_28pt-Bold.ttf';
+$fontRegular = __DIR__ . '/fonts/Inter_28pt-Regular.ttf';
 
 // Jika font TTF tidak ada, pakai built-in GD fonts
 $useTTF = file_exists($fontBold) && file_exists($fontRegular);
