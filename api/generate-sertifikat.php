@@ -31,9 +31,9 @@ if (isset($_GET['debug'])) {
 // TEST MODE
 if (isset($_GET['test'])) {
     require_once __DIR__ . '/config.php';
-    $nama = 'AHMAD FAUZI';
-    $skor = 88;
-    $nik = '3326051234567890';
+    $nama = 'BUDI SANTOSO';
+    $skor = 90;
+    $nik = '3326051122334455';
     goto GENERATE;
 }
 
@@ -137,16 +137,16 @@ function drawText($img, $size, $x, $y, $color, $font, $text) {
 drawCenteredText($img, 22, 318, $black, $fontBold, $nama, $imgWidth);
 
 // ──── NIK (di sebelah kanan label "NIK :") ────
-drawText($img, 13, 660, 362, $darkGray, file_exists($fontRegular) ? $fontRegular : $fontBold, $nik);
+drawText($img, 13, 695, 356, $darkGray, file_exists($fontRegular) ? $fontRegular : $fontBold, $nik);
 
 // ──── SKOR (di sebelah kanan label "Skor Nilai :") ────
-drawText($img, 13, 690, 386, $black, $fontBold, (string)$skor);
+drawText($img, 13, 725, 380, $black, $fontBold, (string)$skor);
 
 // ──── TAHUN (setelah "...BA.00/" pada baris Nomor) ────
-drawText($img, 11, 745, 252, $black, $fontBold, $tahun);
+drawText($img, 11, 765, 254, $black, $fontBold, $tahun);
 
-// ──── TANGGAL (setelah "Karangdadap," di area tanda tangan) ────
-drawText($img, 11, 1080, 499, $darkGray, file_exists($fontRegular) ? $fontRegular : $fontBold, $tanggalFormatted);
+// ──── TANGGAL (sejajar dengan "Karangdadap," di area tanda tangan) ────
+drawText($img, 11, 1095, 491, $darkGray, file_exists($fontRegular) ? $fontRegular : $fontBold, $tanggalFormatted);
 
 // ════════════════════════════════════════════════════════
 // SIMPAN OUTPUT
