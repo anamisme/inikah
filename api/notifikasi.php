@@ -6,6 +6,19 @@
 
 require_once __DIR__ . '/config.php';
 
+// Fungsi cek token untuk aksi yang butuh autentikasi
+function requireAuth() {
+    $token = $_GET['token'] ?? $_POST['token'] ?? ($_SERVER['HTTP_AUTHORIZATION'] ?? '');
+    $token = str_replace('Bearer ', '', $token);
+    
+    require_once __DIR__ . '/auth.php';
+    if (!verifyToken($token)) {
+        http_response_code(401);
+        echo json_encode(['error' => 'Akses ditolak. Silakan login ulang.']);
+        exit;
+    }
+}
+
 $action = $_GET['action'] ?? $_POST['action'] ?? 'get';
 
 switch ($action) {
@@ -18,6 +31,7 @@ switch ($action) {
         break;
 
     case 'add':
+        requireAuth();
         $judul = clean($_GET['judul'] ?? $_POST['judul'] ?? '');
         $pesan = clean($_GET['pesan'] ?? $_POST['pesan'] ?? '');
 
@@ -32,6 +46,7 @@ switch ($action) {
         break;
 
     case 'delete':
+        requireAuth();
         $id = intval($_GET['id'] ?? $_POST['id'] ?? 0);
         if ($id <= 0) {
             echo json_encode(['error' => 'ID tidak valid']);
@@ -51,6 +66,7 @@ switch ($action) {
         break;
 
     case 'addBanner':
+        requireAuth();
         $judul = clean($_GET['judul'] ?? $_POST['judul'] ?? '');
         $tag   = clean($_GET['tag'] ?? $_POST['tag'] ?? 'INFO');
         $link  = clean($_GET['link'] ?? $_POST['link'] ?? '');
@@ -80,6 +96,7 @@ switch ($action) {
         break;
 
     case 'deleteBanner':
+        requireAuth();
         $id = intval($_GET['id'] ?? $_POST['id'] ?? 0);
         if ($id <= 0) {
             echo json_encode(['error' => 'ID tidak valid']);

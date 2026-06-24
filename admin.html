@@ -108,19 +108,31 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = 'kuakarangdadap2024';
         const NOTIF_SCRIPT_URL = 'api/notifikasi.php';
+        let AUTH_TOKEN = '';
 
         function loginAdmin() {
             const pass = document.getElementById('adminPass').value;
-            if (pass === ADMIN_PASSWORD) {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                loadAdminNotifs();
-                loadAdminBanners();
-            } else {
+            fetch('api/auth.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pass, role: 'admin' })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    AUTH_TOKEN = res.token;
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadAdminNotifs();
+                    loadAdminBanners();
+                } else {
+                    document.getElementById('loginError').style.display = 'block';
+                }
+            })
+            .catch(() => {
                 document.getElementById('loginError').style.display = 'block';
-            }
+            });
         }
 
         document.getElementById('adminPass').addEventListener('keypress', e => {
@@ -143,7 +155,7 @@
             btn.textContent = 'Mengirim...';
             btn.disabled = true;
 
-            fetch(NOTIF_SCRIPT_URL + '?action=add&judul=' + encodeURIComponent(judul) + '&pesan=' + encodeURIComponent(pesan))
+            fetch(NOTIF_SCRIPT_URL + '?action=add&judul=' + encodeURIComponent(judul) + '&pesan=' + encodeURIComponent(pesan) + '&token=' + encodeURIComponent(AUTH_TOKEN))
                 .then(r => r.json())
                 .then(res => {
                     statusMsg.textContent = 'Notifikasi berhasil dikirim!';
@@ -192,7 +204,7 @@
 
         function hapusNotif(id) {
             if (!confirm('Hapus notifikasi ini?')) return;
-            fetch(NOTIF_SCRIPT_URL + '?action=delete&id=' + encodeURIComponent(id))
+            fetch(NOTIF_SCRIPT_URL + '?action=delete&id=' + encodeURIComponent(id) + '&token=' + encodeURIComponent(AUTH_TOKEN))
                 .then(r => r.json())
                 .then(() => loadAdminNotifs())
                 .catch(() => alert('Gagal menghapus.'));
@@ -224,7 +236,7 @@
             btn.textContent = 'Menambahkan...';
             btn.disabled = true;
 
-            let url = NOTIF_SCRIPT_URL + '?action=addBanner&judul=' + encodeURIComponent(judul) + '&tag=' + encodeURIComponent(tag);
+            let url = NOTIF_SCRIPT_URL + '?action=addBanner&judul=' + encodeURIComponent(judul) + '&tag=' + encodeURIComponent(tag) + '&token=' + encodeURIComponent(AUTH_TOKEN);
             if (link) url += '&link=' + encodeURIComponent(link);
             if (warna) url += '&warna=' + encodeURIComponent(warna);
             if (gambar) url += '&gambar=' + encodeURIComponent(gambar);
@@ -292,7 +304,7 @@
 
         function hapusBanner(id) {
             if (!confirm('Hapus banner ini?')) return;
-            fetch(NOTIF_SCRIPT_URL + '?action=deleteBanner&id=' + encodeURIComponent(id))
+            fetch(NOTIF_SCRIPT_URL + '?action=deleteBanner&id=' + encodeURIComponent(id) + '&token=' + encodeURIComponent(AUTH_TOKEN))
                 .then(r => r.json())
                 .then(() => loadAdminBanners())
                 .catch(() => alert('Gagal menghapus.'));

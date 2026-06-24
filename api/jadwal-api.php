@@ -18,6 +18,19 @@
 
 require_once __DIR__ . '/config.php';
 
+// Fungsi cek token untuk aksi yang butuh autentikasi
+function requireAuth() {
+    $token = $_GET['token'] ?? $_POST['token'] ?? ($_SERVER['HTTP_AUTHORIZATION'] ?? '');
+    $token = str_replace('Bearer ', '', $token);
+    
+    require_once __DIR__ . '/auth.php';
+    if (!verifyToken($token)) {
+        http_response_code(401);
+        echo json_encode(['error' => 'Akses ditolak. Silakan login ulang.']);
+        exit;
+    }
+}
+
 $action = $_GET['action'] ?? '';
 
 switch ($action) {
@@ -29,6 +42,7 @@ switch ($action) {
         break;
 
     case 'addJadwal':
+        requireAuth();
         $input = json_decode(file_get_contents('php://input'), true);
         if (!$input) {
             http_response_code(400);
@@ -54,6 +68,7 @@ switch ($action) {
         break;
 
     case 'deleteJadwal':
+        requireAuth();
         $id = $_GET['id'] ?? '';
         if (!$id) {
             http_response_code(400);
@@ -72,6 +87,7 @@ switch ($action) {
         break;
 
     case 'addPetugas':
+        requireAuth();
         // Multipart/form-data karena ada file upload
         $nama_petugas = clean($_POST['nama_petugas'] ?? '');
         $tanggal = clean($_POST['tanggal'] ?? '');
@@ -100,6 +116,13 @@ switch ($action) {
                 exit;
             }
 
+            // Limit file size to 2MB
+            if ($_FILES['foto']['size'] > 2 * 1024 * 1024) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Ukuran file maksimal 2MB.']);
+                exit;
+            }
+
             $filename = uniqid('petugas_') . '.' . $ext;
             $destination = $uploadDir . $filename;
 
@@ -118,6 +141,7 @@ switch ($action) {
         break;
 
     case 'deletePetugas':
+        requireAuth();
         $id = $_GET['id'] ?? '';
         if (!$id) {
             http_response_code(400);

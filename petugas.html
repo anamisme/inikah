@@ -192,19 +192,31 @@
     </div>
 
     <script>
-        const PETUGAS_PASSWORD = 'petugaskua2024';
         const API_URL = 'api/jadwal-api.php';
+        let AUTH_TOKEN = '';
 
         function loginPetugas() {
             const pass = document.getElementById('petugasPass').value;
-            if (pass === PETUGAS_PASSWORD) {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('petugasPanel').style.display = 'block';
-                loadJadwal();
-                loadPetugas();
-            } else {
+            fetch('api/auth.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pass, role: 'petugas' })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    AUTH_TOKEN = res.token;
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('petugasPanel').style.display = 'block';
+                    loadJadwal();
+                    loadPetugas();
+                } else {
+                    document.getElementById('loginError').style.display = 'block';
+                }
+            })
+            .catch(() => {
                 document.getElementById('loginError').style.display = 'block';
-            }
+            });
         }
 
         // ===== JADWAL =====
@@ -227,7 +239,7 @@
             btn.textContent = 'Menyimpan...';
             btn.disabled = true;
 
-            fetch(API_URL + '?action=addJadwal', {
+            fetch(API_URL + '?action=addJadwal&token=' + encodeURIComponent(AUTH_TOKEN), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -294,7 +306,7 @@
 
         function hapusJadwal(id) {
             if (!confirm('Hapus data jadwal ini?')) return;
-            fetch(API_URL + '?action=deleteJadwal&id=' + id)
+            fetch(API_URL + '?action=deleteJadwal&id=' + id + '&token=' + encodeURIComponent(AUTH_TOKEN))
                 .then(r => r.json())
                 .then(() => loadJadwal())
                 .catch(() => alert('Gagal menghapus.'));
@@ -329,7 +341,7 @@
             formData.append('nama_wanita', wanita);
             formData.append('foto', foto);
 
-            fetch(API_URL + '?action=addPetugas', {
+            fetch(API_URL + '?action=addPetugas&token=' + encodeURIComponent(AUTH_TOKEN), {
                 method: 'POST',
                 body: formData
             })
@@ -394,7 +406,7 @@
 
         function hapusPetugas(id) {
             if (!confirm('Hapus data petugas ini?')) return;
-            fetch(API_URL + '?action=deletePetugas&id=' + id)
+            fetch(API_URL + '?action=deletePetugas&id=' + id + '&token=' + encodeURIComponent(AUTH_TOKEN))
                 .then(r => r.json())
                 .then(() => loadPetugas())
                 .catch(() => alert('Gagal menghapus.'));

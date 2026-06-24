@@ -12,3 +12,6 @@
 <FilesMatch "\.(pdf|jpg|jpeg|png|gif|webp)$">
     Allow from all
 </FilesMatch>
+
+# Blokir directory listing
+Options -Indexes

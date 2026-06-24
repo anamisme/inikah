@@ -297,7 +297,8 @@
     </div>
 
     <script>
-        const ADMIN_PASSWORD = 'kuakarangdadap2024';
+        const ADMIN_PASSWORD = 'placeholder'; // not used anymore
+        let AUTH_TOKEN = '';
 
         // Store raw data for filtering
         const rawData = { pretest: [], posttest: [], jadwal: [], petugas: [], sertifikat: [] };
@@ -305,13 +306,25 @@
         // LOGIN
         function doLogin() {
             const pass = document.getElementById('adminPass').value;
-            if (pass === ADMIN_PASSWORD) {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('mainPanel').style.display = 'block';
-                loadAllData();
-            } else {
+            fetch('api/auth.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pass, role: 'admin' })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    AUTH_TOKEN = res.token;
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('mainPanel').style.display = 'block';
+                    loadAllData();
+                } else {
+                    document.getElementById('loginError').style.display = 'block';
+                }
+            })
+            .catch(() => {
                 document.getElementById('loginError').style.display = 'block';
-            }
+            });
         }
         document.getElementById('adminPass').addEventListener('keypress', e => {
             if (e.key === 'Enter') doLogin();
