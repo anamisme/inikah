@@ -78,7 +78,7 @@ body { background: #e2e8f0; display: flex; flex-direction: column; align-items: 
 .cert-nik { top: 43%; left: 50%; transform: translateX(-50%); font-size: clamp(0.7rem, 1.4vw, 1rem); text-align: center; letter-spacing: 1px; }
 .cert-skor { top: 50%; left: 50%; transform: translateX(-50%); font-size: clamp(0.7rem, 1.4vw, 1rem); text-align: center; }
 .cert-tahun { top: 27.5%; right: 28%; font-size: clamp(0.6rem, 1.2vw, 0.85rem); font-weight: 400; }
-.cert-tanggal { top: 66%; right: 22%; font-size: clamp(0.55rem, 1.1vw, 0.8rem); font-weight: 400; }
+.cert-tanggal { top: 55.5%; right: 14%; font-size: clamp(0.55rem, 1.1vw, 0.8rem); font-weight: 400; }
 .btn-area { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
 .btn-cert { padding: 14px 28px; border-radius: 12px; border: none; font-size: 0.9rem; font-weight: 700; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 .btn-print { background: #064e3b; color: #fff; }
