@@ -143,7 +143,7 @@ drawText($img, 13, 720, 356, $darkGray, $fontBold, $nik);
 drawText($img, 13, 725, 388, $black, $fontBold, (string)$skor);
 
 // ──── TAHUN (setelah "...BA.00/" pada baris Nomor) ────
-drawText($img, 11, 800, 254, $black, $fontBold, $tahun);
+drawText($img, 11, 850, 254, $black, $fontBold, $tahun);
 
 // ──── TANGGAL (sejajar dengan "Karangdadap," di area tanda tangan) ────
 drawText($img, 11, 1095, 484, $darkGray, $fontBold, $tanggalFormatted);
