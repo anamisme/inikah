@@ -272,7 +272,7 @@ function buildPetugasItems(data) {
     data.forEach(item => {
         html += '<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid rgba(15,118,110,0.08);display:flex;align-items:center;gap:12px;">';
         if (item.foto) {
-            html += '<img src="' + _esc(item.foto) + '" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid rgba(15,118,110,0.08);flex-shrink:0;" alt="Foto">';
+            html += '<img src="' + _esc(item.foto) + '" onclick="openFotoLightbox(this.src)" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid rgba(15,118,110,0.08);flex-shrink:0;cursor:pointer;" alt="Foto">';
         } else {
             html += '<div style="width:56px;height:56px;border-radius:12px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-icons-outlined" style="color:#94a3b8;">person</span></div>';
         }
@@ -285,6 +285,42 @@ function buildPetugasItems(data) {
     html += '</div>';
     return html;
 }
+
+// FOTO LIGHTBOX - popup foto ukuran asli
+function openFotoLightbox(src) {
+    // Hapus lightbox lama jika ada
+    const existing = document.getElementById('fotoLightbox');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'fotoLightbox';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:20px;cursor:zoom-out;opacity:0;transition:opacity 0.3s ease;';
+    
+    const img = document.createElement('img');
+    img.src = src;
+    img.style.cssText = 'max-width:90vw;max-height:90vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.5);object-fit:contain;transform:scale(0.9);transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);';
+    
+    overlay.appendChild(img);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+
+    // Animate in
+    requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+        img.style.transform = 'scale(1)';
+    });
+
+    // Tutup lightbox
+    overlay.addEventListener('click', () => {
+        overlay.style.opacity = '0';
+        img.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            overlay.remove();
+            document.body.style.overflow = '';
+        }, 300);
+    });
+}
+window.openFotoLightbox = openFotoLightbox;
 
 // HTML escape helper
 function _esc(text) {
