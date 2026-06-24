@@ -223,17 +223,19 @@ function _esc(text) {
 }
 
 // CLOSE MODAL ON BACKDROP CLICK
-document.querySelectorAll('.app-modal-overlay').forEach(overlay => {
-    overlay.addEventListener('click', e => {
-        if (e.target !== overlay) return;
-        overlay.classList.remove('show');
-        document.body.style.overflow = '';
-        const frame = overlay.querySelector('iframe');
-        if (frame) setTimeout(() => { frame.src = ''; }, 400);
-        const inp = overlay.querySelector('#searchInput');
-        const ra = overlay.querySelector('#resultArea');
-        if (inp) inp.value = '';
-        if (ra) ra.innerHTML = '';
+window.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.app-modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', e => {
+            if (e.target !== overlay) return;
+            overlay.classList.remove('show');
+            document.body.style.overflow = '';
+            const frame = overlay.querySelector('iframe');
+            if (frame) setTimeout(() => { frame.src = ''; }, 400);
+            const inp = overlay.querySelector('#searchInput');
+            const ra = overlay.querySelector('#resultArea');
+            if (inp) inp.value = '';
+            if (ra) ra.innerHTML = '';
+        });
     });
 });
 
