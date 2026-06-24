@@ -85,23 +85,21 @@ window.bukaModalFrame = function(url, judul) {
     const modal = document.getElementById('appModal');
     const frame = document.getElementById('appModalFrame');
     const title = document.getElementById('appModalTitle');
-    
     if (modal && frame && title) {
         title.innerText = judul;
         frame.src = url;
         modal.classList.add('show');
-        document.body.style.overflow = 'hidden'; 
+        document.body.style.overflow = 'hidden';
     }
 }
 
 window.tutupModalFrame = function() {
     const modal = document.getElementById('appModal');
     const frame = document.getElementById('appModalFrame');
-    
     if (modal && frame) {
         modal.classList.remove('show');
-        document.body.style.overflow = ''; 
-        setTimeout(() => { frame.src = ""; }, 400); 
+        document.body.style.overflow = '';
+        setTimeout(() => { frame.src = ""; }, 400);
     }
 }
 
@@ -111,9 +109,7 @@ window.bukaModalSertifikat = function() {
     if (modal) {
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
-        setTimeout(() => {
-            document.getElementById('searchInput').focus();
-        }, 300);
+        setTimeout(() => { document.getElementById('searchInput').focus(); }, 300);
     }
 }
 
@@ -130,42 +126,28 @@ window.tutupModalSertifikat = function() {
 // BLANGKO FLOATING MODAL CONTROLLER
 window.bukaModalBlanko = function() {
     const modal = document.getElementById('blankoModal');
-    if (modal) {
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
+    if (modal) { modal.classList.add('show'); document.body.style.overflow = 'hidden'; }
 }
 
 window.tutupModalBlanko = function() {
     const modal = document.getElementById('blankoModal');
-    if (modal) {
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
-    }
+    if (modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
 }
 
 // JADWAL MODAL CONTROLLER
 window.bukaModalJadwal = function() {
     const modal = document.getElementById('jadwalModal');
-    if (modal) {
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-        loadJadwalModal();
-    }
+    if (modal) { modal.classList.add('show'); document.body.style.overflow = 'hidden'; loadJadwalModal(); }
 }
 
 window.tutupModalJadwal = function() {
     const modal = document.getElementById('jadwalModal');
-    if (modal) {
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
-    }
+    if (modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
 }
 
 function loadJadwalModal() {
     const container = document.getElementById('jadwalModalContent');
     container.innerHTML = '<div class="text-center text-muted p-4"><div class="spinner-border spinner-border-sm text-success me-2" role="status"></div> Memuat data jadwal...</div>';
-
     fetch('api/jadwal-api.php?action=getJadwal')
         .then(r => r.json())
         .then(data => {
@@ -176,41 +158,31 @@ function loadJadwalModal() {
             let html = '<div style="display:flex;flex-direction:column;gap:10px;">';
             data.forEach(item => {
                 html += '<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid rgba(15,118,110,0.08);">';
-                html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:4px;">' + escapeHtmlSafe(item.nama_pria) + ' & ' + escapeHtmlSafe(item.nama_wanita) + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + escapeHtmlSafe(item.tanggal_akad) + ' · ⏰ ' + escapeHtmlSafe(item.waktu || '') + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">📍 ' + escapeHtmlSafe(item.desa || '') + '</p>';
+                html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:4px;">' + _esc(item.nama_pria) + ' & ' + _esc(item.nama_wanita) + '</p>';
+                html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + _esc(item.tanggal_akad) + ' · ⏰ ' + _esc(item.waktu || '') + '</p>';
+                html += '<p style="font-size:0.78rem;color:#64748b;">📍 ' + _esc(item.desa || '') + '</p>';
                 html += '</div>';
             });
             html += '</div>';
             container.innerHTML = html;
         })
-        .catch(() => {
-            container.innerHTML = '<div class="text-center p-4" style="color:#ef4444;font-size:0.9rem;">Gagal memuat data. Periksa koneksi internet.</div>';
-        });
+        .catch(() => { container.innerHTML = '<div class="text-center p-4" style="color:#ef4444;font-size:0.9rem;">Gagal memuat data.</div>'; });
 }
 
 // PETUGAS MODAL CONTROLLER
 window.bukaModalPetugas = function() {
     const modal = document.getElementById('petugasModal');
-    if (modal) {
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-        loadPetugasModal();
-    }
+    if (modal) { modal.classList.add('show'); document.body.style.overflow = 'hidden'; loadPetugasModal(); }
 }
 
 window.tutupModalPetugas = function() {
     const modal = document.getElementById('petugasModal');
-    if (modal) {
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
-    }
+    if (modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
 }
 
 function loadPetugasModal() {
     const container = document.getElementById('petugasModalContent');
     container.innerHTML = '<div class="text-center text-muted p-4"><div class="spinner-border spinner-border-sm text-success me-2" role="status"></div> Memuat data petugas...</div>';
-
     fetch('api/jadwal-api.php?action=getPetugas')
         .then(r => r.json())
         .then(data => {
@@ -222,138 +194,24 @@ function loadPetugasModal() {
             data.forEach(item => {
                 html += '<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid rgba(15,118,110,0.08);display:flex;align-items:center;gap:12px;">';
                 if (item.foto) {
-                    html += '<img src="' + escapeHtmlSafe(item.foto) + '" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid rgba(15,118,110,0.08);flex-shrink:0;" alt="Foto">';
+                    html += '<img src="' + _esc(item.foto) + '" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid rgba(15,118,110,0.08);flex-shrink:0;" alt="Foto">';
                 } else {
                     html += '<div style="width:56px;height:56px;border-radius:12px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-icons-outlined" style="color:#94a3b8;">person</span></div>';
                 }
                 html += '<div style="flex:1;min-width:0;">';
-                html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:3px;">' + escapeHtmlSafe(item.nama_petugas) + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + escapeHtmlSafe(item.tanggal) + ' · ⏰ ' + escapeHtmlSafe(item.waktu || '') + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">👤 ' + escapeHtmlSafe(item.nama_pria) + ' & ' + escapeHtmlSafe(item.nama_wanita) + '</p>';
+                html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:3px;">' + _esc(item.nama_petugas) + '</p>';
+                html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + _esc(item.tanggal) + ' · ⏰ ' + _esc(item.waktu || '') + '</p>';
+                html += '<p style="font-size:0.78rem;color:#64748b;">👤 ' + _esc(item.nama_pria) + ' & ' + _esc(item.nama_wanita) + '</p>';
                 html += '</div></div>';
             });
             html += '</div>';
             container.innerHTML = html;
         })
-        .catch(() => {
-            container.innerHTML = '<div class="text-center p-4" style="color:#ef4444;font-size:0.9rem;">Gagal memuat data. Periksa koneksi internet.</div>';
-        });
+        .catch(() => { container.innerHTML = '<div class="text-center p-4" style="color:#ef4444;font-size:0.9rem;">Gagal memuat data.</div>'; });
 }
 
-function escapeHtmlSafe(text) {
-    const div = document.createElement('div');
-    div.textContent = text || '';
-    return div.innerHTML;
-}
-
-// JADWAL MODAL CONTROLLER
-window.bukaModalJadwal = function() {
-    const modal = document.getElementById('jadwalModal');
-    if (modal) {
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-        loadJadwalModal();
-    }
-}
-
-window.tutupModalJadwal = function() {
-    const modal = document.getElementById('jadwalModal');
-    if (modal) {
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
-    }
-}
-
-function loadJadwalModal() {
-    const container = document.getElementById('jadwalModalContent');
-    container.innerHTML = '<div class="text-center text-muted p-4"><div class="spinner-border spinner-border-sm text-success me-2" role="status"></div> Memuat data jadwal...</div>';
-
-    fetch('api/jadwal-api.php?action=getJadwal')
-        .then(r => r.json())
-        .then(data => {
-            if (!data || data.length === 0) {
-                container.innerHTML = '<div class="text-center text-muted p-4"><span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">event_busy</span><p class="mt-2" style="font-size:0.9rem;">Belum ada data jadwal akad.</p></div>';
-                return;
-            }
-            let html = '<div style="display:flex;flex-direction:column;gap:10px;">';
-            data.forEach(item => {
-                const safeNama = escapeHtmlSafe(item.nama_pria) + ' & ' + escapeHtmlSafe(item.nama_wanita);
-                const safeTanggal = escapeHtmlSafe(item.tanggal_akad);
-                const safeWaktu = escapeHtmlSafe(item.waktu);
-                const safeDesa = escapeHtmlSafe(item.desa);
-                html += '<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid rgba(15,118,110,0.08);">';
-                html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:4px;">' + safeNama + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + safeTanggal + ' · ⏰ ' + safeWaktu + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">📍 ' + safeDesa + '</p>';
-                html += '</div>';
-            });
-            html += '</div>';
-            container.innerHTML = html;
-        })
-        .catch(() => {
-            container.innerHTML = '<div class="text-center p-4" style="color:#ef4444;font-size:0.9rem;">Gagal memuat data. Periksa koneksi internet.</div>';
-        });
-}
-
-// PETUGAS MODAL CONTROLLER
-window.bukaModalPetugas = function() {
-    const modal = document.getElementById('petugasModal');
-    if (modal) {
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-        loadPetugasModal();
-    }
-}
-
-window.tutupModalPetugas = function() {
-    const modal = document.getElementById('petugasModal');
-    if (modal) {
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
-    }
-}
-
-function loadPetugasModal() {
-    const container = document.getElementById('petugasModalContent');
-    container.innerHTML = '<div class="text-center text-muted p-4"><div class="spinner-border spinner-border-sm text-success me-2" role="status"></div> Memuat data petugas...</div>';
-
-    fetch('api/jadwal-api.php?action=getPetugas')
-        .then(r => r.json())
-        .then(data => {
-            if (!data || data.length === 0) {
-                container.innerHTML = '<div class="text-center text-muted p-4"><span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">person_off</span><p class="mt-2" style="font-size:0.9rem;">Belum ada data petugas.</p></div>';
-                return;
-            }
-            let html = '<div style="display:flex;flex-direction:column;gap:12px;">';
-            data.forEach(item => {
-                const safeNama = escapeHtmlSafe(item.nama_petugas);
-                const safePria = escapeHtmlSafe(item.nama_pria);
-                const safeWanita = escapeHtmlSafe(item.nama_wanita);
-                const safeTanggal = escapeHtmlSafe(item.tanggal);
-                const safeWaktu = escapeHtmlSafe(item.waktu);
-                const safeFoto = item.foto ? escapeHtmlSafe(item.foto) : '';
-                html += '<div style="background:#fff;border-radius:14px;padding:14px 16px;border:1px solid rgba(15,118,110,0.08);display:flex;align-items:center;gap:12px;">';
-                if (safeFoto) {
-                    html += '<img src="' + safeFoto + '" style="width:56px;height:56px;border-radius:12px;object-fit:cover;border:1px solid rgba(15,118,110,0.08);flex-shrink:0;" alt="Foto Petugas">';
-                } else {
-                    html += '<div style="width:56px;height:56px;border-radius:12px;background:#e2e8f0;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><span class="material-icons-outlined" style="color:#94a3b8;">person</span></div>';
-                }
-                html += '<div style="flex:1;min-width:0;">';
-                html += '<p style="font-size:0.9rem;font-weight:700;margin-bottom:3px;">' + safeNama + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">📅 ' + safeTanggal + ' · ⏰ ' + safeWaktu + '</p>';
-                html += '<p style="font-size:0.78rem;color:#64748b;">👤 ' + safePria + ' & ' + safeWanita + '</p>';
-                html += '</div></div>';
-            });
-            html += '</div>';
-            container.innerHTML = html;
-        })
-        .catch(() => {
-            container.innerHTML = '<div class="text-center p-4" style="color:#ef4444;font-size:0.9rem;">Gagal memuat data. Periksa koneksi internet.</div>';
-        });
-}
-
-// Helper: safe HTML escape for modal rendering
-function escapeHtmlSafe(text) {
+// HTML escape helper
+function _esc(text) {
     const div = document.createElement('div');
     div.textContent = text || '';
     return div.innerHTML;
@@ -385,45 +243,27 @@ function prosesCariSertifikat() {
     loading.classList.remove('d-none');
     resultArea.innerHTML = '';
 
-    const urlWebApp = "api/sertifikat.php?q=" + encodeURIComponent(input);
-
-    fetch(urlWebApp)
+    fetch("api/sertifikat.php?q=" + encodeURIComponent(input))
         .then(r => r.json())
         .then(data => {
             loading.classList.add('d-none');
             if (data.length === 0) {
-                resultArea.innerHTML = `
-                    <div class="text-center text-muted p-4 page-view">
-                        <span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">search_off</span>
-                        <p class="mt-2" style="font-size:0.9rem;">Sertifikat belum terbit atau nama salah.<br><small>Pastikan nama sesuai dengan form Post-Test.</small></p>
-                    </div>`;
+                resultArea.innerHTML = '<div class="text-center text-muted p-4 page-view"><span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">search_off</span><p class="mt-2" style="font-size:0.9rem;">Sertifikat belum terbit atau nama salah.<br><small>Pastikan nama sesuai dengan form Post-Test.</small></p></div>';
             } else {
-                let html = `<div class="ios-list-group page-view">`;
+                let html = '<div class="ios-list-group page-view">';
                 data.forEach(item => {
-                    // Sanitasi output untuk mencegah XSS
                     const safeNama = document.createElement('span');
                     safeNama.textContent = item.nama || '';
                     const safeLink = (item.link || '').replace(/[^a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%]/g, '');
-                    html += `
-                        <a href="${safeLink}" target="_blank" rel="noopener noreferrer" class="ios-list-item">
-                            <div class="ios-list-left">
-                                <div class="ios-list-badge">E-CERT</div>
-                                <div class="ios-list-title-box">
-                                    <span class="ios-list-main-title" style="text-transform:uppercase;">${safeNama.innerHTML}</span>
-                                    <span style="font-size:0.75rem;color:var(--muted);">Sertifikat Siap Diunduh</span>
-                                </div>
-                            </div>
-                            <span class="material-icons-outlined" style="color:var(--green-mid);">file_download</span>
-                        </a>`;
+                    html += '<a href="' + safeLink + '" target="_blank" rel="noopener noreferrer" class="ios-list-item"><div class="ios-list-left"><div class="ios-list-badge">E-CERT</div><div class="ios-list-title-box"><span class="ios-list-main-title" style="text-transform:uppercase;">' + safeNama.innerHTML + '</span><span style="font-size:0.75rem;color:var(--muted);">Sertifikat Siap Diunduh</span></div></div><span class="material-icons-outlined" style="color:var(--green-mid);">file_download</span></a>';
                 });
-                html += `</div>`;
+                html += '</div>';
                 resultArea.innerHTML = html;
             }
         })
         .catch(err => {
             loading.classList.add('d-none');
             alert('Gagal memuat data. Periksa kembali koneksi internet Anda.');
-            console.error(err);
         });
 }
 
@@ -439,28 +279,19 @@ const NOTIF_SCRIPT_URL = 'api/notifikasi.php';
 
 window.bukaModalNotif = function() {
     const modal = document.getElementById('notifModal');
-    if (modal) {
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
+    if (modal) { modal.classList.add('show'); document.body.style.overflow = 'hidden'; }
 }
 
 window.tutupModalNotif = function() {
     const modal = document.getElementById('notifModal');
-    if (modal) {
-        modal.classList.remove('show');
-        document.body.style.overflow = '';
-    }
+    if (modal) { modal.classList.remove('show'); document.body.style.overflow = ''; }
 }
 
 function loadNotifications() {
     fetch(NOTIF_SCRIPT_URL + '?action=get')
         .then(r => r.json())
         .then(data => {
-            if (!data || data.length === 0) {
-                document.getElementById('notifBadge').style.display = 'none';
-                return;
-            }
+            if (!data || data.length === 0) { document.getElementById('notifBadge').style.display = 'none'; return; }
             renderNotifList(data);
             updateBadge(data);
         })
@@ -469,34 +300,22 @@ function loadNotifications() {
 
 function renderNotifList(data) {
     const container = document.getElementById('notifList');
-
     if (!data || data.length === 0) {
-        container.innerHTML = `
-            <div class="text-center text-muted p-4">
-                <span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">notifications_off</span>
-                <p class="mt-2" style="font-size:0.9rem;">Belum ada notifikasi.</p>
-            </div>`;
+        container.innerHTML = '<div class="text-center text-muted p-4"><span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">notifications_off</span><p class="mt-2" style="font-size:0.9rem;">Belum ada notifikasi.</p></div>';
         return;
     }
-
     let html = '';
     data.forEach(item => {
         const safeTitle = document.createElement('span');
         safeTitle.textContent = item.judul || '';
         const safeMsg = document.createElement('span');
         safeMsg.textContent = item.pesan || '';
-        // Format tanggal
         let tgl = item.tanggal || '';
         if (tgl && tgl.includes('T')) {
             const d = new Date(tgl);
             tgl = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         }
-        html += `
-            <div class="notif-item unread">
-                <div class="notif-item-title">${safeTitle.innerHTML}</div>
-                <div class="notif-item-msg">${safeMsg.innerHTML}</div>
-                <div class="notif-item-date">${tgl}</div>
-            </div>`;
+        html += '<div class="notif-item unread"><div class="notif-item-title">' + safeTitle.innerHTML + '</div><div class="notif-item-msg">' + safeMsg.innerHTML + '</div><div class="notif-item-date">' + tgl + '</div></div>';
     });
     container.innerHTML = html;
 }
@@ -504,16 +323,10 @@ function renderNotifList(data) {
 function updateBadge(data) {
     const badge = document.getElementById('notifBadge');
     const count = data.length;
-
-    if (count > 0) {
-        badge.textContent = count > 9 ? '9+' : count;
-        badge.style.display = 'flex';
-    } else {
-        badge.style.display = 'none';
-    }
+    if (count > 0) { badge.textContent = count > 9 ? '9+' : count; badge.style.display = 'flex'; }
+    else { badge.style.display = 'none'; }
 }
 
-// Load notifikasi saat halaman siap
 setTimeout(loadNotifications, 3000);
 
 // ════════════════════════════════
@@ -536,10 +349,7 @@ function loadBanners() {
     fetch(NOTIF_SCRIPT_URL + '?action=getBanners')
         .then(r => r.json())
         .then(data => {
-            if (!data || data.length === 0) {
-                document.getElementById('bannerCarousel').style.display = 'none';
-                return;
-            }
+            if (!data || data.length === 0) { document.getElementById('bannerCarousel').style.display = 'none'; return; }
             renderBanners(data);
         })
         .catch(() => {});
@@ -549,48 +359,26 @@ function renderBanners(data) {
     const carousel = document.getElementById('bannerCarousel');
     const track = document.getElementById('bannerTrack');
     const dotsContainer = document.getElementById('bannerDots');
-
     bannerTotal = data.length;
     if (bannerTotal === 0) { carousel.style.display = 'none'; return; }
-
     carousel.style.display = 'block';
     let trackHtml = '';
     let dotsHtml = '';
-
     data.forEach((item, i) => {
-        const bg = item.gambar 
-            ? `background-image:url('${item.gambar}');background-size:cover;background-position:center;`
-            : `background:${item.warna || BANNER_COLORS[i % BANNER_COLORS.length]};`;
+        const bg = item.gambar ? "background-image:url('" + item.gambar + "');background-size:cover;background-position:center;" : "background:" + (item.warna || BANNER_COLORS[i % BANNER_COLORS.length]) + ";";
         const safeTitle = document.createElement('span');
         safeTitle.textContent = item.judul || '';
         const safeTag = document.createElement('span');
         safeTag.textContent = item.tag || 'INFO';
-        const link = item.link ? `onclick="window.open('${item.link.replace(/'/g, "\\'")}', '_blank')"` : '';
-
-        trackHtml += `
-            <div class="banner-slide">
-                <div class="banner-card" style="${bg}" ${link}>
-                    <div class="banner-card-content">
-                        <div class="banner-tag">${safeTag.innerHTML}</div>
-                        <div class="banner-title">${safeTitle.innerHTML}</div>
-                    </div>
-                </div>
-            </div>`;
-        dotsHtml += `<span class="banner-dot ${i === 0 ? 'active' : ''}" onclick="goToBanner(${i})"></span>`;
+        const link = item.link ? "onclick=\"window.open('" + item.link.replace(/'/g, "\\'") + "', '_blank')\"" : '';
+        trackHtml += '<div class="banner-slide"><div class="banner-card" style="' + bg + '" ' + link + '><div class="banner-card-content"><div class="banner-tag">' + safeTag.innerHTML + '</div><div class="banner-title">' + safeTitle.innerHTML + '</div></div></div></div>';
+        dotsHtml += '<span class="banner-dot ' + (i === 0 ? 'active' : '') + '" onclick="goToBanner(' + i + ')"></span>';
     });
-
     track.innerHTML = trackHtml;
     dotsContainer.innerHTML = dotsHtml;
-
-    // Auto-slide
     if (bannerTotal > 1) {
-        bannerInterval = setInterval(() => {
-            bannerCurrent = (bannerCurrent + 1) % bannerTotal;
-            goToBanner(bannerCurrent);
-        }, 4000);
+        bannerInterval = setInterval(() => { bannerCurrent = (bannerCurrent + 1) % bannerTotal; goToBanner(bannerCurrent); }, 4000);
     }
-
-    // Swipe support
     let startX = 0;
     track.addEventListener('touchstart', e => { startX = e.changedTouches[0].screenX; }, { passive: true });
     track.addEventListener('touchend', e => {
@@ -608,150 +396,95 @@ function goToBanner(index) {
     bannerCurrent = index;
     const track = document.getElementById('bannerTrack');
     const dots = document.querySelectorAll('.banner-dot');
-    track.style.transform = `translateX(-${index * 100}%)`;
+    track.style.transform = 'translateX(-' + (index * 100) + '%)';
     dots.forEach((d, i) => d.classList.toggle('active', i === index));
 }
 
 function resetBannerInterval() {
     if (bannerInterval) clearInterval(bannerInterval);
     if (bannerTotal > 1) {
-        bannerInterval = setInterval(() => {
-            bannerCurrent = (bannerCurrent + 1) % bannerTotal;
-            goToBanner(bannerCurrent);
-        }, 4000);
+        bannerInterval = setInterval(() => { bannerCurrent = (bannerCurrent + 1) % bannerTotal; goToBanner(bannerCurrent); }, 4000);
     }
 }
 
-// Load banners
 setTimeout(loadBanners, 1500);
 
 
 // ════════════════════════════════
-// ELASTIC OVERSCROLL EFFECT (Menu Cards)
+// ELASTIC OVERSCROLL EFFECT
 // ════════════════════════════════
 (function() {
-    let startY = 0;
-    let currentY = 0;
-    let isDragging = false;
-    let isOverscrolling = false;
-    let elasticOffset = 0;
-    let velocity = 0;
-    let lastY = 0;
-    let lastTime = 0;
-    let animFrame = null;
-
-    const getCards = () => document.querySelectorAll('.ios-main-card');
-    const container = document;
+    var startY = 0, currentY = 0, isDragging = false, isOverscrolling = false, elasticOffset = 0, velocity = 0, lastY = 0, lastTime = 0, animFrame = null;
+    var getCards = function() { return document.querySelectorAll('.ios-main-card'); };
 
     function applyElastic(offset) {
-        const cards = getCards();
-        cards.forEach((card, i) => {
-            const delay = i * 0.06;
-            const individual = offset * (1 - delay);
-            card.style.transform = `translateY(${individual}px)`;
+        var cards = getCards();
+        cards.forEach(function(card, i) {
+            var individual = offset * (1 - i * 0.06);
+            card.style.transform = 'translateY(' + individual + 'px)';
             card.style.transition = 'none';
         });
     }
 
     function releaseElastic() {
-        const cards = getCards();
-        cards.forEach((card, i) => {
-            const delay = i * 40;
-            setTimeout(() => {
-                card.style.transition = `transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)`;
+        var cards = getCards();
+        cards.forEach(function(card, i) {
+            setTimeout(function() {
+                card.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
                 card.style.transform = 'translateY(0px)';
-                setTimeout(() => { card.style.transition = ''; card.style.transform = ''; }, 700);
-            }, delay);
+                setTimeout(function() { card.style.transition = ''; card.style.transform = ''; }, 700);
+            }, i * 40);
         });
     }
 
-    function isAtTop() {
-        return window.scrollY <= 0;
-    }
+    function isAtTop() { return window.scrollY <= 0; }
+    function isAtBottom() { return (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 2; }
 
-    function isAtBottom() {
-        return (window.innerHeight + window.scrollY) >= document.body.scrollHeight - 2;
-    }
-
-    window.addEventListener('touchstart', (e) => {
-        startY = e.touches[0].clientY;
-        lastY = startY;
-        lastTime = Date.now();
-        isDragging = true;
-        isOverscrolling = false;
-        velocity = 0;
+    window.addEventListener('touchstart', function(e) {
+        startY = e.touches[0].clientY; lastY = startY; lastTime = Date.now();
+        isDragging = true; isOverscrolling = false; velocity = 0;
         if (animFrame) cancelAnimationFrame(animFrame);
     }, { passive: true });
 
-    window.addEventListener('touchmove', (e) => {
+    window.addEventListener('touchmove', function(e) {
         if (!isDragging) return;
         currentY = e.touches[0].clientY;
-        const diff = currentY - startY;
-        const now = Date.now();
+        var diff = currentY - startY;
+        var now = Date.now();
         velocity = (currentY - lastY) / (now - lastTime || 1);
-        lastY = currentY;
-        lastTime = now;
-
-        // Overscroll atas (tarik ke bawah saat sudah di top)
-        if (isAtTop() && diff > 0) {
-            isOverscrolling = true;
-            elasticOffset = Math.pow(diff, 0.7);
-            applyElastic(elasticOffset);
-        }
-        // Overscroll bawah (tarik ke atas saat sudah di bottom)
-        else if (isAtBottom() && diff < 0) {
-            isOverscrolling = true;
-            elasticOffset = -Math.pow(Math.abs(diff), 0.7);
-            applyElastic(elasticOffset);
-        }
-        else if (isOverscrolling) {
-            // Masih overscroll tapi arah berubah
-            elasticOffset = diff > 0 ? Math.pow(Math.abs(diff), 0.7) : -Math.pow(Math.abs(diff), 0.7);
-            applyElastic(elasticOffset);
-        }
+        lastY = currentY; lastTime = now;
+        if (isAtTop() && diff > 0) { isOverscrolling = true; elasticOffset = Math.pow(diff, 0.7); applyElastic(elasticOffset); }
+        else if (isAtBottom() && diff < 0) { isOverscrolling = true; elasticOffset = -Math.pow(Math.abs(diff), 0.7); applyElastic(elasticOffset); }
+        else if (isOverscrolling) { elasticOffset = diff > 0 ? Math.pow(Math.abs(diff), 0.7) : -Math.pow(Math.abs(diff), 0.7); applyElastic(elasticOffset); }
     }, { passive: true });
 
-    window.addEventListener('touchend', () => {
+    window.addEventListener('touchend', function() {
         isDragging = false;
         if (isOverscrolling) {
             isOverscrolling = false;
-            // Bounce back with velocity
             if (Math.abs(velocity) > 0.5) {
-                const bounce = velocity * 30;
-                const cards = getCards();
-                cards.forEach((card, i) => {
-                    const delay = i * 0.06;
-                    const individual = bounce * (1 - delay);
+                var bounce = velocity * 30;
+                var cards = getCards();
+                cards.forEach(function(card, i) {
                     card.style.transition = 'transform 0.2s ease-out';
-                    card.style.transform = `translateY(${elasticOffset + individual}px)`;
+                    card.style.transform = 'translateY(' + (elasticOffset + bounce * (1 - i * 0.06)) + 'px)';
                 });
                 setTimeout(releaseElastic, 180);
-            } else {
-                releaseElastic();
-            }
+            } else { releaseElastic(); }
             elasticOffset = 0;
         }
     }, { passive: true });
 
-    // Mouse wheel overscroll for desktop
-    let wheelTimeout = null;
-    let wheelAccum = 0;
-
-    window.addEventListener('wheel', (e) => {
-        const atTop = isAtTop() && e.deltaY < 0;
-        const atBottom = isAtBottom() && e.deltaY > 0;
-
+    var wheelTimeout = null, wheelAccum = 0;
+    window.addEventListener('wheel', function(e) {
+        var atTop = isAtTop() && e.deltaY < 0;
+        var atBottom = isAtBottom() && e.deltaY > 0;
         if (atTop || atBottom) {
             wheelAccum += e.deltaY * 0.3;
             wheelAccum = Math.max(-80, Math.min(80, wheelAccum));
-            const offset = -wheelAccum;
-            applyElastic(offset);
-
+            applyElastic(-wheelAccum);
             if (wheelTimeout) clearTimeout(wheelTimeout);
-            wheelTimeout = setTimeout(() => {
-                releaseElastic();
-                wheelAccum = 0;
-            }, 150);
+            wheelTimeout = setTimeout(function() { releaseElastic(); wheelAccum = 0; }, 150);
         }
     }, { passive: true });
 })();
