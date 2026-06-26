@@ -1,15 +1,21 @@
 // SPLASH SCREEN & HEARTS EFFECT
 window.addEventListener('DOMContentLoaded', () => {
     const splash = document.getElementById('splashScreen');
-    setTimeout(() => { createSplashHearts(); }, 500);
 
-    setTimeout(() => {
-        if (splash) {
-            splash.style.opacity = '0';
-            splash.style.transform = 'scale(1.06)';
-            setTimeout(() => splash.style.display = 'none', 800);
-        }
-    }, 2600);
+    // Jika dibuka dari APK (?app=1), langsung sembunyikan splash
+    const isApp = new URLSearchParams(location.search).get('app') === '1';
+    if (isApp) {
+        if (splash) splash.style.display = 'none';
+    } else {
+        setTimeout(() => { createSplashHearts(); }, 500);
+        setTimeout(() => {
+            if (splash) {
+                splash.style.opacity = '0';
+                splash.style.transform = 'scale(1.06)';
+                setTimeout(() => splash.style.display = 'none', 800);
+            }
+        }, 2600);
+    }
 
     // Restore theme preference
     const saved = localStorage.getItem('inikah-theme');
