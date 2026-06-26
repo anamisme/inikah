@@ -534,6 +534,9 @@ setTimeout(loadBanners, 1500);
 // ELASTIC OVERSCROLL EFFECT
 // ════════════════════════════════
 (function() {
+    // Nonaktifkan di APK (mencegah lag di WebView)
+    if (new URLSearchParams(location.search).get('app') === '1') return;
+
     var startY = 0, currentY = 0, isDragging = false, isOverscrolling = false, elasticOffset = 0, velocity = 0, lastY = 0, lastTime = 0, animFrame = null;
     var getCards = function() { return document.querySelectorAll('.ios-main-card'); };
 
