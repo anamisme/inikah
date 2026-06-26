@@ -88,6 +88,11 @@
             border: 1.5px solid var(--border); font-size: 0.85rem; outline: none;
         }
         .search-input:focus { border-color: var(--green-light); }
+        .month-input {
+            padding: 9px 12px; border-radius: 10px; border: 1.5px solid var(--border);
+            font-size: 0.8rem; outline: none; color: var(--text); background: #fff;
+        }
+        .month-input:focus { border-color: var(--green-light); }
         .btn-action {
             padding: 9px 16px; border-radius: 10px; border: none;
             font-size: 0.8rem; font-weight: 600; cursor: pointer;
@@ -192,8 +197,9 @@
                 <div class="print-title">Laporan Data Pre-Test</div>
                 <div class="table-toolbar">
                     <input class="search-input" type="text" placeholder="🔍 Cari nama, NIK..." oninput="filterTable('pretest')">
+                    <input class="month-input" type="month" id="month-pretest" title="Filter bulan">
                     <button class="btn-action btn-print" onclick="cetakTab('pretest')">🖨️ Cetak</button>
-                    <button class="btn-action btn-export" onclick="exportCSV('pretest')">📥 Export Excel</button>
+                    <button class="btn-action btn-export" onclick="exportExcel('pretest')">📥 Export Excel</button>
                 </div>
                 <div class="table-wrap">
                     <table class="data-table" id="table-pretest">
@@ -213,8 +219,9 @@
                 <div class="print-title">Laporan Data Post-Test</div>
                 <div class="table-toolbar">
                     <input class="search-input" type="text" placeholder="🔍 Cari nama, NIK..." oninput="filterTable('posttest')">
+                    <input class="month-input" type="month" id="month-posttest" title="Filter bulan">
                     <button class="btn-action btn-print" onclick="cetakTab('posttest')">🖨️ Cetak</button>
-                    <button class="btn-action btn-export" onclick="exportCSV('posttest')">📥 Export Excel</button>
+                    <button class="btn-action btn-export" onclick="exportExcel('posttest')">📥 Export Excel</button>
                 </div>
                 <div class="table-wrap">
                     <table class="data-table" id="table-posttest">
@@ -234,8 +241,9 @@
                 <div class="print-title">Laporan Jadwal Akad</div>
                 <div class="table-toolbar">
                     <input class="search-input" type="text" placeholder="🔍 Cari nama..." oninput="filterTable('jadwal')">
+                    <input class="month-input" type="month" id="month-jadwal" title="Filter bulan">
                     <button class="btn-action btn-print" onclick="cetakTab('jadwal')">🖨️ Cetak</button>
-                    <button class="btn-action btn-export" onclick="exportCSV('jadwal')">📥 Export Excel</button>
+                    <button class="btn-action btn-export" onclick="exportExcel('jadwal')">📥 Export Excel</button>
                 </div>
                 <div class="table-wrap">
                     <table class="data-table" id="table-jadwal">
@@ -255,8 +263,9 @@
                 <div class="print-title">Laporan Data Petugas</div>
                 <div class="table-toolbar">
                     <input class="search-input" type="text" placeholder="🔍 Cari nama petugas..." oninput="filterTable('petugas')">
+                    <input class="month-input" type="month" id="month-petugas" title="Filter bulan">
                     <button class="btn-action btn-print" onclick="cetakTab('petugas')">🖨️ Cetak</button>
-                    <button class="btn-action btn-export" onclick="exportCSV('petugas')">📥 Export Excel</button>
+                    <button class="btn-action btn-export" onclick="exportExcel('petugas')">📥 Export Excel</button>
                 </div>
                 <div class="table-wrap">
                     <table class="data-table" id="table-petugas">
@@ -276,8 +285,9 @@
                 <div class="print-title">Laporan Data Sertifikat</div>
                 <div class="table-toolbar">
                     <input class="search-input" type="text" placeholder="🔍 Cari nama..." oninput="filterTable('sertifikat')">
+                    <input class="month-input" type="month" id="month-sertifikat" title="Filter bulan">
                     <button class="btn-action btn-print" onclick="cetakTab('sertifikat')">🖨️ Cetak</button>
-                    <button class="btn-action btn-export" onclick="exportCSV('sertifikat')">📥 Export Excel</button>
+                    <button class="btn-action btn-export" onclick="exportExcel('sertifikat')">📥 Export Excel</button>
                 </div>
                 <div class="table-wrap">
                     <table class="data-table" id="table-sertifikat">
@@ -493,29 +503,88 @@
             }, 1000);
         }
 
-        // EXPORT CSV
-        function exportCSV(tab) {
-            const table = document.getElementById('table-' + tab);
-            const rows = table.querySelectorAll('tr');
-            let csv = '';
+        // Ambil field tanggal sesuai jenis tab
+        function getTanggal(tab, item) {
+            switch (tab) {
+                case 'jadwal':  return item.tanggal_akad || item.tanggal || '';
+                case 'petugas': return item.tanggal || '';
+                default:        return item.tanggal || item.created_at || '';
+            }
+        }
 
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('th, td');
-                const rowData = [];
-                cells.forEach(cell => {
-                    let text = cell.innerText.replace(/"/g, '""');
-                    rowData.push('"' + text + '"');
+        // Bangun baris data sesuai kolom tiap tab
+        function buildRow(tab, item, no) {
+            switch (tab) {
+                case 'pretest':
+                case 'posttest':
+                    return [no, item.nama || item.nama_lengkap || '', item.nik || '', item.no_hp || item.email || '', item.skor || item.nilai || '', item.tanggal || item.created_at || ''];
+                case 'jadwal':
+                    return [no, item.tanggal_akad || item.tanggal || '', item.waktu || item.jam || '', item.nama_pria || '', item.nama_wanita || '', item.desa || item.alamat || ''];
+                case 'petugas':
+                    return [no, item.nama_petugas || '', item.tanggal || '', item.waktu || item.jam || '', item.nama_pria || '', item.nama_wanita || ''];
+                case 'sertifikat':
+                    return [no, item.nama || '', item.link || item.file_path || '', item.tanggal || item.created_at || ''];
+            }
+            return [];
+        }
+
+        const TAB_HEADERS = {
+            pretest:    ['No', 'Nama', 'NIK', 'No HP', 'Skor', 'Tanggal'],
+            posttest:   ['No', 'Nama', 'NIK', 'No HP', 'Skor', 'Tanggal'],
+            jadwal:     ['No', 'Tanggal Akad', 'Jam', 'Nama Pria', 'Nama Wanita', 'Alamat'],
+            petugas:    ['No', 'Nama Petugas', 'Tanggal', 'Jam', 'Nama Pria', 'Nama Wanita'],
+            sertifikat: ['No', 'Nama', 'Link', 'Tanggal']
+        };
+
+        const TAB_LABELS = {
+            pretest: 'Pre-Test', posttest: 'Post-Test', jadwal: 'Jadwal Akad',
+            petugas: 'Petugas', sertifikat: 'Sertifikat'
+        };
+
+        const BULAN_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+        // EXPORT EXCEL (.xls) — difilter berdasarkan bulan
+        function exportExcel(tab) {
+            const bulanVal = (document.getElementById('month-' + tab).value || '').trim(); // format: YYYY-MM
+            let data = rawData[tab] || [];
+
+            // Filter berdasarkan bulan jika dipilih
+            if (bulanVal) {
+                data = data.filter(item => {
+                    const tgl = (getTanggal(tab, item) || '').toString();
+                    return tgl.slice(0, 7) === bulanVal; // cocokkan YYYY-MM
                 });
-                csv += rowData.join(',') + '\n';
+            }
+
+            if (data.length === 0) {
+                alert(bulanVal ? 'Tidak ada data pada bulan tersebut.' : 'Belum ada data untuk diekspor.');
+                return;
+            }
+
+            const headers = TAB_HEADERS[tab];
+            let periode = 'Semua Data';
+            if (bulanVal) {
+                const [th, bl] = bulanVal.split('-');
+                periode = BULAN_ID[parseInt(bl, 10) - 1] + ' ' + th;
+            }
+
+            // Bangun tabel HTML (Excel bisa membuka format ini sebagai .xls)
+            let html = '<table border="1"><thead>';
+            html += '<tr><th colspan="' + headers.length + '" style="font-size:14px;background:#064e3b;color:#fff;">Laporan ' + TAB_LABELS[tab] + ' - iNikah KUA Karangdadap (' + periode + ')</th></tr>';
+            html += '<tr>' + headers.map(h => '<th style="background:#0f766e;color:#fff;">' + h + '</th>').join('') + '</tr>';
+            html += '</thead><tbody>';
+            data.forEach((item, i) => {
+                const row = buildRow(tab, item, i + 1);
+                html += '<tr>' + row.map(c => '<td>' + escXml(c) + '</td>').join('') + '</tr>';
             });
+            html += '</tbody></table>';
 
-            // Generate filename with date
-            const today = new Date().toISOString().split('T')[0];
-            const filename = 'data_' + tab + '_' + today + '.csv';
+            const fullDoc = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body>' + html + '</body></html>';
 
-            // Add BOM for Excel UTF-8 compatibility
-            const bom = '\uFEFF';
-            const blob = new Blob([bom + csv], { type: 'text/csv;charset=utf-8;' });
+            const periodeFile = bulanVal ? bulanVal : 'semua';
+            const filename = 'laporan_' + tab + '_' + periodeFile + '.xls';
+
+            const blob = new Blob(['\uFEFF' + fullDoc], { type: 'application/vnd.ms-excel;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
@@ -524,6 +593,12 @@
             link.click();
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
+        }
+
+        // Escape untuk konten sel Excel
+        function escXml(text) {
+            return (text == null ? '' : text.toString())
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         }
     </script>
 </body>
