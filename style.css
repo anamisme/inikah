@@ -337,13 +337,11 @@ body.dark-mode .banner-dot.active {
     display: flex; align-items: center; justify-content: space-between;
     padding: 12px; border-radius: 16px;
     text-decoration: none; color: inherit; margin-bottom: 4px;
-    transition: all 0.2s ease;
 }
 .sub-list-item:hover { 
     background: var(--green-tint); 
-    transform: translateX(4px);
 }
-.sub-list-item:active { transform: scale(0.98); }
+.sub-list-item:active { background: var(--green-tint); }
 
 .sub-list-left { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
 
@@ -386,9 +384,8 @@ body.dark-mode .banner-dot.active {
 
 .book-item {
     text-decoration: none; display: flex; flex-direction: column;
-    align-items: center; text-align: center; transition: all 0.25s ease;
+    align-items: center; text-align: center;
 }
-.book-item:hover { transform: translateY(-4px) scale(1.03); }
 
 .book-cover {
     width: 100%; max-width: 6.25rem; aspect-ratio: 3/4;
@@ -697,10 +694,8 @@ body.dark-mode .notif-bell {
     background: #ffffff;
     border: 1px solid var(--border);
     margin-bottom: 10px;
-    transition: all 0.2s ease;
 }
 .notif-item:last-child { margin-bottom: 0; }
-.notif-item:hover { transform: translateX(3px); }
 .notif-item-title {
     font-size: 0.9rem; font-weight: 700; color: var(--text);
     margin-bottom: 4px;
