@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Redirecting...</title></head>
+<body>
+<script>
+var url = new URLSearchParams(location.search).get('url');
+if (url) {
+    // Buka URL di tab baru (di APK ini akan trigger onCreateWindow -> browser luar)
+    var a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    // Fallback: redirect langsung
+    setTimeout(function() { location.href = url; }, 500);
+}
+</script>
+<p style="font-family:sans-serif;text-align:center;padding:40px;">Membuka file...</p>
+</body>
+</html>

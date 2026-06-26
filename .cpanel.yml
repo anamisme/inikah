@@ -12,6 +12,7 @@ deployment:
     - /bin/cp -R laporan.html $DEPLOYPATH/
     - /bin/cp -R privacy-policy.html $DEPLOYPATH/
     - /bin/cp -R terms-of-service.html $DEPLOYPATH/
+    - /bin/cp -R open-external.html $DEPLOYPATH/
     - /bin/cp -R api/*.php $DEPLOYPATH/api/
     - /bin/cp -R api/.htaccess $DEPLOYPATH/api/
     - /bin/mkdir -p $DEPLOYPATH/api/fonts
