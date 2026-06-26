@@ -11,9 +11,14 @@ require_once __DIR__ . '/config.php';
 
 // ─── HELPER FUNCTIONS ─────────────────────────────
 
+function getSecretKey() {
+    // Diambil dari config.php (didefinisikan di server, tidak masuk ke git)
+    return defined('INIKAH_SECRET') ? INIKAH_SECRET : 'inikah-secret-key-2024';
+}
+
 function generateToken($role) {
     $payload = $role . '|' . time() . '|' . bin2hex(random_bytes(16));
-    $signature = hash_hmac('sha256', $payload, 'inikah-secret-key-2024');
+    $signature = hash_hmac('sha256', $payload, getSecretKey());
     return base64_encode($payload . '|' . $signature);
 }
 
@@ -36,7 +41,7 @@ function verifyToken($token) {
     
     // Verifikasi signature
     $payload = $role . '|' . $timestamp . '|' . $random;
-    $expectedSig = hash_hmac('sha256', $payload, 'inikah-secret-key-2024');
+    $expectedSig = hash_hmac('sha256', $payload, getSecretKey());
     
     return hash_equals($expectedSig, $signature);
 }
@@ -56,8 +61,8 @@ if (basename($_SERVER['SCRIPT_FILENAME']) === 'auth.php') {
     header('Content-Type: application/json');
 
     $VALID_PASSWORDS = [
-        'admin' => 'kuakarangdadap2024',
-        'petugas' => 'petugaskua2024'
+        'admin'   => defined('ADMIN_PASSWORD') ? ADMIN_PASSWORD : 'kuakarangdadap2024',
+        'petugas' => defined('PETUGAS_PASSWORD') ? PETUGAS_PASSWORD : 'petugaskua2024'
     ];
 
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'verify') {
