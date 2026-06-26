@@ -29,7 +29,7 @@ body {
     padding-bottom: 40px;
     overflow-x: hidden;
     position: relative;
-    transition: background-color 0.4s ease, color 0.4s ease;
+    
 }
 
 
@@ -42,21 +42,15 @@ body {
     z-index: 10000;
     display: flex; flex-direction: column;
     justify-content: center; align-items: center;
-    transition: all 0.8s cubic-bezier(0.85, 0, 0.15, 1);
+    
 }
 
 .splash-brand { 
     display: flex; flex-direction: column; align-items: center; gap: 10px; 
-    transform: scale(0); opacity: 0;
-    animation: zoomBounce 1.2s ease forwards 0.1s;
+     opacity: 0;
+    
 }
 
-@keyframes zoomBounce {
-    0%   { transform: scale(0); opacity: 0; }
-    50%  { transform: scale(1.15); opacity: 1; }
-    75%  { transform: scale(0.95); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
-}
 
 .splash-wordmark {
     font-family: "Playfair Display", serif;
@@ -69,7 +63,7 @@ body {
 
 .splash-sub {
     font-size: 0.8rem; font-weight: 700; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 3px;
+    text- letter-spacing: 3px;
 }
 
 .splash-heart {
@@ -77,14 +71,9 @@ body {
     color: #ef4444;
     pointer-events: none;
     bottom: 40%; opacity: 0;
-    animation: flyUpHeart 2s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+    
 }
 
-@keyframes flyUpHeart {
-    0% { transform: translateY(50px) scale(0.5) rotate(0deg); opacity: 0; }
-    20% { opacity: 0.8; transform: translateY(0) scale(1.2) rotate(10deg); }
-    100% { transform: translateY(-300px) scale(0.6) rotate(-20deg); opacity: 0; }
-}
 
 /* ════════════════════════════════
    NAVBAR (HEADER KEMENAG)
@@ -99,7 +88,7 @@ body {
     border-radius: 18px;
     box-shadow: 0 4px 16px rgba(0, 102, 64, 0.3), inset 0 1px 1px rgba(255,255,255,0.2);
     display: flex; flex-direction: column;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    
 }
 
 .nav-row {
@@ -113,7 +102,7 @@ body {
 .ios-subtitle {
     font-size: 0.5rem; font-weight: 600; 
     color: rgba(255, 255, 255, 0.75);
-    text-transform: uppercase; letter-spacing: 1.5px; margin-top: 1px;
+    text- letter-spacing: 1.5px; margin-top: 1px;
 }
 
 .logo-wordmark {
@@ -136,8 +125,8 @@ body {
 
 .banner-track {
     display: flex;
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: transform;
+    
+    
 }
 
 .banner-slide {
@@ -159,13 +148,13 @@ body {
     cursor: pointer;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), inset -4px 0 8px rgba(0, 0, 0, 0.08);
     border-left: 4px solid rgba(0, 0, 0, 0.15);
-    transition: transform 0.3s ease;
+    
 }
 .banner-card:hover {
-    transform: scale(1.02);
+    
 }
 .banner-card:active {
-    transform: scale(0.98);
+    
 }
 
 .banner-card::before {
@@ -184,7 +173,7 @@ body {
     font-size: 0.55rem;
     font-weight: 800;
     color: rgba(255, 255, 255, 0.7);
-    text-transform: uppercase;
+    text-
     letter-spacing: 1px;
     margin-bottom: 4px;
 }
@@ -212,7 +201,7 @@ body {
     border-radius: 50%;
     background: #cbd5e1;
     cursor: pointer;
-    transition: all 0.3s ease;
+    
 }
 .banner-dot.active {
     width: 18px;
@@ -312,21 +301,21 @@ body.dark-mode .banner-dot.active {
 
 .chevron-main {
     font-size: 22px; color: #94a3b8;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
+    
 }
-.chevron-main.rotated { transform: rotate(90deg); color: var(--green-mid); }
+.chevron-main.rotated {  color: var(--green-mid); }
 
 /* ════════════════════════════════
    FLUID ACCORDION MULTI-LEVEL
 ════════════════════════════════ */
 .ios-submenu-wrapper {
     display: grid; grid-template-rows: 0fr;
-    transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    
 }
 .ios-submenu-wrapper.active { grid-template-rows: 1fr; }
 .ios-submenu-inner { 
     overflow: hidden; opacity: 0;
-    transition: opacity 0.3s ease;
+    
 }
 .ios-submenu-wrapper.active .ios-submenu-inner { 
     opacity: 1; margin-top: 16px; padding-top: 12px;
@@ -366,7 +355,7 @@ body.dark-mode .banner-dot.active {
 ════════════════════════════════ */
 .apple-books-container { 
     display: grid; grid-template-rows: 0fr;
-    transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    
 }
 .apple-books-container.show { grid-template-rows: 1fr; }
 .apple-books-inner { overflow: hidden; }
@@ -407,7 +396,7 @@ body.dark-mode .banner-dot.active {
 .cover-9  { background: linear-gradient(145deg, #334155, #0f172a); }
 .cover-10 { background: linear-gradient(145deg, #1e293b, #020617); }
 
-.book-badge { font-size: 0.5rem; font-weight: 800; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; }
+.book-badge { font-size: 0.5rem; font-weight: 800; color: rgba(255,255,255,0.6); text- letter-spacing: 0.5px; }
 .book-cover-title { font-size: 0.65rem; font-weight: 700; color: #FFF; line-height: 1.3; text-align: left; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
 .book-label-title { font-size: 0.75rem; font-weight: 700; color: var(--text); margin-top: 6px; }
 
@@ -422,7 +411,7 @@ body.dark-mode .banner-dot.active {
     z-index: 2000;
     display: flex; align-items: center; justify-content: center;
     opacity: 0; pointer-events: none;
-    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    
     padding: 20px;
 }
 .app-modal-overlay.show { opacity: 1; pointer-events: auto; }
@@ -436,11 +425,11 @@ body.dark-mode .banner-dot.active {
     border: 1px solid rgba(255, 255, 255, 0.6);
     display: flex; flex-direction: column;
     position: relative;
-    transform: translateY(30px) scale(0.96);
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    
+    
     overflow: hidden;
 }
-.app-modal-overlay.show .app-modal-content { transform: translateY(0) scale(1); }
+.app-modal-overlay.show .app-modal-content {  }
 
 .app-modal-close {
     position: absolute; top: 16px; right: 16px;
@@ -448,11 +437,11 @@ body.dark-mode .banner-dot.active {
     background: rgba(15, 118, 110, 0.08); border: none;
     display: flex; align-items: center; justify-content: center;
     color: var(--green-deep); cursor: pointer; z-index: 10;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    
 }
 .app-modal-close:hover {
     background: #ef4444; color: #ffffff;
-    transform: rotate(90deg) scale(1.05);
+    
 }
 
 .app-modal-title {
@@ -472,7 +461,7 @@ body.dark-mode .banner-dot.active {
 .doc-list-item {
     display: flex; align-items: center; justify-content: space-between;
     padding: 12px; text-decoration: none; color: inherit;
-    border-radius: 14px; transition: background-color 0.2s;
+    border-radius: 14px; 
 }
 .doc-list-item:hover { background: rgba(15, 118, 110, 0.08); }
 .doc-badge {
@@ -493,7 +482,7 @@ body.dark-mode .banner-dot.active {
     font-size: 1rem; font-family: inherit; font-weight: 500;
     margin-bottom: 16px; outline: none;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.01);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    
 }
 .ios-input:focus {
     background: #ffffff; border-color: var(--green-mid);
@@ -506,14 +495,14 @@ body.dark-mode .banner-dot.active {
     color: #FFFFFF; font-size: 1rem; font-weight: 700; font-family: inherit;
     display: flex; align-items: center; justify-content: space-between;
     box-shadow: 0 10px 25px rgba(6, 78, 59, 0.2);
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    
 }
 .ios-btn-premium:hover { 
-    transform: translateY(-2px); 
+     
     box-shadow: 0 14px 30px rgba(6, 78, 59, 0.28);
     filter: brightness(1.05);
 }
-.ios-btn-premium:active { transform: scale(0.98); }
+.ios-btn-premium:active {  }
 .btn-text-main { flex-grow: 1; text-align: left; margin-left: 12px; }
 
 /* ════════════════════════════════
@@ -523,7 +512,7 @@ body.dark-mode .banner-dot.active {
 .ios-list-item {
     display: flex; align-items: center; justify-content: space-between;
     padding: 14px 18px; text-decoration: none; color: inherit;
-    border-bottom: 1px solid rgba(0,0,0,0.03); transition: background-color 0.2s;
+    border-bottom: 1px solid rgba(0,0,0,0.03); 
 }
 .ios-list-item:last-child { border-bottom: none; }
 .ios-list-item:hover { background: #f8fafc; }
@@ -541,11 +530,9 @@ body.dark-mode .banner-dot.active {
    FLUID PAGE SWITCH SYSTEM
 ════════════════════════════════ */
 .page-view {
-    opacity: 1; transform: translateY(0) scale(1);
-    transition: opacity 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), 
-                transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    opacity: 1; 
 }
-.page-view.d-none { display: none !important; opacity: 0; transform: translateY(24px) scale(0.97); }
+.page-view.d-none { display: none !important; opacity: 0;  }
 
 .page-footer {
     text-align: center; padding: 32px 16px 10px;
@@ -564,7 +551,7 @@ body.dark-mode .banner-dot.active {
 .footer-links a {
     color: var(--green-mid);
     text-decoration: none;
-    transition: opacity 0.2s;
+    
 }
 .footer-links a:hover {
     opacity: 0.7;
@@ -591,21 +578,21 @@ body.dark-mode .footer-sep {
     display: flex; align-items: center; justify-content: center;
     cursor: pointer; flex-shrink: 0;
     color: #ffffff;
-    transition: all 0.3s ease;
+    
 }
 .theme-toggle:hover {
     background: rgba(255, 255, 255, 0.25);
-    transform: scale(1.1);
+    
 }
 .theme-toggle:active {
-    transform: scale(0.95);
+    
 }
 .theme-toggle .material-icons-outlined {
     font-size: 14px;
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    
 }
 .theme-toggle:hover .material-icons-outlined {
-    transform: rotate(25deg);
+    
 }
 
 /* ════════════════════════════════
@@ -647,14 +634,14 @@ body.dark-mode .theme-toggle {
     cursor: pointer; flex-shrink: 0;
     color: #ffffff;
     position: relative;
-    transition: all 0.3s ease;
+    
 }
 .notif-bell:hover {
     background: rgba(255, 255, 255, 0.25);
-    transform: scale(1.1);
+    
 }
 .notif-bell:active {
-    transform: scale(0.95);
+    
 }
 .notif-bell .material-icons-outlined {
     font-size: 14px;
@@ -673,13 +660,9 @@ body.dark-mode .theme-toggle {
     padding: 0 3px;
     line-height: 1;
     box-shadow: 0 2px 4px rgba(239, 68, 68, 0.4);
-    animation: notifPulse 2s ease-in-out infinite;
+    
 }
 
-@keyframes notifPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.15); }
-}
 
 body.dark-mode .notif-bell {
     background: rgba(255, 255, 255, 0.08);
