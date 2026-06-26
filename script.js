@@ -69,10 +69,8 @@ function toggleMainMenu(idSubmenu, idChevron) {
     const submenu = document.getElementById(idSubmenu);
     const chevron = document.getElementById(idChevron);
     if (submenu && chevron) {
-        const card = submenu.closest('.ios-main-card');
         submenu.classList.toggle('active');
         chevron.classList.toggle('rotated');
-        if (card) card.classList.toggle('expanded');
     }
 }
 
@@ -375,7 +373,9 @@ function prosesCariSertifikat() {
                     const safeNama = document.createElement('span');
                     safeNama.textContent = item.nama || '';
                     const safeLink = (item.link || '').replace(/[^a-zA-Z0-9\-._~:/?#\[\]@!$&'()*+,;=%]/g, '');
-                    html += '<a href="' + safeLink + '" target="_blank" rel="noopener noreferrer" class="ios-list-item"><div class="ios-list-left"><div class="ios-list-badge">E-CERT</div><div class="ios-list-title-box"><span class="ios-list-main-title" style="text-transform:uppercase;">' + safeNama.innerHTML + '</span><span style="font-size:0.75rem;color:var(--muted);">Sertifikat Siap Diunduh</span></div></div><span class="material-icons-outlined" style="color:var(--green-mid);">file_download</span></a>';
+                    // Buat full URL jika relative path
+                    const fullLink = safeLink.startsWith('http') ? safeLink : 'https://inikah.yayasanbaitulhikmah.com/' + safeLink;
+                    html += '<a href="#" onclick="window.open(\'' + fullLink.replace(/'/g, "\\'") + '\', \'_system\'); return false;" class="ios-list-item"><div class="ios-list-left"><div class="ios-list-badge">E-CERT</div><div class="ios-list-title-box"><span class="ios-list-main-title" style="text-transform:uppercase;">' + safeNama.innerHTML + '</span><span style="font-size:0.75rem;color:var(--muted);">Sertifikat Siap Diunduh</span></div></div><span class="material-icons-outlined" style="color:var(--green-mid);">file_download</span></a>';
                 });
                 html += '</div>';
                 resultArea.innerHTML = html;
