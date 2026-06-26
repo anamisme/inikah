@@ -43,6 +43,7 @@ switch ($action) {
     // ─── SERTIFIKAT ───────────────────────────────────
 
     case 'getSertifikat':
+        requireAdminAuth();
         $stmt = $pdo->query("SELECT id, nama, link, tanggal FROM sertifikat ORDER BY tanggal DESC LIMIT 100");
         echo json_encode($stmt->fetchAll());
         break;
@@ -75,6 +76,7 @@ switch ($action) {
     // ─── JADWAL ───────────────────────────────────────
 
     case 'getJadwal':
+        requireAdminAuth();
         $stmt = $pdo->query("SELECT id, tanggal_akad, waktu, nama_pria, nama_wanita, desa, petugas, keterangan FROM jadwal ORDER BY tanggal_akad DESC LIMIT 50");
         echo json_encode($stmt->fetchAll());
         break;
@@ -112,6 +114,7 @@ switch ($action) {
     // ─── HASIL TEST ───────────────────────────────────
 
     case 'getHasilTest':
+        requireAdminAuth();
         $tipe = clean($_GET['tipe'] ?? 'pretest');
         if (!in_array($tipe, ['pretest', 'posttest'])) $tipe = 'pretest';
 

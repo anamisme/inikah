@@ -347,7 +347,7 @@
         }
 
         function loadPretest() {
-            fetch('api/admin-api.php?action=getHasilTest&tipe=pretest')
+            fetch('api/admin-api.php?action=getHasilTest&tipe=pretest&token=' + encodeURIComponent(AUTH_TOKEN))
                 .then(r => r.json())
                 .then(data => {
                     rawData.pretest = data || [];
@@ -357,7 +357,7 @@
         }
 
         function loadPosttest() {
-            fetch('api/admin-api.php?action=getHasilTest&tipe=posttest')
+            fetch('api/admin-api.php?action=getHasilTest&tipe=posttest&token=' + encodeURIComponent(AUTH_TOKEN))
                 .then(r => r.json())
                 .then(data => {
                     rawData.posttest = data || [];
@@ -387,7 +387,7 @@
         }
 
         function loadSertifikat() {
-            fetch('api/admin-api.php?action=getSertifikat')
+            fetch('api/admin-api.php?action=getSertifikat&token=' + encodeURIComponent(AUTH_TOKEN))
                 .then(r => r.json())
                 .then(data => {
                     rawData.sertifikat = data || [];
