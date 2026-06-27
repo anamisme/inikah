@@ -33,6 +33,14 @@
         .admin-logo .wi { font-style: italic; color: #b45309; }
         .admin-logo .wn { font-weight: 700; }
         .admin-sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; font-weight: 600; }
+        .admin-section { background:#fff;border-radius:20px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);margin-bottom:16px;overflow:hidden; }
+        .admin-section-header { display:flex;align-items:center;justify-content:space-between;padding:18px 20px;cursor:pointer;user-select:none; }
+        .admin-section-header:hover { background:rgba(15,118,110,0.03); }
+        .admin-section-header h3 { font-size:0.95rem;font-weight:700;margin:0; }
+        .admin-section-body { display:none;padding:0 20px 20px; }
+        .admin-section.open .admin-section-body { display:block; }
+        .admin-section .chevron { font-size:20px;color:#94a3b8; }
+        .admin-section.open .chevron { color:var(--green-mid); }
 </style>
 </head>
 <body>
@@ -57,54 +65,71 @@
             <p class="admin-sub">Panel Admin Notifikasi</p>
         </div>
 
-        <!-- FORM KIRIM NOTIFIKASI -->
-        <div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);margin-bottom:20px;">
-            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">📢 Kirim Notifikasi Baru</h3>
-            <input type="text" id="notifJudul" placeholder="Judul notifikasi..." style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
-            <textarea id="notifPesan" placeholder="Isi pesan notifikasi..." rows="3" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:12px;resize:vertical;font-family:inherit;"></textarea>
-            <button onclick="kirimNotif()" id="btnKirim" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--green-deep),var(--green-mid));color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;">Kirim Notifikasi</button>
-            <p id="statusMsg" style="font-size:0.8rem;margin-top:10px;display:none;"></p>
-        </div>
-
-        <!-- DAFTAR NOTIFIKASI -->
-        <div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);">
-            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">📋 Daftar Notifikasi</h3>
-            <div id="adminNotifList"><p style="color:var(--muted);font-size:0.85rem;">Memuat...</p></div>
-        </div>
-
-        <!-- FORM BANNER -->
-        <div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);margin-top:20px;">
-            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">🖼️ Kelola Banner (maks. 3)</h3>
-            <input type="text" id="bannerJudul" placeholder="Judul banner..." style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
-            <input type="text" id="bannerTag" placeholder="Tag (opsional, misal: PENGUMUMAN)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
-            <input type="url" id="bannerLink" placeholder="Link tujuan (opsional, misal: https://...)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
-            <input type="text" id="bannerGambar" placeholder="Link atau ID file Google Drive" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:6px;">
-            <div id="bannerPreview" style="display:none;margin-bottom:10px;border-radius:12px;overflow:hidden;border:1px solid var(--border);">
-                <img id="bannerPreviewImg" src="" style="width:100%;aspect-ratio:16/7;object-fit:cover;display:block;">
+        <!-- NOTIFIKASI (dropdown) -->
+        <div class="admin-section open" id="sectionNotif">
+            <div class="admin-section-header" onclick="toggleSection('sectionNotif')">
+                <h3>📢 Notifikasi</h3>
+                <span class="material-icons-outlined chevron">expand_more</span>
             </div>
-            <p style="font-size:0.7rem;color:var(--muted);margin:0 0 10px 4px;">Ukuran ideal: 1200x525px. Paste link Drive atau ID file. Pastikan sharing = "Anyone with the link"</p>
-            <select id="bannerWarna" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:12px;background:#fff;">
-                <option value="">Warna fallback (jika tanpa gambar)...</option>
-                <option value="linear-gradient(145deg, #064e3b, #0f766e)">Hijau Tua</option>
-                <option value="linear-gradient(145deg, #0369a1, #0c4a6e)">Biru</option>
-                <option value="linear-gradient(145deg, #7c3aed, #4c1d95)">Ungu</option>
-                <option value="linear-gradient(145deg, #be185d, #831843)">Merah Muda</option>
-                <option value="linear-gradient(145deg, #b45309, #78350f)">Emas</option>
-                <option value="linear-gradient(145deg, #1d4ed8, #1e3a8a)">Biru Tua</option>
-            </select>
-            <button onclick="tambahBanner()" id="btnBanner" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#7c3aed,#4c1d95);color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;">Tambah Banner</button>
-            <p id="bannerStatus" style="font-size:0.8rem;margin-top:10px;display:none;"></p>
+            <div class="admin-section-body">
+                <input type="text" id="notifJudul" placeholder="Judul notifikasi..." style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+                <textarea id="notifPesan" placeholder="Isi pesan notifikasi..." rows="3" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:12px;resize:vertical;font-family:inherit;"></textarea>
+                <button onclick="kirimNotif()" id="btnKirim" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--green-deep),var(--green-mid));color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;">Kirim Notifikasi</button>
+                <p id="statusMsg" style="font-size:0.8rem;margin-top:10px;display:none;"></p>
+                <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+                    <p style="font-size:0.8rem;font-weight:700;margin-bottom:10px;">Daftar Notifikasi</p>
+                    <div id="adminNotifList"><p style="color:var(--muted);font-size:0.85rem;">Memuat...</p></div>
+                </div>
+            </div>
         </div>
 
-        <!-- DAFTAR BANNER -->
-        <div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);margin-top:20px;">
-            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">📋 Banner Aktif</h3>
-            <div id="adminBannerList"><p style="color:var(--muted);font-size:0.85rem;">Memuat...</p></div>
+        <!-- BANNER (dropdown) -->
+        <div class="admin-section" id="sectionBanner">
+            <div class="admin-section-header" onclick="toggleSection('sectionBanner')">
+                <h3>🖼️ Banner</h3>
+                <span class="material-icons-outlined chevron">expand_more</span>
+            </div>
+            <div class="admin-section-body">
+                <input type="text" id="bannerJudul" placeholder="Judul banner..." style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+                <input type="text" id="bannerTag" placeholder="Tag (opsional, misal: PENGUMUMAN)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+                <input type="url" id="bannerLink" placeholder="Link tujuan (opsional, misal: https://...)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+                <input type="text" id="bannerGambar" placeholder="Link atau ID file Google Drive" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:6px;">
+                <div id="bannerPreview" style="display:none;margin-bottom:10px;border-radius:12px;overflow:hidden;border:1px solid var(--border);">
+                    <img id="bannerPreviewImg" src="" style="width:100%;aspect-ratio:16/7;object-fit:cover;display:block;">
+                </div>
+                <p style="font-size:0.7rem;color:var(--muted);margin:0 0 10px 4px;">Ukuran ideal: 1200x525px. Paste link Drive atau ID file.</p>
+                <select id="bannerWarna" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:12px;background:#fff;">
+                    <option value="">Warna fallback (jika tanpa gambar)...</option>
+                    <option value="linear-gradient(145deg, #064e3b, #0f766e)">Hijau Tua</option>
+                    <option value="linear-gradient(145deg, #0369a1, #0c4a6e)">Biru</option>
+                    <option value="linear-gradient(145deg, #7c3aed, #4c1d95)">Ungu</option>
+                    <option value="linear-gradient(145deg, #be185d, #831843)">Merah Muda</option>
+                    <option value="linear-gradient(145deg, #b45309, #78350f)">Emas</option>
+                    <option value="linear-gradient(145deg, #1d4ed8, #1e3a8a)">Biru Tua</option>
+                </select>
+                <button onclick="tambahBanner()" id="btnBanner" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#7c3aed,#4c1d95);color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;">Tambah Banner</button>
+                <p id="bannerStatus" style="font-size:0.8rem;margin-top:10px;display:none;"></p>
+                <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+                    <p style="font-size:0.8rem;font-weight:700;margin-bottom:10px;">Banner Aktif</p>
+                    <div id="adminBannerList"><p style="color:var(--muted);font-size:0.85rem;">Memuat...</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MENU LAPORAN -->
+        <div style="background:#fff;border-radius:20px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);margin-top:20px;">
+            <a href="laporan.html" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
+                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--green-deep),var(--green-mid));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <span class="material-icons-outlined" style="color:#fff;font-size:22px;">download</span>
+                </div>
+                <div>
+                    <p style="font-size:0.95rem;font-weight:700;margin-bottom:2px;">📊 Laporan & Download Data</p>
+                    <p style="font-size:0.75rem;color:var(--muted);">Export data jadwal, test, sertifikat ke Excel</p>
+                </div>
+            </a>
         </div>
 
         <p style="text-align:center;margin-top:20px;font-size:0.75rem;color:var(--muted);">
-            <a href="laporan.html" style="color:var(--green-mid);text-decoration:none;font-weight:600;">📊 Laporan & Download Data</a>
-            <span style="margin:0 8px;color:#cbd5e1;">·</span>
             <a href="index.html" style="color:var(--green-mid);text-decoration:none;font-weight:600;">← Kembali ke Beranda</a>
         </p>
     </div>
@@ -112,6 +137,28 @@
     <script>
         const NOTIF_SCRIPT_URL = 'api/notifikasi.php';
         let AUTH_TOKEN = '';
+
+        function toggleSection(id) {
+            document.getElementById(id).classList.toggle('open');
+        }
+
+        // Auto-login dari token tersimpan
+        (function() {
+            const saved = localStorage.getItem('inikah-admin-token');
+            if (saved) {
+                fetch('api/auth.php?action=verify&token=' + encodeURIComponent(saved))
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.valid) {
+                            AUTH_TOKEN = saved;
+                            document.getElementById('loginScreen').style.display = 'none';
+                            document.getElementById('adminPanel').style.display = 'block';
+                            loadAdminNotifs();
+                            loadAdminBanners();
+                        }
+                    }).catch(() => {});
+            }
+        })();
 
         function loginAdmin() {
             const pass = document.getElementById('adminPass').value;
@@ -124,6 +171,7 @@
             .then(res => {
                 if (res.success) {
                     AUTH_TOKEN = res.token;
+                    localStorage.setItem('inikah-admin-token', AUTH_TOKEN);
                     document.getElementById('loginScreen').style.display = 'none';
                     document.getElementById('adminPanel').style.display = 'block';
                     loadAdminNotifs();

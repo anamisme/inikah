@@ -310,6 +310,23 @@
         const ADMIN_PASSWORD = 'placeholder'; // not used anymore
         let AUTH_TOKEN = '';
 
+        // Auto-login dari shared token
+        (function() {
+            const saved = localStorage.getItem('inikah-admin-token');
+            if (saved) {
+                fetch('api/auth.php?action=verify&token=' + encodeURIComponent(saved))
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.valid) {
+                            AUTH_TOKEN = saved;
+                            document.getElementById('loginScreen').style.display = 'none';
+                            document.getElementById('mainPanel').style.display = 'block';
+                            loadAllData();
+                        }
+                    }).catch(() => {});
+            }
+        })();
+
         // Store raw data for filtering
         const rawData = { pretest: [], posttest: [], jadwal: [], petugas: [], sertifikat: [] };
 
@@ -325,6 +342,7 @@
             .then(res => {
                 if (res.success) {
                     AUTH_TOKEN = res.token;
+                    localStorage.setItem('inikah-admin-token', AUTH_TOKEN);
                     document.getElementById('loginScreen').style.display = 'none';
                     document.getElementById('mainPanel').style.display = 'block';
                     loadAllData();
