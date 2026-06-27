@@ -270,7 +270,7 @@
                 <div class="table-wrap">
                     <table class="data-table" id="table-petugas">
                         <thead>
-                            <tr><th>No</th><th>Nama Petugas</th><th>Tanggal</th><th>Jam</th><th>Nama Pria</th><th>Nama Wanita</th></tr>
+                            <tr><th>No</th><th>Nama Petugas</th><th>Tanggal</th><th>Jam</th><th>Nama Pria</th><th>Nama Wanita</th><th>Foto</th></tr>
                         </thead>
                         <tbody></tbody>
                     </table>
@@ -365,6 +365,18 @@
             return d.innerHTML;
         }
 
+        // FORMAT TANGGAL ke dd/mm/yyyy
+        function formatTgl(str) {
+            if (!str) return '-';
+            // Coba parse berbagai format
+            var d = new Date(str);
+            if (isNaN(d.getTime())) return esc(str);
+            var dd = String(d.getDate()).padStart(2, '0');
+            var mm = String(d.getMonth() + 1).padStart(2, '0');
+            var yyyy = d.getFullYear();
+            return dd + '/' + mm + '/' + yyyy;
+        }
+
         // LOAD ALL DATA
         function loadAllData() {
             loadPretest();
@@ -450,11 +462,11 @@
                         html += '<td>' + esc(item.nik || '') + '</td>';
                         html += '<td>' + esc(item.no_hp || item.email || '') + '</td>';
                         html += '<td>' + esc(item.skor || item.nilai || '') + '</td>';
-                        html += '<td>' + esc(item.tanggal || item.created_at || '') + '</td>';
+                        html += '<td>' + formatTgl(item.tanggal || item.created_at || '') + '</td>';
                         break;
                     case 'jadwal':
                         html += '<td>' + (i + 1) + '</td>';
-                        html += '<td>' + esc(item.tanggal_akad || item.tanggal || '') + '</td>';
+                        html += '<td>' + formatTgl(item.tanggal_akad || item.tanggal || '') + '</td>';
                         html += '<td>' + esc(item.waktu || item.jam || '') + '</td>';
                         html += '<td>' + esc(item.nama_pria || '') + '</td>';
                         html += '<td>' + esc(item.nama_wanita || '') + '</td>';
@@ -463,16 +475,17 @@
                     case 'petugas':
                         html += '<td>' + (i + 1) + '</td>';
                         html += '<td>' + esc(item.nama_petugas || '') + '</td>';
-                        html += '<td>' + esc(item.tanggal || '') + '</td>';
+                        html += '<td>' + formatTgl(item.tanggal || '') + '</td>';
                         html += '<td>' + esc(item.waktu || item.jam || '') + '</td>';
                         html += '<td>' + esc(item.nama_pria || '') + '</td>';
                         html += '<td>' + esc(item.nama_wanita || '') + '</td>';
+                        html += '<td>' + (item.foto ? '<a href="' + esc(item.foto) + '" target="_blank">Lihat</a>' : '-') + '</td>';
                         break;
                     case 'sertifikat':
                         html += '<td>' + (i + 1) + '</td>';
                         html += '<td>' + esc(item.nama || '') + '</td>';
                         html += '<td><a href="' + esc(item.link || item.file_path || '') + '" target="_blank">Lihat</a></td>';
-                        html += '<td>' + esc(item.tanggal || item.created_at || '') + '</td>';
+                        html += '<td>' + formatTgl(item.tanggal || item.created_at || '') + '</td>';
                         break;
                 }
                 html += '</tr>';
@@ -535,13 +548,13 @@
             switch (tab) {
                 case 'pretest':
                 case 'posttest':
-                    return [no, item.nama || item.nama_lengkap || '', item.nik || '', item.no_hp || item.email || '', item.skor || item.nilai || '', item.tanggal || item.created_at || ''];
+                    return [no, item.nama || item.nama_lengkap || '', item.nik || '', item.no_hp || item.email || '', item.skor || item.nilai || '', formatTgl(item.tanggal || item.created_at || '')];
                 case 'jadwal':
-                    return [no, item.tanggal_akad || item.tanggal || '', item.waktu || item.jam || '', item.nama_pria || '', item.nama_wanita || '', item.desa || item.alamat || ''];
+                    return [no, formatTgl(item.tanggal_akad || item.tanggal || ''), item.waktu || item.jam || '', item.nama_pria || '', item.nama_wanita || '', item.desa || item.alamat || ''];
                 case 'petugas':
-                    return [no, item.nama_petugas || '', item.tanggal || '', item.waktu || item.jam || '', item.nama_pria || '', item.nama_wanita || ''];
+                    return [no, item.nama_petugas || '', formatTgl(item.tanggal || ''), item.waktu || item.jam || '', item.nama_pria || '', item.nama_wanita || '', item.foto || '-'];
                 case 'sertifikat':
-                    return [no, item.nama || '', item.link || item.file_path || '', item.tanggal || item.created_at || ''];
+                    return [no, item.nama || '', item.link || item.file_path || '', formatTgl(item.tanggal || item.created_at || '')];
             }
             return [];
         }
@@ -550,7 +563,7 @@
             pretest:    ['No', 'Nama', 'NIK', 'No HP', 'Skor', 'Tanggal'],
             posttest:   ['No', 'Nama', 'NIK', 'No HP', 'Skor', 'Tanggal'],
             jadwal:     ['No', 'Tanggal Akad', 'Jam', 'Nama Pria', 'Nama Wanita', 'Alamat'],
-            petugas:    ['No', 'Nama Petugas', 'Tanggal', 'Jam', 'Nama Pria', 'Nama Wanita'],
+            petugas:    ['No', 'Nama Petugas', 'Tanggal', 'Jam', 'Nama Pria', 'Nama Wanita', 'Foto'],
             sertifikat: ['No', 'Nama', 'Link', 'Tanggal']
         };
 
