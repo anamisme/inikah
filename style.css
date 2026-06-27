@@ -309,13 +309,11 @@ body.dark-mode .banner-dot.active {
    FLUID ACCORDION MULTI-LEVEL
 ════════════════════════════════ */
 .ios-submenu-wrapper {
-    display: grid; grid-template-rows: 0fr;
-    
+    display: none;
 }
-.ios-submenu-wrapper.active { grid-template-rows: 1fr; }
+.ios-submenu-wrapper.active { display: block; }
 .ios-submenu-inner { 
-    overflow: hidden; opacity: 0;
-    
+    overflow: hidden;
 }
 .ios-submenu-wrapper.active .ios-submenu-inner { 
     opacity: 1; margin-top: 16px; padding-top: 12px;
@@ -354,10 +352,9 @@ body.dark-mode .banner-dot.active {
    DIGITAL BOOKSHELF SYSTEM
 ════════════════════════════════ */
 .apple-books-container { 
-    display: grid; grid-template-rows: 0fr;
-    
+    display: none;
 }
-.apple-books-container.show { grid-template-rows: 1fr; }
+.apple-books-container.show { display: block; }
 .apple-books-inner { overflow: hidden; }
 
 .bookshelf-grid {
