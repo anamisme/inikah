@@ -239,12 +239,19 @@ body.dark-mode .banner-dot.active {
 .menu-slide {
     flex-shrink: 0;
     width: 85%;
+    min-height: 400px;
     scroll-snap-align: center;
     border-radius: 24px;
     background: var(--surface, #fff);
     border: 1px solid var(--border);
     overflow: hidden;
     box-shadow: 0 4px 20px -4px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+}
+.menu-slide-body {
+    padding: 12px 14px 16px;
+    flex: 1;
 }
 body.dark-mode .menu-slide {
     background: #1a1c2e;
@@ -264,9 +271,6 @@ body.dark-mode .menu-slide {
     margin: 0;
 }
 
-.menu-slide-body {
-    padding: 12px 14px 16px;
-}
 
 .menu-item {
     display: flex;
