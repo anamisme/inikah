@@ -220,6 +220,115 @@ body.dark-mode .banner-dot.active {
 }
 
 /* ════════════════════════════════
+   MENU CAROUSEL (horizontal swipe)
+════════════════════════════════ */
+.menu-carousel-wrap {
+    margin-bottom: 20px;
+}
+.menu-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 14px;
+    padding: 0 2px 12px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.menu-carousel::-webkit-scrollbar { display: none; }
+
+.menu-slide {
+    flex-shrink: 0;
+    width: 85%;
+    scroll-snap-align: center;
+    border-radius: 24px;
+    background: var(--surface, #fff);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 4px 20px -4px rgba(0,0,0,0.08);
+}
+body.dark-mode .menu-slide {
+    background: #1a1c2e;
+    border-color: rgba(255,255,255,0.06);
+}
+
+.menu-slide-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+}
+.menu-slide-header h2 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.menu-slide-body {
+    padding: 12px 14px 16px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    margin-bottom: 4px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+.menu-item:hover {
+    background: var(--green-tint);
+}
+body.dark-mode .menu-item {
+    color: #f1f5f9;
+}
+body.dark-mode .menu-item:hover {
+    background: rgba(15,118,110,0.12);
+}
+
+.menu-num {
+    width: 26px; height: 26px;
+    border-radius: 8px;
+    background: rgba(15,118,110,0.1);
+    color: var(--green-mid);
+    font-size: 0.75rem;
+    font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+body.dark-mode .menu-num {
+    background: rgba(15,118,110,0.25);
+    color: #2dd4bf;
+}
+
+.menu-carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 4px 0;
+}
+.menu-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #cbd5e1;
+}
+.menu-dot.active {
+    width: 18px;
+    border-radius: 3px;
+    background: var(--green-mid);
+}
+body.dark-mode .menu-dot {
+    background: #334155;
+}
+body.dark-mode .menu-dot.active {
+    background: #14b8a6;
+}
+
+/* ════════════════════════════════
    KARTU MENU DENGAN EFEK 3D & GRADASI
 ════════════════════════════════ */
 .ios-container { width: 100%; max-width: 37.5rem; margin: 0 auto; padding: 0 16px; }

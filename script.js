@@ -530,3 +530,18 @@ function resetBannerInterval() {
 setTimeout(loadBanners, 1500);
 
 
+
+
+// MENU CAROUSEL DOTS
+(function() {
+    var carousel = document.getElementById('menuCarousel');
+    var dots = document.querySelectorAll('.menu-dot');
+    if (!carousel || !dots.length) return;
+    carousel.addEventListener('scroll', function() {
+        var index = Math.round(carousel.scrollLeft / (carousel.offsetWidth * 0.85));
+        dots.forEach(function(d, i) {
+            if (i === index) { d.classList.add('active'); d.style.width = '18px'; d.style.borderRadius = '3px'; }
+            else { d.classList.remove('active'); d.style.width = '6px'; d.style.borderRadius = '50%'; }
+        });
+    });
+})();
