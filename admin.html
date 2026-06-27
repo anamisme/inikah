@@ -62,10 +62,9 @@
     <div id="adminPanel" class="admin-container" style="display:none;">
         <div class="admin-header">
             <div class="admin-logo"><span class="wi">i</span><span class="wn">Nikah</span></div>
-            <p class="admin-sub">Panel Admin Notifikasi</p>
+            <p class="admin-sub">Panel Admin</p>
+            <button onclick="logoutAdmin()" style="margin-top:10px;padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:#fff;color:#ef4444;font-size:0.75rem;font-weight:600;cursor:pointer;">Logout</button>
         </div>
-
-        <!-- NOTIFIKASI (dropdown) -->
         <div class="admin-section open" id="sectionNotif">
             <div class="admin-section-header" onclick="toggleSection('sectionNotif')">
                 <h3>📢 Notifikasi</h3>
@@ -140,6 +139,13 @@
 
         function toggleSection(id) {
             document.getElementById(id).classList.toggle('open');
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('inikah-admin-token');
+            AUTH_TOKEN = '';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'block';
         }
 
         // Auto-login dari token tersimpan
