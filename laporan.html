@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Data – iNikah</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-deep: #064e3b;
+            --green-mid: #0f766e;
+            --green-light: #14b8a6;
+            --bg: #f2f5f3;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: rgba(15, 118, 110, 0.08);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+            background: var(--bg); color: var(--text);
+            padding: 20px; min-height: 100vh;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .header {
+            text-align: center; padding: 24px 0 20px;
+        }
+        .logo {
+            font-family: "Playfair Display", serif;
+            font-size: 1.8rem;
+        }
+        .logo .wi { font-style: italic; color: #b45309; }
+        .logo .wn { font-weight: 700; }
+        .sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; font-weight: 600; }
+
+        /* LOGIN */
+        .login-box {
+            background: #fff; border-radius: 20px; padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06); border: 1px solid var(--border);
+            max-width: 400px; margin: 0 auto;
+        }
+        .login-box h3 { font-size: 1rem; font-weight: 700; margin-bottom: 16px; }
+        .login-box input {
+            width: 100%; padding: 14px 18px; border-radius: 12px;
+            border: 1.5px solid var(--border); font-size: 0.95rem;
+            outline: none; margin-bottom: 12px;
+        }
+        .login-box button {
+            width: 100%; padding: 14px; border-radius: 12px; border: none;
+            background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+            color: #fff; font-size: 0.95rem; font-weight: 700; cursor: pointer;
+        }
+        .login-box button:hover { opacity: 0.9; }
+        .login-error { color: #ef4444; font-size: 0.8rem; margin-top: 10px; display: none; }
+
+        /* TABS */
+        .tabs-nav {
+            display: flex; gap: 8px; overflow-x: auto; padding: 10px 0 16px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .tabs-nav::-webkit-scrollbar { display: none; }
+        .tab-btn {
+            padding: 10px 18px; border-radius: 24px; border: 1.5px solid var(--border);
+            background: #fff; font-size: 0.82rem; font-weight: 600;
+            cursor: pointer; white-space: nowrap; color: var(--text);
+            transition: all 0.2s;
+        }
+        .tab-btn.active {
+            background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+            color: #fff; border-color: transparent;
+        }
+
+        /* PANEL */
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* TABLE CARD */
+        .table-card {
+            background: #fff; border-radius: 16px; padding: 20px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06); border: 1px solid var(--border);
+        }
+        .table-toolbar {
+            display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center;
+        }
+        .search-input {
+            flex: 1; min-width: 180px; padding: 10px 14px; border-radius: 10px;
+            border: 1.5px solid var(--border); font-size: 0.85rem; outline: none;
+        }
+        .search-input:focus { border-color: var(--green-light); }
+        .month-input {
+            padding: 9px 12px; border-radius: 10px; border: 1.5px solid var(--border);
+            font-size: 0.8rem; outline: none; color: var(--text); background: #fff;
+        }
+        .month-input:focus { border-color: var(--green-light); }
+        .btn-action {
+            padding: 9px 16px; border-radius: 10px; border: none;
+            font-size: 0.8rem; font-weight: 600; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 4px;
+        }
+        .btn-print {
+            background: #f0fdf4; color: var(--green-deep); border: 1px solid var(--border);
+        }
+        .btn-export {
+            background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+            color: #fff;
+        }
+        .btn-action:hover { opacity: 0.85; }
+
+        /* TABLE */
+        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .data-table {
+            width: 100%; border-collapse: collapse; font-size: 0.8rem;
+        }
+        .data-table th {
+            background: var(--green-deep); color: #fff; padding: 10px 12px;
+            text-align: left; font-weight: 600; white-space: nowrap;
+        }
+        .data-table td {
+            padding: 9px 12px; border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        .data-table tr:nth-child(even) td { background: #f8faf9; }
+        .data-table tr:hover td { background: #ecfdf5; }
+        .data-table a { color: var(--green-mid); text-decoration: none; font-weight: 600; }
+        .data-table a:hover { text-decoration: underline; }
+
+        .empty-state {
+            text-align: center; padding: 40px 20px; color: var(--muted); font-size: 0.9rem;
+        }
+        .loading-state {
+            text-align: center; padding: 30px; color: var(--muted); font-size: 0.85rem;
+        }
+
+        .footer-link {
+            text-align: center; margin-top: 24px; font-size: 0.75rem;
+        }
+        .footer-link a {
+            color: var(--green-mid); text-decoration: none; font-weight: 600;
+        }
+
+        /* PRINT STYLES */
+        @media print {
+            body { padding: 0; background: #fff; }
+            .header, .tabs-nav, .table-toolbar, .footer-link, #loginScreen { display: none !important; }
+            .tab-panel { display: none !important; }
+            .tab-panel.printing { display: block !important; }
+            .table-card { box-shadow: none; border: none; padding: 0; border-radius: 0; }
+            .data-table th { background: #333 !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .data-table tr:nth-child(even) td { background: #f3f3f3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .container { max-width: 100%; }
+            .print-title { display: block !important; font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+        }
+        .print-title { display: none; }
+
+        @media (max-width: 600px) {
+            body { padding: 12px; }
+            .table-card { padding: 14px; border-radius: 12px; }
+            .tab-btn { padding: 8px 14px; font-size: 0.78rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="container">
+        <div class="header">
+            <div class="logo"><span class="wi">i</span><span class="wn">Nikah</span></div>
+            <p class="sub">Laporan Data</p>
+        </div>
+        <div class="login-box">
+            <h3>🔐 Login Admin</h3>
+            <input type="password" id="adminPass" placeholder="Masukkan password admin...">
+            <button onclick="doLogin()">Masuk</button>
+            <p class="login-error" id="loginError">Password salah!</p>
+        </div>
+    </div>
+
+    <!-- MAIN PANEL -->
+    <div id="mainPanel" class="container" style="display:none;">
+        <div class="header">
+            <div class="logo"><span class="wi">i</span><span class="wn">Nikah</span></div>
+            <p class="sub">Laporan Data</p>
+        </div>
+
+        <!-- TAB NAV -->
+        <div class="tabs-nav">
+            <button class="tab-btn active" onclick="switchTab('pretest')">Pre-Test</button>
+            <button class="tab-btn" onclick="switchTab('posttest')">Post-Test</button>
+            <button class="tab-btn" onclick="switchTab('jadwal')">Jadwal Akad</button>
+            <button class="tab-btn" onclick="switchTab('petugas')">Petugas</button>
+            <button class="tab-btn" onclick="switchTab('sertifikat')">Sertifikat</button>
+        </div>
+
+        <!-- TAB: PRE-TEST -->
+        <div class="tab-panel active" id="panel-pretest">
+            <div class="table-card">
+                <div class="print-title">Laporan Data Pre-Test</div>
+                <div class="table-toolbar">
+                    <input class="search-input" type="text" placeholder="🔍 Cari nama, NIK..." oninput="filterTable('pretest')">
+                    <input class="month-input" type="month" id="month-pretest" title="Filter bulan">
+                    <button class="btn-action btn-print" onclick="cetakTab('pretest')">🖨️ Cetak</button>
+                    <button class="btn-action btn-export" onclick="exportExcel('pretest')">📥 Export Excel</button>
+                </div>
+                <div class="table-wrap">
+                    <table class="data-table" id="table-pretest">
+                        <thead>
+                            <tr><th>No</th><th>Nama</th><th>NIK</th><th>No HP</th><th>Skor</th><th>Tanggal</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="loading-state" id="loading-pretest">Memuat data...</div>
+            </div>
+        </div>
+
+        <!-- TAB: POST-TEST -->
+        <div class="tab-panel" id="panel-posttest">
+            <div class="table-card">
+                <div class="print-title">Laporan Data Post-Test</div>
+                <div class="table-toolbar">
+                    <input class="search-input" type="text" placeholder="🔍 Cari nama, NIK..." oninput="filterTable('posttest')">
+                    <input class="month-input" type="month" id="month-posttest" title="Filter bulan">
+                    <button class="btn-action btn-print" onclick="cetakTab('posttest')">🖨️ Cetak</button>
+                    <button class="btn-action btn-export" onclick="exportExcel('posttest')">📥 Export Excel</button>
+                </div>
+                <div class="table-wrap">
+                    <table class="data-table" id="table-posttest">
+                        <thead>
+                            <tr><th>No</th><th>Nama</th><th>NIK</th><th>No HP</th><th>Skor</th><th>Tanggal</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="loading-state" id="loading-posttest">Memuat data...</div>
+            </div>
+        </div>
+
+        <!-- TAB: JADWAL -->
+        <div class="tab-panel" id="panel-jadwal">
+            <div class="table-card">
+                <div class="print-title">Laporan Jadwal Akad</div>
+                <div class="table-toolbar">
+                    <input class="search-input" type="text" placeholder="🔍 Cari nama..." oninput="filterTable('jadwal')">
+                    <input class="month-input" type="month" id="month-jadwal" title="Filter bulan">
+                    <button class="btn-action btn-print" onclick="cetakTab('jadwal')">🖨️ Cetak</button>
+                    <button class="btn-action btn-export" onclick="exportExcel('jadwal')">📥 Export Excel</button>
+                </div>
+                <div class="table-wrap">
+                    <table class="data-table" id="table-jadwal">
+                        <thead>
+                            <tr><th>No</th><th>Tanggal Akad</th><th>Jam</th><th>Nama Pria</th><th>Nama Wanita</th><th>Alamat</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="loading-state" id="loading-jadwal">Memuat data...</div>
+            </div>
+        </div>
+
+        <!-- TAB: PETUGAS -->
+        <div class="tab-panel" id="panel-petugas">
+            <div class="table-card">
+                <div class="print-title">Laporan Data Petugas</div>
+                <div class="table-toolbar">
+                    <input class="search-input" type="text" placeholder="🔍 Cari nama petugas..." oninput="filterTable('petugas')">
+                    <input class="month-input" type="month" id="month-petugas" title="Filter bulan">
+                    <button class="btn-action btn-print" onclick="cetakTab('petugas')">🖨️ Cetak</button>
+                    <button class="btn-action btn-export" onclick="exportExcel('petugas')">📥 Export Excel</button>
+                </div>
+                <div class="table-wrap">
+                    <table class="data-table" id="table-petugas">
+                        <thead>
+                            <tr><th>No</th><th>Nama Petugas</th><th>Tanggal</th><th>Jam</th><th>Nama Pria</th><th>Nama Wanita</th><th>Foto</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="loading-state" id="loading-petugas">Memuat data...</div>
+            </div>
+        </div>
+
+        <!-- TAB: SERTIFIKAT -->
+        <div class="tab-panel" id="panel-sertifikat">
+            <div class="table-card">
+                <div class="print-title">Laporan Data Sertifikat</div>
+                <div class="table-toolbar">
+                    <input class="search-input" type="text" placeholder="🔍 Cari nama..." oninput="filterTable('sertifikat')">
+                    <input class="month-input" type="month" id="month-sertifikat" title="Filter bulan">
+                    <button class="btn-action btn-print" onclick="cetakTab('sertifikat')">🖨️ Cetak</button>
+                    <button class="btn-action btn-export" onclick="exportExcel('sertifikat')">📥 Export Excel</button>
+                </div>
+                <div class="table-wrap">
+                    <table class="data-table" id="table-sertifikat">
+                        <thead>
+                            <tr><th>No</th><th>Nama</th><th>Link</th><th>Tanggal</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="loading-state" id="loading-sertifikat">Memuat data...</div>
+            </div>
+        </div>
+
+        <p class="footer-link">
+            <a href="admin.html">← Kembali ke Admin</a>
+        </p>
+    </div>
+
+    <script>
+        const ADMIN_PASSWORD = 'placeholder'; // not used anymore
+        let AUTH_TOKEN = '';
+
+        // Auto-login dari shared token
+        (function() {
+            const saved = localStorage.getItem('inikah-admin-token');
+            if (saved) {
+                fetch('api/auth.php?action=verify&token=' + encodeURIComponent(saved))
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.valid) {
+                            AUTH_TOKEN = saved;
+                            document.getElementById('loginScreen').style.display = 'none';
+                            document.getElementById('mainPanel').style.display = 'block';
+                            loadAllData();
+                        }
+                    }).catch(() => {});
+            }
+        })();
+
+        // Store raw data for filtering
+        const rawData = { pretest: [], posttest: [], jadwal: [], petugas: [], sertifikat: [] };
+
+        // LOGIN
+        function doLogin() {
+            const pass = document.getElementById('adminPass').value;
+            fetch('api/auth.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pass, role: 'admin' })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    AUTH_TOKEN = res.token;
+                    localStorage.setItem('inikah-admin-token', AUTH_TOKEN);
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('mainPanel').style.display = 'block';
+                    loadAllData();
+                } else {
+                    document.getElementById('loginError').style.display = 'block';
+                }
+            })
+            .catch(() => {
+                document.getElementById('loginError').style.display = 'block';
+            });
+        }
+        document.getElementById('adminPass').addEventListener('keypress', e => {
+            if (e.key === 'Enter') doLogin();
+        });
+
+        // ESCAPE HTML
+        function esc(text) {
+            const d = document.createElement('div');
+            d.textContent = text || '';
+            return d.innerHTML;
+        }
+
+        // FORMAT TANGGAL ke dd/mm/yyyy
+        function formatTgl(str) {
+            if (!str) return '-';
+            // Coba parse berbagai format
+            var d = new Date(str);
+            if (isNaN(d.getTime())) return esc(str);
+            var dd = String(d.getDate()).padStart(2, '0');
+            var mm = String(d.getMonth() + 1).padStart(2, '0');
+            var yyyy = d.getFullYear();
+            return dd + '/' + mm + '/' + yyyy;
+        }
+
+        // LOAD ALL DATA
+        function loadAllData() {
+            loadPretest();
+            loadPosttest();
+            loadJadwal();
+            loadPetugas();
+            loadSertifikat();
+        }
+
+        function loadPretest() {
+            fetch('api/admin-api.php?action=getHasilTest&tipe=pretest&token=' + encodeURIComponent(AUTH_TOKEN))
+                .then(r => r.json())
+                .then(data => {
+                    rawData.pretest = data || [];
+                    renderTable('pretest', rawData.pretest);
+                })
+                .catch(() => showError('pretest'));
+        }
+
+        function loadPosttest() {
+            fetch('api/admin-api.php?action=getHasilTest&tipe=posttest&token=' + encodeURIComponent(AUTH_TOKEN))
+                .then(r => r.json())
+                .then(data => {
+                    rawData.posttest = data || [];
+                    renderTable('posttest', rawData.posttest);
+                })
+                .catch(() => showError('posttest'));
+        }
+
+        function loadJadwal() {
+            fetch('api/jadwal-api.php?action=getJadwal')
+                .then(r => r.json())
+                .then(data => {
+                    rawData.jadwal = data || [];
+                    renderTable('jadwal', rawData.jadwal);
+                })
+                .catch(() => showError('jadwal'));
+        }
+
+        function loadPetugas() {
+            fetch('api/jadwal-api.php?action=getPetugas')
+                .then(r => r.json())
+                .then(data => {
+                    rawData.petugas = data || [];
+                    renderTable('petugas', rawData.petugas);
+                })
+                .catch(() => showError('petugas'));
+        }
+
+        function loadSertifikat() {
+            fetch('api/admin-api.php?action=getSertifikat&token=' + encodeURIComponent(AUTH_TOKEN))
+                .then(r => r.json())
+                .then(data => {
+                    rawData.sertifikat = data || [];
+                    renderTable('sertifikat', rawData.sertifikat);
+                })
+                .catch(() => showError('sertifikat'));
+        }
+
+        function showError(tab) {
+            document.getElementById('loading-' + tab).innerHTML = '<span style="color:#ef4444;">Gagal memuat data.</span>';
+        }
+
+        // RENDER TABLE
+        function renderTable(tab, data) {
+            const tbody = document.querySelector('#table-' + tab + ' tbody');
+            const loading = document.getElementById('loading-' + tab);
+            loading.style.display = 'none';
+
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--muted);padding:30px;">Belum ada data.</td></tr>';
+                return;
+            }
+
+            let html = '';
+            data.forEach((item, i) => {
+                html += '<tr>';
+                switch (tab) {
+                    case 'pretest':
+                    case 'posttest':
+                        html += '<td>' + (i + 1) + '</td>';
+                        html += '<td>' + esc(item.nama || item.nama_lengkap || '') + '</td>';
+                        html += '<td>' + esc(item.nik || '') + '</td>';
+                        html += '<td>' + esc(item.no_hp || item.email || '') + '</td>';
+                        html += '<td>' + esc(item.skor || item.nilai || '') + '</td>';
+                        html += '<td>' + formatTgl(item.tanggal || item.created_at || '') + '</td>';
+                        break;
+                    case 'jadwal':
+                        html += '<td>' + (i + 1) + '</td>';
+                        html += '<td>' + formatTgl(item.tanggal_akad || item.tanggal || '') + '</td>';
+                        html += '<td>' + esc(item.waktu || item.jam || '') + '</td>';
+                        html += '<td>' + esc(item.nama_pria || '') + '</td>';
+                        html += '<td>' + esc(item.nama_wanita || '') + '</td>';
+                        html += '<td>' + esc(item.desa || item.alamat || '') + '</td>';
+                        break;
+                    case 'petugas':
+                        html += '<td>' + (i + 1) + '</td>';
+                        html += '<td>' + esc(item.nama_petugas || '') + '</td>';
+                        html += '<td>' + formatTgl(item.tanggal || '') + '</td>';
+                        html += '<td>' + esc(item.waktu || item.jam || '') + '</td>';
+                        html += '<td>' + esc(item.nama_pria || '') + '</td>';
+                        html += '<td>' + esc(item.nama_wanita || '') + '</td>';
+                        html += '<td>' + (item.foto ? '<a href="' + esc(item.foto) + '" target="_blank">Lihat</a>' : '-') + '</td>';
+                        break;
+                    case 'sertifikat':
+                        html += '<td>' + (i + 1) + '</td>';
+                        html += '<td>' + esc(item.nama || '') + '</td>';
+                        html += '<td><a href="' + esc(item.link || item.file_path || '') + '" target="_blank">Lihat</a></td>';
+                        html += '<td>' + formatTgl(item.tanggal || item.created_at || '') + '</td>';
+                        break;
+                }
+                html += '</tr>';
+            });
+            tbody.innerHTML = html;
+        }
+
+        // TABS
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('panel-' + tab).classList.add('active');
+            // Highlight active tab button
+            const btns = document.querySelectorAll('.tab-btn');
+            const tabs = ['pretest', 'posttest', 'jadwal', 'petugas', 'sertifikat'];
+            const idx = tabs.indexOf(tab);
+            if (idx >= 0 && btns[idx]) btns[idx].classList.add('active');
+        }
+
+        // FILTER
+        function filterTable(tab) {
+            const input = document.querySelector('#panel-' + tab + ' .search-input');
+            const query = (input.value || '').toLowerCase().trim();
+            const data = rawData[tab];
+
+            if (!query) {
+                renderTable(tab, data);
+                return;
+            }
+
+            const filtered = data.filter(item => {
+                const values = Object.values(item).join(' ').toLowerCase();
+                return values.includes(query);
+            });
+            renderTable(tab, filtered);
+        }
+
+        // PRINT
+        function cetakTab(tab) {
+            // Add printing class for @media print
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('printing'));
+            document.getElementById('panel-' + tab).classList.add('printing');
+            window.print();
+            setTimeout(() => {
+                document.getElementById('panel-' + tab).classList.remove('printing');
+            }, 1000);
+        }
+
+        // Ambil field tanggal sesuai jenis tab
+        function getTanggal(tab, item) {
+            switch (tab) {
+                case 'jadwal':  return item.tanggal_akad || item.tanggal || '';
+                case 'petugas': return item.tanggal || '';
+                default:        return item.tanggal || item.created_at || '';
+            }
+        }
+
+        // Bangun baris data sesuai kolom tiap tab
+        function buildRow(tab, item, no) {
+            switch (tab) {
+                case 'pretest':
+                case 'posttest':
+                    return [no, item.nama || item.nama_lengkap || '', item.nik || '', item.no_hp || item.email || '', item.skor || item.nilai || '', formatTgl(item.tanggal || item.created_at || '')];
+                case 'jadwal':
+                    return [no, formatTgl(item.tanggal_akad || item.tanggal || ''), item.waktu || item.jam || '', item.nama_pria || '', item.nama_wanita || '', item.desa || item.alamat || ''];
+                case 'petugas':
+                    return [no, item.nama_petugas || '', formatTgl(item.tanggal || ''), item.waktu || item.jam || '', item.nama_pria || '', item.nama_wanita || '', item.foto || '-'];
+                case 'sertifikat':
+                    return [no, item.nama || '', item.link || item.file_path || '', formatTgl(item.tanggal || item.created_at || '')];
+            }
+            return [];
+        }
+
+        const TAB_HEADERS = {
+            pretest:    ['No', 'Nama', 'NIK', 'No HP', 'Skor', 'Tanggal'],
+            posttest:   ['No', 'Nama', 'NIK', 'No HP', 'Skor', 'Tanggal'],
+            jadwal:     ['No', 'Tanggal Akad', 'Jam', 'Nama Pria', 'Nama Wanita', 'Alamat'],
+            petugas:    ['No', 'Nama Petugas', 'Tanggal', 'Jam', 'Nama Pria', 'Nama Wanita', 'Foto'],
+            sertifikat: ['No', 'Nama', 'Link', 'Tanggal']
+        };
+
+        const TAB_LABELS = {
+            pretest: 'Pre-Test', posttest: 'Post-Test', jadwal: 'Jadwal Akad',
+            petugas: 'Petugas', sertifikat: 'Sertifikat'
+        };
+
+        const BULAN_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+
+        // EXPORT EXCEL (.xls) — difilter berdasarkan bulan
+        function exportExcel(tab) {
+            const bulanVal = (document.getElementById('month-' + tab).value || '').trim(); // format: YYYY-MM
+            let data = rawData[tab] || [];
+
+            // Filter berdasarkan bulan jika dipilih
+            if (bulanVal) {
+                data = data.filter(item => {
+                    const tgl = (getTanggal(tab, item) || '').toString();
+                    return tgl.slice(0, 7) === bulanVal; // cocokkan YYYY-MM
+                });
+            }
+
+            if (data.length === 0) {
+                alert(bulanVal ? 'Tidak ada data pada bulan tersebut.' : 'Belum ada data untuk diekspor.');
+                return;
+            }
+
+            const headers = TAB_HEADERS[tab];
+            let periode = 'Semua Data';
+            if (bulanVal) {
+                const [th, bl] = bulanVal.split('-');
+                periode = BULAN_ID[parseInt(bl, 10) - 1] + ' ' + th;
+            }
+
+            // Bangun tabel HTML (Excel bisa membuka format ini sebagai .xls)
+            let html = '<table border="1"><thead>';
+            html += '<tr><th colspan="' + headers.length + '" style="font-size:14px;background:#064e3b;color:#fff;">Laporan ' + TAB_LABELS[tab] + ' - iNikah KUA Karangdadap (' + periode + ')</th></tr>';
+            html += '<tr>' + headers.map(h => '<th style="background:#0f766e;color:#fff;">' + h + '</th>').join('') + '</tr>';
+            html += '</thead><tbody>';
+            data.forEach((item, i) => {
+                const row = buildRow(tab, item, i + 1);
+                html += '<tr>' + row.map(c => '<td>' + escXml(c) + '</td>').join('') + '</tr>';
+            });
+            html += '</tbody></table>';
+
+            const fullDoc = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body>' + html + '</body></html>';
+
+            const periodeFile = bulanVal ? bulanVal : 'semua';
+            const filename = 'laporan_' + tab + '_' + periodeFile + '.xls';
+
+            const blob = new Blob(['\uFEFF' + fullDoc], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        // Escape untuk konten sel Excel
+        function escXml(text) {
+            return (text == null ? '' : text.toString())
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+    </script>
+</body>
+</html>

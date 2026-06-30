@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Test Bimwin – iNikah</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --green-deep: #064e3b;
+            --green-mid: #0f766e;
+            --green-light: #14b8a6;
+            --bg: #f2f5f3;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: rgba(15, 118, 110, 0.1);
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+            background: var(--bg); color: var(--text);
+            min-height: 100vh; padding: 20px;
+        }
+        .form-container { max-width: 600px; margin: 0 auto; }
+        .form-header { text-align: center; padding: 20px 0; }
+        .form-logo { font-family: "Playfair Display", serif; font-size: 1.6rem; }
+        .form-logo .wi { font-style: italic; color: #b45309; }
+        .form-logo .wn { font-weight: 700; }
+        .form-sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+        .form-card {
+            background: #fff; border-radius: 20px; padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06); border: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+        .form-card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+        .form-card p { font-size: 0.8rem; color: var(--muted); margin-bottom: 16px; }
+        .form-input {
+            width: 100%; padding: 14px 18px; border-radius: 12px;
+            border: 1.5px solid var(--border); font-size: 0.9rem;
+            outline: none; margin-bottom: 12px; transition: border 0.2s;
+        }
+        .form-input:focus { border-color: var(--green-mid); }
+        .question-card {
+            background: var(--bg); border-radius: 14px; padding: 18px;
+            margin-bottom: 12px; border: 1px solid var(--border);
+        }
+        .question-card .q-title {
+            font-size: 0.85rem; font-weight: 600; margin-bottom: 12px; line-height: 1.5;
+        }
+        .question-card .q-num {
+            display: inline-block; background: var(--green-deep); color: #fff;
+            font-size: 0.7rem; padding: 2px 8px; border-radius: 6px;
+            margin-bottom: 8px; font-weight: 700;
+        }
+        .option-label {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 10px 14px; border-radius: 10px; cursor: pointer;
+            margin-bottom: 6px; transition: background 0.2s; font-size: 0.85rem; line-height: 1.4;
+        }
+        .option-label:hover { background: rgba(15, 118, 110, 0.06); }
+        .option-label input[type="radio"] { accent-color: var(--green-mid); width: 16px; height: 16px; margin-top: 2px; flex-shrink: 0; }
+        .btn-submit {
+            width: 100%; padding: 16px; border-radius: 14px; border: none;
+            background: linear-gradient(135deg, var(--green-deep), var(--green-mid));
+            color: #fff; font-size: 1rem; font-weight: 700; cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-submit:hover { opacity: 0.9; }
+        .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+        .success-msg { text-align: center; padding: 40px 20px; }
+        .success-msg .material-icons-outlined { font-size: 64px; color: var(--green-mid); }
+        .back-link {
+            display: block; text-align: center; margin-top: 16px;
+            font-size: 0.8rem; color: var(--green-mid); text-decoration: none; font-weight: 600;
+        }
+        .progress-bar-container { position: sticky; top: 0; z-index: 10; background: var(--bg); padding: 8px 0; }
+        .progress-bar { height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--green-deep), var(--green-light)); transition: width 0.3s; width: 0%; }
+        .progress-text { font-size: 0.7rem; color: var(--muted); text-align: center; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <div class="form-logo"><span class="wi">i</span><span class="wn">Nikah</span></div>
+            <p class="form-sub">Post-Test Bimbingan Perkawinan KUA Karangdadap</p>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar"><div class="progress-bar-fill" id="progressFill"></div></div>
+            <div class="progress-text" id="progressText">0 / 50 soal dijawab</div>
+        </div>
+
+        <form id="pretestForm">
+            <!-- Data Diri -->
+            <div class="form-card">
+                <h3>Data Diri Peserta</h3>
+                <p>Lengkapi data-data Anda berikut ini menggunakan huruf besar!</p>
+                <input type="text" class="form-input" id="nama" placeholder="Nama Lengkap *" required style="text-transform:uppercase;">
+                <input type="date" class="form-input" id="tanggal" required>
+                <input type="text" class="form-input" id="nik" placeholder="Nomor KTP *" maxlength="16" inputmode="numeric" required>
+            </div>
+
+            <!-- Soal-soal -->
+            <div class="form-card">
+                <h3>Jawablah pertanyaan-pertanyaan di bawah ini dengan benar!</h3>
+                <p>Setiap soal bernilai 2 poin. Total nilai maksimal: 100.</p>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 1</span>
+                    <div class="q-title">Apa yang menjadi tujuan utama pernikahan dalam Islam?</div>
+                    <label class="option-label"><input type="radio" name="q1" value="a" required> Memperoleh keturunan</label>
+                    <label class="option-label"><input type="radio" name="q1" value="b"> Mencari kebahagiaan dunia semata</label>
+                    <label class="option-label"><input type="radio" name="q1" value="c"> Mencapai sakinah, mawaddah, dan rahmah</label>
+                    <label class="option-label"><input type="radio" name="q1" value="d"> Menghindari kesepian</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 2</span>
+                    <div class="q-title">Menurut QS. Ar-Rum ayat 21, apa yang diberikan Allah dalam pernikahan?</div>
+                    <label class="option-label"><input type="radio" name="q2" value="a" required> Harta dan keturunan</label>
+                    <label class="option-label"><input type="radio" name="q2" value="b"> Kedamaian, kasih sayang, dan rahmat</label>
+                    <label class="option-label"><input type="radio" name="q2" value="c"> Ujian dan cobaan</label>
+                    <label class="option-label"><input type="radio" name="q2" value="d"> Keberuntungan dan kemuliaan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 3</span>
+                    <div class="q-title">Salah satu kunci pernikahan yang sukses adalah...?</div>
+                    <label class="option-label"><input type="radio" name="q3" value="a" required> Keberanian untuk mengambil risiko</label>
+                    <label class="option-label"><input type="radio" name="q3" value="b"> Kerelaan, kemauan, dan komitmen</label>
+                    <label class="option-label"><input type="radio" name="q3" value="c"> Mengutamakan kepentingan individu</label>
+                    <label class="option-label"><input type="radio" name="q3" value="d"> Keberlimpahan materi</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 4</span>
+                    <div class="q-title">Menurut ajaran Islam, pernikahan sebaiknya dilakukan pada usia...?</div>
+                    <label class="option-label"><input type="radio" name="q4" value="a" required> Sedini mungkin setelah akil baligh</label>
+                    <label class="option-label"><input type="radio" name="q4" value="b"> Saat pasangan sudah mapan secara ekonomi</label>
+                    <label class="option-label"><input type="radio" name="q4" value="c"> Ketika sudah mencapai kedewasaan fisik dan mental</label>
+                    <label class="option-label"><input type="radio" name="q4" value="d"> Saat sudah mendapatkan pasangan yang kaya</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 5</span>
+                    <div class="q-title">Dalam Islam, suami memiliki tanggung jawab utama yaitu...?</div>
+                    <label class="option-label"><input type="radio" name="q5" value="a" required> Memasak dan mengurus rumah tangga</label>
+                    <label class="option-label"><input type="radio" name="q5" value="b"> Memberikan nafkah dan membimbing istri</label>
+                    <label class="option-label"><input type="radio" name="q5" value="c"> Membantu istri dalam mengurus anak</label>
+                    <label class="option-label"><input type="radio" name="q5" value="d"> Mengatur seluruh kehidupan keluarga secara mutlak</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 6</span>
+                    <div class="q-title">Apa yang dimaksud dengan "nafkah" dalam rumah tangga Islam?</div>
+                    <label class="option-label"><input type="radio" name="q6" value="a" required> Hanya makanan dan minuman yang cukup</label>
+                    <label class="option-label"><input type="radio" name="q6" value="b"> Semua kebutuhan hidup termasuk spiritual dan emosional</label>
+                    <label class="option-label"><input type="radio" name="q6" value="c"> Hanya uang bulanan yang diberikan suami</label>
+                    <label class="option-label"><input type="radio" name="q6" value="d"> Hanya tempat tinggal</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 7</span>
+                    <div class="q-title">Bagaimana Islam memandang peran istri dalam rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q7" value="a" required> Harus tetap di rumah dan tidak boleh bekerja</label>
+                    <label class="option-label"><input type="radio" name="q7" value="b"> Wajib membantu ekonomi keluarga</label>
+                    <label class="option-label"><input type="radio" name="q7" value="c"> Bertanggung jawab dalam urusan domestik tetapi bisa berperan publik</label>
+                    <label class="option-label"><input type="radio" name="q7" value="d"> Tidak memiliki peran khusus dalam keluarga</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 8</span>
+                    <div class="q-title">Apa yang menjadi penyebab umum konflik dalam rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q8" value="a" required> Perbedaan karakter dan harapan</label>
+                    <label class="option-label"><input type="radio" name="q8" value="b"> Tidak adanya anak dalam pernikahan</label>
+                    <label class="option-label"><input type="radio" name="q8" value="c"> Terlalu sering bepergian</label>
+                    <label class="option-label"><input type="radio" name="q8" value="d"> Seringnya makan di luar</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 9</span>
+                    <div class="q-title">Salah satu cara terbaik menyelesaikan konflik rumah tangga adalah...?</div>
+                    <label class="option-label"><input type="radio" name="q9" value="a" required> Menghindari pembicaraan tentang masalah</label>
+                    <label class="option-label"><input type="radio" name="q9" value="b"> Mengedepankan komunikasi yang baik</label>
+                    <label class="option-label"><input type="radio" name="q9" value="c"> Membiarkan konflik berlalu tanpa penyelesaian</label>
+                    <label class="option-label"><input type="radio" name="q9" value="d"> Mengandalkan pihak ketiga dalam setiap keputusan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 10</span>
+                    <div class="q-title">Apa yang harus dilakukan suami dan istri untuk menjaga keharmonisan rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q10" value="a" required> Memaksakan kehendak masing-masing</label>
+                    <label class="option-label"><input type="radio" name="q10" value="b"> Saling menghargai dan bekerja sama</label>
+                    <label class="option-label"><input type="radio" name="q10" value="c"> Fokus pada karier masing-masing</label>
+                    <label class="option-label"><input type="radio" name="q10" value="d"> Menghindari komunikasi yang berlebihan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 11</span>
+                    <div class="q-title">Dalam Islam, pernikahan disebut sebagai "Mitsaqan Ghalizhan" yang berarti...?</div>
+                    <label class="option-label"><input type="radio" name="q11" value="a" required> Ikatan sementara</label>
+                    <label class="option-label"><input type="radio" name="q11" value="b"> Janji yang kuat</label>
+                    <label class="option-label"><input type="radio" name="q11" value="c"> Perjanjian tertulis</label>
+                    <label class="option-label"><input type="radio" name="q11" value="d"> Kontrak bisnis</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 12</span>
+                    <div class="q-title">Apa saja prinsip dalam perkawinan menurut Islam?</div>
+                    <label class="option-label"><input type="radio" name="q12" value="a" required> Saling mencintai, memahami, dan menghargai</label>
+                    <label class="option-label"><input type="radio" name="q12" value="b"> Mementingkan kepentingan individu</label>
+                    <label class="option-label"><input type="radio" name="q12" value="c"> Mengutamakan harta dalam membangun rumah tangga</label>
+                    <label class="option-label"><input type="radio" name="q12" value="d"> Menghindari keterbukaan dalam komunikasi</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 13</span>
+                    <div class="q-title">Menurut Islam, apakah seorang perempuan boleh menolak pernikahan yang dipaksakan?</div>
+                    <label class="option-label"><input type="radio" name="q13" value="a" required> Tidak boleh, karena orang tua yang menentukan</label>
+                    <label class="option-label"><input type="radio" name="q13" value="b"> Boleh, karena pernikahan harus didasarkan pada kerelaan</label>
+                    <label class="option-label"><input type="radio" name="q13" value="c"> Hanya boleh jika calon suami miskin</label>
+                    <label class="option-label"><input type="radio" name="q13" value="d"> Tidak boleh jika sudah ada persetujuan keluarga</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 14</span>
+                    <div class="q-title">Apa tujuan utama dari mahar dalam pernikahan?</div>
+                    <label class="option-label"><input type="radio" name="q14" value="a" required> Bentuk penghormatan kepada calon istri</label>
+                    <label class="option-label"><input type="radio" name="q14" value="b"> Menunjukkan status sosial suami</label>
+                    <label class="option-label"><input type="radio" name="q14" value="c"> Sebagai alat untuk mengikat pernikahan</label>
+                    <label class="option-label"><input type="radio" name="q14" value="d"> Sebagai bukti keseriusan orang tua mempelai</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 15</span>
+                    <div class="q-title">Bagaimana Islam memandang perceraian?</div>
+                    <label class="option-label"><input type="radio" name="q15" value="a" required> Halal, tetapi dibenci oleh Allah</label>
+                    <label class="option-label"><input type="radio" name="q15" value="b"> Dilarang dalam kondisi apa pun</label>
+                    <label class="option-label"><input type="radio" name="q15" value="c"> Wajib dilakukan jika suami dan istri bertengkar</label>
+                    <label class="option-label"><input type="radio" name="q15" value="d"> Disarankan untuk dilakukan setelah lima tahun menikah</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 16</span>
+                    <div class="q-title">Apa yang dimaksud dengan konsep "mu'asyarah bil ma'ruf" dalam pernikahan?</div>
+                    <label class="option-label"><input type="radio" name="q16" value="a" required> Berinteraksi dengan pasangan secara baik dan wajar</label>
+                    <label class="option-label"><input type="radio" name="q16" value="b"> Hidup bersama tanpa menikah</label>
+                    <label class="option-label"><input type="radio" name="q16" value="c"> Bergaul dengan masyarakat lebih baik daripada dengan keluarga</label>
+                    <label class="option-label"><input type="radio" name="q16" value="d"> Mengutamakan urusan pribadi di atas keluarga</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 17</span>
+                    <div class="q-title">Mengapa komunikasi dalam pernikahan sangat penting?</div>
+                    <label class="option-label"><input type="radio" name="q17" value="a" required> Untuk menghindari perceraian</label>
+                    <label class="option-label"><input type="radio" name="q17" value="b"> Agar bisa menyampaikan perasaan dan harapan dengan baik</label>
+                    <label class="option-label"><input type="radio" name="q17" value="c"> Untuk mengontrol pasangan</label>
+                    <label class="option-label"><input type="radio" name="q17" value="d"> Supaya dapat memenangkan setiap perdebatan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 18</span>
+                    <div class="q-title">Apa yang harus dilakukan pasangan suami istri jika menghadapi masalah dalam rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q18" value="a" required> Menghindari pembicaraan dan membiarkan masalah berlalu</label>
+                    <label class="option-label"><input type="radio" name="q18" value="b"> Menyelesaikan masalah dengan komunikasi terbuka dan musyawarah</label>
+                    <label class="option-label"><input type="radio" name="q18" value="c"> Segera mengajukan gugatan cerai</label>
+                    <label class="option-label"><input type="radio" name="q18" value="d"> Mencari kesalahan pasangan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 19</span>
+                    <div class="q-title">Salah satu ciri keluarga sakinah adalah...?</div>
+                    <label class="option-label"><input type="radio" name="q19" value="a" required> Sering bepergian ke luar negeri</label>
+                    <label class="option-label"><input type="radio" name="q19" value="b"> Kehidupan yang harmonis, damai, dan penuh kasih sayang</label>
+                    <label class="option-label"><input type="radio" name="q19" value="c"> Tidak adanya konflik sama sekali</label>
+                    <label class="option-label"><input type="radio" name="q19" value="d"> Tidak adanya tanggung jawab dalam rumah tangga</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 20</span>
+                    <div class="q-title">Bagaimana Islam memandang poligami?</div>
+                    <label class="option-label"><input type="radio" name="q20" value="a" required> Wajib dilakukan oleh semua laki-laki</label>
+                    <label class="option-label"><input type="radio" name="q20" value="b"> Diperbolehkan dengan syarat berlaku adil</label>
+                    <label class="option-label"><input type="radio" name="q20" value="c"> Dilarang dalam kondisi apa pun</label>
+                    <label class="option-label"><input type="radio" name="q20" value="d"> Harus dilakukan jika istri pertama tidak memiliki keturunan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 21</span>
+                    <div class="q-title">Apa saja kebutuhan utama dalam keluarga?</div>
+                    <label class="option-label"><input type="radio" name="q21" value="a" required> Spiritual, emosional, dan materi</label>
+                    <label class="option-label"><input type="radio" name="q21" value="b"> Keuangan dan pekerjaan</label>
+                    <label class="option-label"><input type="radio" name="q21" value="c"> Tempat tinggal dan kendaraan</label>
+                    <label class="option-label"><input type="radio" name="q21" value="d"> Gaya hidup mewah</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 22</span>
+                    <div class="q-title">Dalam Islam, bagaimana suami harus memperlakukan istri?</div>
+                    <label class="option-label"><input type="radio" name="q22" value="a" required> Sebagai pemimpin yang harus ditaati secara mutlak</label>
+                    <label class="option-label"><input type="radio" name="q22" value="b"> Dengan kasih sayang dan penghormatan</label>
+                    <label class="option-label"><input type="radio" name="q22" value="c"> Dengan memberikan kebebasan penuh tanpa batasan</label>
+                    <label class="option-label"><input type="radio" name="q22" value="d"> Dengan sikap tegas dan dominan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 23</span>
+                    <div class="q-title">Apa yang bisa dilakukan suami istri untuk membangun keluarga sakinah?</div>
+                    <label class="option-label"><input type="radio" name="q23" value="a" required> Menjalani kehidupan tanpa aturan</label>
+                    <label class="option-label"><input type="radio" name="q23" value="b"> Saling menghormati dan mendukung dalam kebaikan</label>
+                    <label class="option-label"><input type="radio" name="q23" value="c"> Menyimpan rahasia dari pasangan</label>
+                    <label class="option-label"><input type="radio" name="q23" value="d"> Membiarkan pasangan menangani masalah sendiri</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 24</span>
+                    <div class="q-title">Menurut Islam, bagaimana cara terbaik mendidik anak?</div>
+                    <label class="option-label"><input type="radio" name="q24" value="a" required> Mengajarkan nilai-nilai agama sejak dini</label>
+                    <label class="option-label"><input type="radio" name="q24" value="b"> Memberikan kebebasan penuh tanpa aturan</label>
+                    <label class="option-label"><input type="radio" name="q24" value="c"> Menyuruh mereka belajar sendiri</label>
+                    <label class="option-label"><input type="radio" name="q24" value="d"> Mengandalkan sekolah tanpa pendidikan keluarga</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 25</span>
+                    <div class="q-title">Apa dampak dari komunikasi yang buruk dalam rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q25" value="a" required> Meningkatkan keharmonisan</label>
+                    <label class="option-label"><input type="radio" name="q25" value="b"> Memicu konflik dan kesalahpahaman</label>
+                    <label class="option-label"><input type="radio" name="q25" value="c"> Mempererat hubungan suami istri</label>
+                    <label class="option-label"><input type="radio" name="q25" value="d"> Menambah kedamaian dalam keluarga</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 26</span>
+                    <div class="q-title">Apa yang dapat dilakukan pasangan untuk menjaga kesejahteraan rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q26" value="a" required> Saling bekerja sama dalam urusan rumah tangga</label>
+                    <label class="option-label"><input type="radio" name="q26" value="b"> Menghindari keterbukaan</label>
+                    <label class="option-label"><input type="radio" name="q26" value="c"> Mengutamakan kepentingan pribadi</label>
+                    <label class="option-label"><input type="radio" name="q26" value="d"> Membiarkan pasangan mengurus semuanya sendiri</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 27</span>
+                    <div class="q-title">Apa yang dimaksud dengan "hak dan kewajiban" dalam pernikahan?</div>
+                    <label class="option-label"><input type="radio" name="q27" value="a" required> Suami dan istri memiliki tugas dan tanggung jawab yang seimbang</label>
+                    <label class="option-label"><input type="radio" name="q27" value="b"> Suami hanya memiliki hak, dan istri hanya memiliki kewajiban</label>
+                    <label class="option-label"><input type="radio" name="q27" value="c"> Istri tidak memiliki kewajiban terhadap rumah tangga</label>
+                    <label class="option-label"><input type="radio" name="q27" value="d"> Hanya suami yang memiliki kewajiban dalam keluarga</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 28</span>
+                    <div class="q-title">Mengapa sikap saling menghormati penting dalam pernikahan?</div>
+                    <label class="option-label"><input type="radio" name="q28" value="a" required> Untuk menghindari perselisihan yang tidak perlu</label>
+                    <label class="option-label"><input type="radio" name="q28" value="b"> Agar pasangan lebih takut satu sama lain</label>
+                    <label class="option-label"><input type="radio" name="q28" value="c"> Supaya salah satu pasangan bisa lebih dominan</label>
+                    <label class="option-label"><input type="radio" name="q28" value="d"> Agar hubungan tetap kaku dan tegang</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 29</span>
+                    <div class="q-title">Bagaimana cara mengatasi perbedaan pendapat dalam pernikahan?</div>
+                    <label class="option-label"><input type="radio" name="q29" value="a" required> Berdiskusi dengan kepala dingin</label>
+                    <label class="option-label"><input type="radio" name="q29" value="b"> Membiarkan pasangan selalu menang</label>
+                    <label class="option-label"><input type="radio" name="q29" value="c"> Menghindari pembicaraan sama sekali</label>
+                    <label class="option-label"><input type="radio" name="q29" value="d"> Memaksakan pendapat sendiri</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 30</span>
+                    <div class="q-title">Salah satu bentuk kasih sayang dalam keluarga adalah...?</div>
+                    <label class="option-label"><input type="radio" name="q30" value="a" required> Mengabaikan perasaan pasangan</label>
+                    <label class="option-label"><input type="radio" name="q30" value="b"> Mendukung pasangan dalam setiap keadaan</label>
+                    <label class="option-label"><input type="radio" name="q30" value="c"> Mengkritik pasangan secara berlebihan</label>
+                    <label class="option-label"><input type="radio" name="q30" value="d"> Mengontrol semua keputusan dalam rumah tangga</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 31</span>
+                    <div class="q-title">Apa tujuan utama dari pernikahan menurut Islam?</div>
+                    <label class="option-label"><input type="radio" name="q31" value="a" required> Menghindari kesepian</label>
+                    <label class="option-label"><input type="radio" name="q31" value="b"> Menjalin hubungan sosial</label>
+                    <label class="option-label"><input type="radio" name="q31" value="c"> Mewujudkan keluarga sakinah, mawaddah, dan rahmah</label>
+                    <label class="option-label"><input type="radio" name="q31" value="d"> Menghindari beban ekonomi</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 32</span>
+                    <div class="q-title">Salah satu cara menjaga keharmonisan dalam keluarga adalah...?</div>
+                    <label class="option-label"><input type="radio" name="q32" value="a" required> Mengutamakan kepentingan pribadi</label>
+                    <label class="option-label"><input type="radio" name="q32" value="b"> Mengedepankan sikap egois</label>
+                    <label class="option-label"><input type="radio" name="q32" value="c"> Berkomunikasi secara terbuka dan jujur</label>
+                    <label class="option-label"><input type="radio" name="q32" value="d"> Membatasi interaksi dengan pasangan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 33</span>
+                    <div class="q-title">Apa yang harus dilakukan ketika menghadapi masalah besar dalam rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q33" value="a" required> Mencari solusi bersama secara bijaksana</label>
+                    <label class="option-label"><input type="radio" name="q33" value="b"> Menghindari diskusi dan membiarkan masalah berlalu</label>
+                    <label class="option-label"><input type="radio" name="q33" value="c"> Menyalahkan pasangan atas segala sesuatu</label>
+                    <label class="option-label"><input type="radio" name="q33" value="d"> Langsung meminta bantuan pihak luar tanpa komunikasi dengan pasangan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 34</span>
+                    <div class="q-title">Menurut Islam, bagaimana suami dan istri harus menyikapi perbedaan dalam rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q34" value="a" required> Dengan saling menghormati dan mencari jalan tengah</label>
+                    <label class="option-label"><input type="radio" name="q34" value="b"> Dengan memaksakan kehendak masing-masing</label>
+                    <label class="option-label"><input type="radio" name="q34" value="c"> Dengan menghindari pembicaraan tentang perbedaan</label>
+                    <label class="option-label"><input type="radio" name="q34" value="d"> Dengan meminta keluarga untuk ikut campur setiap saat</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 35</span>
+                    <div class="q-title">Apa yang dimaksud dengan "qawwam" dalam Islam terkait peran suami?</div>
+                    <label class="option-label"><input type="radio" name="q35" value="a" required> Pemimpin yang bertanggung jawab atas keluarga</label>
+                    <label class="option-label"><input type="radio" name="q35" value="b"> Pemimpin yang berhak memutuskan segalanya sendiri</label>
+                    <label class="option-label"><input type="radio" name="q35" value="c"> Seorang yang hanya bekerja mencari nafkah</label>
+                    <label class="option-label"><input type="radio" name="q35" value="d"> Seorang yang harus selalu diutamakan dalam keluarga</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 36</span>
+                    <div class="q-title">Dalam konsep keluarga sakinah, bagaimana peran seorang istri?</div>
+                    <label class="option-label"><input type="radio" name="q36" value="a" required> Mendukung suami dan menjaga keharmonisan keluarga</label>
+                    <label class="option-label"><input type="radio" name="q36" value="b"> Bertanggung jawab atas semua pekerjaan rumah tangga</label>
+                    <label class="option-label"><input type="radio" name="q36" value="c"> Hanya berperan dalam mengasuh anak</label>
+                    <label class="option-label"><input type="radio" name="q36" value="d"> Tidak memiliki kewajiban tertentu dalam rumah tangga</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 37</span>
+                    <div class="q-title">Bagaimana Islam memandang pernikahan dini?</div>
+                    <label class="option-label"><input type="radio" name="q37" value="a" required> Dianjurkan tanpa syarat</label>
+                    <label class="option-label"><input type="radio" name="q37" value="b"> Diperbolehkan jika kedua belah pihak sudah matang secara mental dan fisik</label>
+                    <label class="option-label"><input type="radio" name="q37" value="c"> Harus dilakukan sebelum usia 20 tahun</label>
+                    <label class="option-label"><input type="radio" name="q37" value="d"> Tidak diperbolehkan dalam kondisi apa pun</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 38</span>
+                    <div class="q-title">Apa dampak dari ketidakseimbangan peran suami dan istri dalam rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q38" value="a" required> Keluarga menjadi lebih harmonis</label>
+                    <label class="option-label"><input type="radio" name="q38" value="b"> Salah satu pihak merasa terbebani dan tidak bahagia</label>
+                    <label class="option-label"><input type="radio" name="q38" value="c"> Anak-anak akan tumbuh lebih baik</label>
+                    <label class="option-label"><input type="radio" name="q38" value="d"> Hubungan menjadi lebih kuat</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 39</span>
+                    <div class="q-title">Apa yang harus dilakukan suami ketika istrinya sedang dalam keadaan sulit?</div>
+                    <label class="option-label"><input type="radio" name="q39" value="a" required> Membiarkan istri menyelesaikan masalahnya sendiri</label>
+                    <label class="option-label"><input type="radio" name="q39" value="b"> Memberikan dukungan moral dan emosional</label>
+                    <label class="option-label"><input type="radio" name="q39" value="c"> Mengabaikan perasaannya</label>
+                    <label class="option-label"><input type="radio" name="q39" value="d"> Meminta istri untuk mencari solusi sendiri</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 40</span>
+                    <div class="q-title">Salah satu cara membangun keluarga yang kuat adalah...?</div>
+                    <label class="option-label"><input type="radio" name="q40" value="a" required> Membangun komunikasi yang sehat dan terbuka</label>
+                    <label class="option-label"><input type="radio" name="q40" value="b"> Menghindari pembicaraan serius</label>
+                    <label class="option-label"><input type="radio" name="q40" value="c"> Mengutamakan kepentingan individu</label>
+                    <label class="option-label"><input type="radio" name="q40" value="d"> Mengontrol segala aspek kehidupan pasangan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 41</span>
+                    <div class="q-title">Apa yang dimaksud dengan "sakinah" dalam konsep keluarga sakinah?</div>
+                    <label class="option-label"><input type="radio" name="q41" value="a" required> Ketenangan dan kedamaian dalam rumah tangga</label>
+                    <label class="option-label"><input type="radio" name="q41" value="b"> Kemewahan dalam kehidupan rumah tangga</label>
+                    <label class="option-label"><input type="radio" name="q41" value="c"> Ketergantungan kepada pasangan</label>
+                    <label class="option-label"><input type="radio" name="q41" value="d"> Kebebasan tanpa aturan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 42</span>
+                    <div class="q-title">Mengapa peran keluarga dalam pendidikan anak sangat penting?</div>
+                    <label class="option-label"><input type="radio" name="q42" value="a" required> Karena keluarga adalah tempat pertama anak belajar nilai dan moral</label>
+                    <label class="option-label"><input type="radio" name="q42" value="b"> Karena sekolah tidak memiliki peran dalam pendidikan</label>
+                    <label class="option-label"><input type="radio" name="q42" value="c"> Agar anak-anak tidak perlu belajar di luar rumah</label>
+                    <label class="option-label"><input type="radio" name="q42" value="d"> Karena hanya orang tua yang wajib mengajari anak</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 43</span>
+                    <div class="q-title">Bagaimana Islam mengajarkan pasangan dalam mengelola keuangan rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q43" value="a" required> Dengan transparansi dan perencanaan yang baik</label>
+                    <label class="option-label"><input type="radio" name="q43" value="b"> Hanya suami yang boleh mengatur keuangan</label>
+                    <label class="option-label"><input type="radio" name="q43" value="c"> Istri harus meminta izin untuk setiap pengeluaran</label>
+                    <label class="option-label"><input type="radio" name="q43" value="d"> Tidak perlu ada perencanaan dalam keuangan</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 44</span>
+                    <div class="q-title">Apa dampak dari kurangnya komunikasi dalam rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q44" value="a" required> Meningkatnya konflik dan kesalahpahaman</label>
+                    <label class="option-label"><input type="radio" name="q44" value="b"> Hubungan yang semakin harmonis</label>
+                    <label class="option-label"><input type="radio" name="q44" value="c"> Suami istri menjadi lebih mandiri</label>
+                    <label class="option-label"><input type="radio" name="q44" value="d"> Kehidupan rumah tangga menjadi lebih damai</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 45</span>
+                    <div class="q-title">Dalam Islam, bagaimana cara menghadapi pasangan yang memiliki sifat egois?</div>
+                    <label class="option-label"><input type="radio" name="q45" value="a" required> Dengan komunikasi dan saling memahami</label>
+                    <label class="option-label"><input type="radio" name="q45" value="b"> Dengan membalasnya dengan sikap yang sama</label>
+                    <label class="option-label"><input type="radio" name="q45" value="c"> Dengan menjauhinya dan tidak berbicara</label>
+                    <label class="option-label"><input type="radio" name="q45" value="d"> Dengan meminta bantuan pihak luar langsung</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 46</span>
+                    <div class="q-title">Apa saja aspek utama dalam membangun keluarga yang kuat?</div>
+                    <label class="option-label"><input type="radio" name="q46" value="a" required> Keuangan, komunikasi, dan spiritualitas</label>
+                    <label class="option-label"><input type="radio" name="q46" value="b"> Kemewahan, kekuasaan, dan ketenaran</label>
+                    <label class="option-label"><input type="radio" name="q46" value="c"> Kesuksesan individu tanpa memperhatikan pasangan</label>
+                    <label class="option-label"><input type="radio" name="q46" value="d"> Dominasi salah satu pihak dalam rumah tangga</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 47</span>
+                    <div class="q-title">Bagaimana Islam mengajarkan suami istri dalam menghadapi ujian rumah tangga?</div>
+                    <label class="option-label"><input type="radio" name="q47" value="a" required> Dengan bersabar dan mencari solusi bersama</label>
+                    <label class="option-label"><input type="radio" name="q47" value="b"> Dengan menyalahkan satu sama lain</label>
+                    <label class="option-label"><input type="radio" name="q47" value="c"> Dengan berpisah secepat mungkin</label>
+                    <label class="option-label"><input type="radio" name="q47" value="d"> Dengan menghindari pembicaraan tentang masalah</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 48</span>
+                    <div class="q-title">Apa yang menjadi kunci sukses dalam mendidik anak menurut Islam?</div>
+                    <label class="option-label"><input type="radio" name="q48" value="a" required> Menjadi teladan yang baik</label>
+                    <label class="option-label"><input type="radio" name="q48" value="b"> Memberikan hukuman berat saat anak melakukan kesalahan</label>
+                    <label class="option-label"><input type="radio" name="q48" value="c"> Menyerahkan sepenuhnya kepada sekolah</label>
+                    <label class="option-label"><input type="radio" name="q48" value="d"> Mengabaikan pendidikan agama</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 49</span>
+                    <div class="q-title">Mengapa penting bagi suami dan istri untuk saling mendukung dalam kehidupan sehari-hari?</div>
+                    <label class="option-label"><input type="radio" name="q49" value="a" required> Untuk menciptakan keluarga yang harmonis dan kuat</label>
+                    <label class="option-label"><input type="radio" name="q49" value="b"> Agar salah satu pihak lebih unggul dalam keluarga</label>
+                    <label class="option-label"><input type="radio" name="q49" value="c"> Untuk menghindari perceraian tanpa alasan</label>
+                    <label class="option-label"><input type="radio" name="q49" value="d"> Supaya keluarga tidak terlibat dalam masalah sosial</label>
+                </div>
+
+                <div class="question-card">
+                    <span class="q-num">Soal 50</span>
+                    <div class="q-title">Apa yang dimaksud dengan konsep "rahmah" dalam keluarga sakinah?</div>
+                    <label class="option-label"><input type="radio" name="q50" value="a" required> Kasih sayang yang diberikan dengan ikhlas</label>
+                    <label class="option-label"><input type="radio" name="q50" value="b"> Kekuasaan penuh dalam rumah tangga</label>
+                    <label class="option-label"><input type="radio" name="q50" value="c"> Kepatuhan mutlak terhadap pasangan</label>
+                    <label class="option-label"><input type="radio" name="q50" value="d"> Keputusan yang hanya diambil oleh satu pihak</label>
+                </div>
+
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn-submit" id="btnSubmit">Kirim Jawaban Post-Test</button>
+        </form>
+
+        <!-- Success Message -->
+        <div id="successMsg" class="form-card success-msg" style="display:none;">
+            <span class="material-icons-outlined">check_circle</span>
+            <h3 style="margin-top:16px;">Post-Test Berhasil Dikirim!</h3>
+            <p style="color:var(--muted);margin-top:8px;">Skor Anda: <strong id="skorDisplay">0</strong> / 100</p>
+            <p style="color:var(--muted);margin-top:4px;font-size:0.8rem;">Selamat! E-Sertifikat Anda sudah tersedia.</p>
+            <a href="#" id="sertifikatLink" target="_blank" style="display:none;margin-top:16px;padding:14px 24px;background:linear-gradient(135deg,#064e3b,#0f766e);color:#fff;border-radius:12px;text-decoration:none;font-weight:700;font-size:0.9rem;display:inline-flex;align-items:center;gap:6px;">
+                📄 Buka & Cetak Sertifikat
+            </a>
+            <p style="color:var(--muted);margin-top:12px;font-size:0.75rem;">Atau klaim nanti di halaman utama → menu "Klaim & Ambil E-Sertifikat"</p>
+        </div>
+
+        <a href="index.html" class="back-link">← Kembali ke Beranda</a>
+    </div>
+
+    <script>
+        const TOTAL_SOAL = 50;
+        const KUNCI = {
+            q1:'c', q2:'b', q3:'b', q4:'c', q5:'b', q6:'b', q7:'c', q8:'a', q9:'b', q10:'b',
+            q11:'b', q12:'a', q13:'b', q14:'a', q15:'a', q16:'a', q17:'b', q18:'b', q19:'b', q20:'b',
+            q21:'a', q22:'b', q23:'b', q24:'a', q25:'b', q26:'a', q27:'a', q28:'a', q29:'a', q30:'b',
+            q31:'c', q32:'c', q33:'a', q34:'a', q35:'a', q36:'a', q37:'b', q38:'b', q39:'b', q40:'a',
+            q41:'a', q42:'a', q43:'a', q44:'a', q45:'a', q46:'a', q47:'a', q48:'a', q49:'a', q50:'a'
+        };
+
+        // Progress bar
+        function updateProgress() {
+            let answered = 0;
+            for (let i = 1; i <= TOTAL_SOAL; i++) {
+                if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+            }
+            const pct = Math.round((answered / TOTAL_SOAL) * 100);
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressText').textContent = answered + ' / ' + TOTAL_SOAL + ' soal dijawab';
+        }
+
+        document.querySelectorAll('input[type="radio"]').forEach(r => {
+            r.addEventListener('change', updateProgress);
+        });
+
+        // Submit
+        document.getElementById('pretestForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            btn.textContent = 'Mengirim...';
+            btn.disabled = true;
+
+            const nama = document.getElementById('nama').value.trim().toUpperCase();
+            const jawaban = {};
+            let skor = 0;
+            for (let i = 1; i <= TOTAL_SOAL; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                jawaban[`q${i}`] = selected ? selected.value : '';
+                if (jawaban[`q${i}`] === KUNCI[`q${i}`]) skor += 2;
+            }
+
+            const data = {
+                tipe: 'posttest',
+                nama: nama,
+                nik: document.getElementById('nik').value.trim(),
+                no_hp: null,
+                jawaban: jawaban,
+                skor: skor
+            };
+
+            fetch('api/form-submit.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    // Auto-generate sertifikat ke database
+                    return fetch('api/generate-sertifikat.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nama: nama, skor: skor, nik: data.nik })
+                    });
+                } else {
+                    throw new Error(res.error || 'Gagal mengirim');
+                }
+            })
+            .then(r => r.json())
+            .then(res => {
+                document.getElementById('pretestForm').style.display = 'none';
+                document.getElementById('skorDisplay').textContent = skor;
+                document.getElementById('successMsg').style.display = 'block';
+                // Show certificate link
+                if (res.link) {
+                    const certLink = document.getElementById('sertifikatLink');
+                    certLink.href = res.link;
+                    certLink.style.display = 'inline-flex';
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            })
+            .catch(err => {
+                alert(err.message || 'Gagal mengirim. Periksa koneksi internet.');
+                btn.textContent = 'Kirim Jawaban Post-Test';
+                btn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>

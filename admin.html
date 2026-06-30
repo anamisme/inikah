@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Notifikasi – iNikah</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green-deep: #064e3b;
+            --green-mid: #0f766e;
+            --green-light: #14b8a6;
+            --bg: #f2f5f3;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: rgba(15, 118, 110, 0.08);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+            background: var(--bg); color: var(--text);
+            padding: 20px; min-height: 100vh;
+        }
+        .admin-container { max-width: 600px; margin: 0 auto; }
+        .admin-header {
+            text-align: center; padding: 24px 0 20px;
+        }
+        .admin-logo {
+            font-family: "Playfair Display", serif;
+            font-size: 1.8rem;
+        }
+        .admin-logo .wi { font-style: italic; color: #b45309; }
+        .admin-logo .wn { font-weight: 700; }
+        .admin-sub { font-size: 0.75rem; color: var(--muted); margin-top: 4px; font-weight: 600; }
+        .admin-section { background:#fff;border-radius:20px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);margin-bottom:16px;overflow:hidden; }
+        .admin-section-header { display:flex;align-items:center;justify-content:space-between;padding:18px 20px;cursor:pointer;user-select:none; }
+        .admin-section-header:hover { background:rgba(15,118,110,0.03); }
+        .admin-section-header h3 { font-size:0.95rem;font-weight:700;margin:0; }
+        .admin-section-body { display:none;padding:0 20px 20px; }
+        .admin-section.open .admin-section-body { display:block; }
+        .admin-section .chevron { font-size:20px;color:#94a3b8; }
+        .admin-section.open .chevron { color:var(--green-mid); }
+</style>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="admin-container">
+        <div class="admin-header">
+            <div class="admin-logo"><span class="wi">i</span><span class="wn">Nikah</span></div>
+            <p class="admin-sub">Panel Admin Notifikasi</p>
+        </div>
+        <div style="background:#fff;border-radius:20px;padding:24px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;">🔐 Login Admin</h3>
+            <input type="password" id="adminPass" placeholder="Masukkan password admin..." style="width:100%;padding:14px 18px;border-radius:12px;border:1.5px solid var(--border);font-size:0.95rem;outline:none;margin-bottom:12px;">
+            <button onclick="loginAdmin()" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--green-deep),var(--green-mid));color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;">Masuk</button>
+            <p id="loginError" style="color:#ef4444;font-size:0.8rem;margin-top:10px;display:none;">Password salah!</p>
+        </div>
+    </div>
+
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel" class="admin-container" style="display:none;">
+        <div class="admin-header">
+            <div class="admin-logo"><span class="wi">i</span><span class="wn">Nikah</span></div>
+            <p class="admin-sub">Panel Admin</p>
+            <button onclick="logoutAdmin()" style="margin-top:10px;padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:#fff;color:#ef4444;font-size:0.75rem;font-weight:600;cursor:pointer;">Logout</button>
+        </div>
+        <div class="admin-section open" id="sectionNotif">
+            <div class="admin-section-header" onclick="toggleSection('sectionNotif')">
+                <h3>📢 Notifikasi</h3>
+                <span class="material-icons-outlined chevron">expand_more</span>
+            </div>
+            <div class="admin-section-body">
+                <input type="text" id="notifJudul" placeholder="Judul notifikasi..." style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+                <textarea id="notifPesan" placeholder="Isi pesan notifikasi..." rows="3" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:12px;resize:vertical;font-family:inherit;"></textarea>
+                <button onclick="kirimNotif()" id="btnKirim" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--green-deep),var(--green-mid));color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;">Kirim Notifikasi</button>
+                <p id="statusMsg" style="font-size:0.8rem;margin-top:10px;display:none;"></p>
+                <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+                    <p style="font-size:0.8rem;font-weight:700;margin-bottom:10px;">Daftar Notifikasi</p>
+                    <div id="adminNotifList"><p style="color:var(--muted);font-size:0.85rem;">Memuat...</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BANNER (dropdown) -->
+        <div class="admin-section" id="sectionBanner">
+            <div class="admin-section-header" onclick="toggleSection('sectionBanner')">
+                <h3>🖼️ Banner</h3>
+                <span class="material-icons-outlined chevron">expand_more</span>
+            </div>
+            <div class="admin-section-body">
+                <input type="text" id="bannerJudul" placeholder="Judul banner..." style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+                <input type="text" id="bannerTag" placeholder="Tag (opsional, misal: PENGUMUMAN)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+                <input type="url" id="bannerLink" placeholder="Link tujuan (opsional, misal: https://...)" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:10px;">
+                <input type="text" id="bannerGambar" placeholder="Link atau ID file Google Drive" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:6px;">
+                <div id="bannerPreview" style="display:none;margin-bottom:10px;border-radius:12px;overflow:hidden;border:1px solid var(--border);">
+                    <img id="bannerPreviewImg" src="" style="width:100%;aspect-ratio:16/7;object-fit:cover;display:block;">
+                </div>
+                <p style="font-size:0.7rem;color:var(--muted);margin:0 0 10px 4px;">Ukuran ideal: 1200x525px. Paste link Drive atau ID file.</p>
+                <select id="bannerWarna" style="width:100%;padding:12px 16px;border-radius:12px;border:1.5px solid var(--border);font-size:0.9rem;outline:none;margin-bottom:12px;background:#fff;">
+                    <option value="">Warna fallback (jika tanpa gambar)...</option>
+                    <option value="linear-gradient(145deg, #064e3b, #0f766e)">Hijau Tua</option>
+                    <option value="linear-gradient(145deg, #0369a1, #0c4a6e)">Biru</option>
+                    <option value="linear-gradient(145deg, #7c3aed, #4c1d95)">Ungu</option>
+                    <option value="linear-gradient(145deg, #be185d, #831843)">Merah Muda</option>
+                    <option value="linear-gradient(145deg, #b45309, #78350f)">Emas</option>
+                    <option value="linear-gradient(145deg, #1d4ed8, #1e3a8a)">Biru Tua</option>
+                </select>
+                <button onclick="tambahBanner()" id="btnBanner" style="width:100%;padding:14px;border-radius:12px;border:none;background:linear-gradient(135deg,#7c3aed,#4c1d95);color:#fff;font-size:0.95rem;font-weight:700;cursor:pointer;">Tambah Banner</button>
+                <p id="bannerStatus" style="font-size:0.8rem;margin-top:10px;display:none;"></p>
+                <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);">
+                    <p style="font-size:0.8rem;font-weight:700;margin-bottom:10px;">Banner Aktif</p>
+                    <div id="adminBannerList"><p style="color:var(--muted);font-size:0.85rem;">Memuat...</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MENU LAPORAN -->
+        <div style="background:#fff;border-radius:20px;padding:20px;box-shadow:0 4px 16px rgba(0,0,0,0.06);border:1px solid var(--border);margin-top:20px;">
+            <a href="laporan.html" style="display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;">
+                <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--green-deep),var(--green-mid));display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                    <span class="material-icons-outlined" style="color:#fff;font-size:22px;">download</span>
+                </div>
+                <div>
+                    <p style="font-size:0.95rem;font-weight:700;margin-bottom:2px;">📊 Laporan & Download Data</p>
+                    <p style="font-size:0.75rem;color:var(--muted);">Export data jadwal, test, sertifikat ke Excel</p>
+                </div>
+            </a>
+        </div>
+
+        <p style="text-align:center;margin-top:20px;font-size:0.75rem;color:var(--muted);">
+            <a href="index.html" style="color:var(--green-mid);text-decoration:none;font-weight:600;">← Kembali ke Beranda</a>
+        </p>
+    </div>
+
+    <script>
+        const NOTIF_SCRIPT_URL = 'api/notifikasi.php';
+        let AUTH_TOKEN = '';
+
+        function toggleSection(id) {
+            document.getElementById(id).classList.toggle('open');
+        }
+
+        function logoutAdmin() {
+            localStorage.removeItem('inikah-admin-token');
+            AUTH_TOKEN = '';
+            document.getElementById('adminPanel').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'block';
+        }
+
+        // Auto-login dari token tersimpan
+        (function() {
+            const saved = localStorage.getItem('inikah-admin-token');
+            if (saved) {
+                fetch('api/auth.php?action=verify&token=' + encodeURIComponent(saved))
+                    .then(r => r.json())
+                    .then(res => {
+                        if (res.valid) {
+                            AUTH_TOKEN = saved;
+                            document.getElementById('loginScreen').style.display = 'none';
+                            document.getElementById('adminPanel').style.display = 'block';
+                            loadAdminNotifs();
+                            loadAdminBanners();
+                        }
+                    }).catch(() => {});
+            }
+        })();
+
+        function loginAdmin() {
+            const pass = document.getElementById('adminPass').value;
+            fetch('api/auth.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ password: pass, role: 'admin' })
+            })
+            .then(r => r.json())
+            .then(res => {
+                if (res.success) {
+                    AUTH_TOKEN = res.token;
+                    localStorage.setItem('inikah-admin-token', AUTH_TOKEN);
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('adminPanel').style.display = 'block';
+                    loadAdminNotifs();
+                    loadAdminBanners();
+                } else {
+                    document.getElementById('loginError').style.display = 'block';
+                }
+            })
+            .catch(() => {
+                document.getElementById('loginError').style.display = 'block';
+            });
+        }
+
+        document.getElementById('adminPass').addEventListener('keypress', e => {
+            if (e.key === 'Enter') loginAdmin();
+        });
+
+        function kirimNotif() {
+            const judul = document.getElementById('notifJudul').value.trim();
+            const pesan = document.getElementById('notifPesan').value.trim();
+            const statusMsg = document.getElementById('statusMsg');
+            const btn = document.getElementById('btnKirim');
+
+            if (!judul || !pesan) {
+                statusMsg.textContent = 'Judul dan pesan wajib diisi!';
+                statusMsg.style.color = '#ef4444';
+                statusMsg.style.display = 'block';
+                return;
+            }
+
+            btn.textContent = 'Mengirim...';
+            btn.disabled = true;
+
+            fetch(NOTIF_SCRIPT_URL + '?action=add&judul=' + encodeURIComponent(judul) + '&pesan=' + encodeURIComponent(pesan) + '&token=' + encodeURIComponent(AUTH_TOKEN))
+                .then(r => r.json())
+                .then(res => {
+                    statusMsg.textContent = 'Notifikasi berhasil dikirim!';
+                    statusMsg.style.color = '#059669';
+                    statusMsg.style.display = 'block';
+                    document.getElementById('notifJudul').value = '';
+                    document.getElementById('notifPesan').value = '';
+                    btn.textContent = 'Kirim Notifikasi';
+                    btn.disabled = false;
+                    loadAdminNotifs();
+                })
+                .catch(err => {
+                    statusMsg.textContent = 'Gagal mengirim. Periksa koneksi.';
+                    statusMsg.style.color = '#ef4444';
+                    statusMsg.style.display = 'block';
+                    btn.textContent = 'Kirim Notifikasi';
+                    btn.disabled = false;
+                });
+        }
+
+        function loadAdminNotifs() {
+            fetch(NOTIF_SCRIPT_URL + '?action=get')
+                .then(r => r.json())
+                .then(data => {
+                    const container = document.getElementById('adminNotifList');
+                    if (!data || data.length === 0) {
+                        container.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">Belum ada notifikasi.</p>';
+                        return;
+                    }
+                    let html = '';
+                    data.forEach(item => {
+                        html += '<div style="padding:12px 14px;border-radius:12px;background:var(--bg);margin-bottom:8px;border:1px solid var(--border);">';
+                        html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
+                        html += '<div><p style="font-size:0.85rem;font-weight:700;margin-bottom:3px;">' + escapeHtml(item.judul) + '</p>';
+                        html += '<p style="font-size:0.78rem;color:var(--muted);">' + escapeHtml(item.pesan) + '</p>';
+                        html += '<p style="font-size:0.65rem;color:#94a3b8;margin-top:4px;">' + escapeHtml(item.tanggal) + '</p></div>';
+                        html += '<button onclick="hapusNotif(\'' + item.id + '\')" style="background:#fee2e2;border:none;border-radius:8px;padding:6px 8px;cursor:pointer;color:#ef4444;font-size:0.7rem;font-weight:700;flex-shrink:0;">Hapus</button>';
+                        html += '</div></div>';
+                    });
+                    container.innerHTML = html;
+                })
+                .catch(() => {
+                    document.getElementById('adminNotifList').innerHTML = '<p style="color:#ef4444;font-size:0.85rem;">Gagal memuat data.</p>';
+                });
+        }
+
+        function hapusNotif(id) {
+            if (!confirm('Hapus notifikasi ini?')) return;
+            fetch(NOTIF_SCRIPT_URL + '?action=delete&id=' + encodeURIComponent(id) + '&token=' + encodeURIComponent(AUTH_TOKEN))
+                .then(r => r.json())
+                .then(() => loadAdminNotifs())
+                .catch(() => alert('Gagal menghapus.'));
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text || '';
+            return div.innerHTML;
+        }
+
+        // BANNER FUNCTIONS
+        function tambahBanner() {
+            const judul = document.getElementById('bannerJudul').value.trim();
+            const tag = document.getElementById('bannerTag').value.trim() || 'INFO';
+            const link = document.getElementById('bannerLink').value.trim();
+            const gambar = document.getElementById('bannerGambar').dataset.extractedId || extractDriveId(document.getElementById('bannerGambar').value.trim());
+            const warna = document.getElementById('bannerWarna').value;
+            const status = document.getElementById('bannerStatus');
+            const btn = document.getElementById('btnBanner');
+
+            if (!judul) {
+                status.textContent = 'Judul banner wajib diisi!';
+                status.style.color = '#ef4444';
+                status.style.display = 'block';
+                return;
+            }
+
+            btn.textContent = 'Menambahkan...';
+            btn.disabled = true;
+
+            let url = NOTIF_SCRIPT_URL + '?action=addBanner&judul=' + encodeURIComponent(judul) + '&tag=' + encodeURIComponent(tag) + '&token=' + encodeURIComponent(AUTH_TOKEN);
+            if (link) url += '&link=' + encodeURIComponent(link);
+            if (warna) url += '&warna=' + encodeURIComponent(warna);
+            if (gambar) url += '&gambar=' + encodeURIComponent(gambar);
+
+            fetch(url)
+                .then(r => r.json())
+                .then(res => {
+                    if (res.error) {
+                        status.textContent = res.error;
+                        status.style.color = '#ef4444';
+                    } else {
+                        status.textContent = 'Banner berhasil ditambahkan!';
+                        status.style.color = '#059669';
+                        document.getElementById('bannerJudul').value = '';
+                        document.getElementById('bannerTag').value = '';
+                        document.getElementById('bannerLink').value = '';
+                        document.getElementById('bannerGambar').value = '';
+                        document.getElementById('bannerGambar').dataset.extractedId = '';
+                        document.getElementById('bannerPreview').style.display = 'none';
+                        document.getElementById('bannerWarna').value = '';
+                        loadAdminBanners();
+                    }
+                    status.style.display = 'block';
+                    btn.textContent = 'Tambah Banner';
+                    btn.disabled = false;
+                })
+                .catch(() => {
+                    status.textContent = 'Gagal menambahkan. Periksa koneksi.';
+                    status.style.color = '#ef4444';
+                    status.style.display = 'block';
+                    btn.textContent = 'Tambah Banner';
+                    btn.disabled = false;
+                });
+        }
+
+        function loadAdminBanners() {
+            fetch(NOTIF_SCRIPT_URL + '?action=getBanners')
+                .then(r => r.json())
+                .then(data => {
+                    const container = document.getElementById('adminBannerList');
+                    if (!data || data.length === 0) {
+                        container.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;">Belum ada banner.</p>';
+                        return;
+                    }
+                    let html = '';
+                    data.forEach(item => {
+                        var thumbHtml = '';
+                        if (item.gambar) {
+                            thumbHtml = '<img src="' + escapeHtml(item.gambar) + '" style="width:100%;height:60px;object-fit:cover;border-radius:8px;margin-bottom:8px;">';
+                        }
+                        html += '<div style="padding:12px 14px;border-radius:12px;background:var(--bg);margin-bottom:8px;border:1px solid var(--border);">';
+                        html += thumbHtml;
+                        html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
+                        html += '<div><p style="font-size:0.85rem;font-weight:700;margin-bottom:3px;">' + escapeHtml(item.judul) + '</p>';
+                        html += '<p style="font-size:0.7rem;color:var(--muted);">Tag: ' + escapeHtml(item.tag) + (item.link ? ' · <a href="' + escapeHtml(item.link) + '" target="_blank" style="color:var(--green-mid);">Link</a>' : '') + '</p></div>';
+                        html += '<button onclick="hapusBanner(\'' + item.id + '\')" style="background:#fee2e2;border:none;border-radius:8px;padding:6px 8px;cursor:pointer;color:#ef4444;font-size:0.7rem;font-weight:700;flex-shrink:0;">Hapus</button>';
+                        html += '</div></div>';
+                    });
+                    container.innerHTML = html;
+                })
+                .catch(() => {
+                    document.getElementById('adminBannerList').innerHTML = '<p style="color:#ef4444;font-size:0.85rem;">Gagal memuat data.</p>';
+                });
+        }
+
+        function hapusBanner(id) {
+            if (!confirm('Hapus banner ini?')) return;
+            fetch(NOTIF_SCRIPT_URL + '?action=deleteBanner&id=' + encodeURIComponent(id) + '&token=' + encodeURIComponent(AUTH_TOKEN))
+                .then(r => r.json())
+                .then(() => loadAdminBanners())
+                .catch(() => alert('Gagal menghapus.'));
+        }
+
+        // AUTO CONVERT & PREVIEW GOOGLE DRIVE LINK
+        function extractDriveId(input) {
+            if (!input) return '';
+            // Format: https://drive.google.com/file/d/FILE_ID/view...
+            var match = input.match(/\/d\/([a-zA-Z0-9_-]+)/);
+            if (match) return match[1];
+            // Format: https://drive.google.com/open?id=FILE_ID
+            match = input.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+            if (match) return match[1];
+            // Format: https://lh3.googleusercontent.com/d/FILE_ID
+            match = input.match(/googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/);
+            if (match) return match[1];
+            // Anggap itu langsung ID
+            if (/^[a-zA-Z0-9_-]{10,}$/.test(input.trim())) return input.trim();
+            return '';
+        }
+
+        function getDriveThumbnail(fileId) {
+            return 'https://lh3.googleusercontent.com/d/' + fileId + '=w1200';
+        }
+
+        document.getElementById('bannerGambar').addEventListener('input', function() {
+            const val = this.value.trim();
+            const fileId = extractDriveId(val);
+            const preview = document.getElementById('bannerPreview');
+            const img = document.getElementById('bannerPreviewImg');
+
+            if (fileId) {
+                const thumbUrl = getDriveThumbnail(fileId);
+                img.src = thumbUrl;
+                preview.style.display = 'block';
+                // Simpan ID yang sudah di-extract
+                this.dataset.extractedId = fileId;
+            } else {
+                preview.style.display = 'none';
+                img.src = '';
+                this.dataset.extractedId = '';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.nucleapp.na_76ba41",
+      "sha256_cert_fingerprints": [
+        "DC:6E:21:AB:2F:89:DE:A6:86:87:27:19:97:B2:A0:B6:E9:2D:2D:35:97:76:CE:F8:E7:83:3E:DD:F4:9D:81:BB",
+        "11:8D:CC:79:6C:8B:8C:2F:29:51:3B:4F:3B:09:CC:A1:F8:79:EA:F3:DA:FE:61:03:F2:17:D4:90:9A:21:97:85"
+      ]
+    }
+  }
+]
