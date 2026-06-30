@@ -1,0 +1,9 @@
+*.keystore
+*.pem
+*.jks
+.vscode/
+.DS_Store
+api/config.php
+api/fonts/
+JANGAN_UPLOAD/
+UPLOAD_KE_HOSTING.zip

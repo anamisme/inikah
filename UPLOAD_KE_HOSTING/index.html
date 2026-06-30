@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>iNikah – KUA Karangdadap</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splashScreen">
+        <div class="splash-brand">
+            <div class="splash-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></div>
+            <div class="splash-sub">KUA Karangdadap</div>
+        </div>
+    </div>
+
+    <!-- STICKY KEMENAG NAVBAR -->
+    <div class="ios-navbar" id="iosMainHeader">
+        <div class="nav-row">
+            <div class="notif-bell" id="notifBell" role="button" aria-label="Notifikasi" tabindex="0" onclick="bukaModalNotif()">
+                <span class="material-icons-outlined">notifications</span>
+                <span class="notif-badge" id="notifBadge" style="display:none;">0</span>
+            </div>
+            <div class="nav-brand-center">
+                <h1 class="logo-wordmark"><span class="wi">i</span><span class="wn">Nikah</span></h1>
+                <p class="ios-subtitle">KUA Karangdadap</p>
+            </div>
+            <div class="theme-toggle" id="themeToggle" role="button" aria-label="Toggle dark mode" tabindex="0">
+                <span class="material-icons-outlined" id="toggleIcon">dark_mode</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL NOTIFIKASI -->
+    <div id="notifModal" class="app-modal-overlay">
+        <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
+            <button class="app-modal-close" onclick="tutupModalNotif()" title="Tutup">
+                <span class="material-icons-outlined">close</span>
+            </button>
+            <h3 class="app-modal-title">Notifikasi</h3>
+            <div class="p-4" style="background: #f8fafc;" id="notifList">
+                <div class="text-center text-muted p-4">
+                    <span class="material-icons-outlined" style="font-size:48px;color:#cbd5e1;">notifications_off</span>
+                    <p class="mt-2" style="font-size:0.9rem;">Belum ada notifikasi.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UNIVERSAL FLOATING MODAL (UNTUK EBOOK & SPREADSHEET JADWAL) -->
+    <div id="appModal" class="app-modal-overlay">
+        <div class="app-modal-content">
+            <button class="app-modal-close" onclick="tutupModalFrame()" title="Tutup">
+                <span class="material-icons-outlined">close</span>
+            </button>
+            <h3 id="appModalTitle" class="app-modal-title">Memuat...</h3>
+            <div class="app-modal-body">
+                <iframe id="appModalFrame" src="" allow="autoplay"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL JADWAL AKAD NIKAH -->
+    <div id="jadwalModal" class="app-modal-overlay">
+        <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
+            <button class="app-modal-close" onclick="tutupModalJadwal()" title="Tutup">
+                <span class="material-icons-outlined">close</span>
+            </button>
+            <h3 class="app-modal-title">Jadwal Akad Nikah</h3>
+            <div class="p-4" style="background: #f8fafc;">
+                <p class="text-muted small mb-3">Data jadwal akad nikah KUA Karangdadap.</p>
+                <div id="jadwalModalContent">
+                    <div class="text-center text-muted p-4">
+                        <div class="spinner-border spinner-border-sm text-success me-2" role="status"></div>
+                        Memuat data jadwal...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PETUGAS PENGHULU -->
+    <div id="petugasModal" class="app-modal-overlay">
+        <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
+            <button class="app-modal-close" onclick="tutupModalPetugas()" title="Tutup">
+                <span class="material-icons-outlined">close</span>
+            </button>
+            <h3 class="app-modal-title">Petugas Penghulu</h3>
+            <div class="p-4" style="background: #f8fafc;">
+                <p class="text-muted small mb-3">Data penunjukan petugas penghulu KUA Karangdadap.</p>
+                <div id="petugasModalContent">
+                    <div class="text-center text-muted p-4">
+                        <div class="spinner-border spinner-border-sm text-success me-2" role="status"></div>
+                        Memuat data petugas...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING MODAL PENCARIAN SERTIFIKAT -->
+    <div id="searchModal" class="app-modal-overlay">
+        <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
+            <button class="app-modal-close" onclick="tutupModalSertifikat()" title="Tutup">
+                <span class="material-icons-outlined">close</span>
+            </button>
+            <h3 class="app-modal-title">Cek & Klaim E-Sertifikat</h3>
+            <div class="p-4" style="background: #f8fafc;">
+                <p class="text-muted small mb-3">Silakan masukkan nama lengkap Anda untuk mengunduh berkas lembar kelulusan Bimwin mandiri.</p>
+                
+                <input type="text" id="searchInput" class="ios-input" placeholder="Ketik Nama Lengkap Anda..." autocomplete="off">
+
+                <button class="ios-btn-premium" onclick="prosesCariSertifikat()">
+                    <span class="material-icons-outlined">search</span>
+                    <span class="btn-text-main">Cari Dokumen</span>
+                    <span class="material-icons-outlined" style="opacity: 0.7;">chevron_right</span>
+                </button>
+
+                <div id="loading" class="text-center d-none my-4 text-muted">
+                    <div class="spinner-border spinner-border-sm text-success me-2" role="status"></div>
+                    Menghubungkan ke database KUA...
+                </div>
+                <div id="resultArea" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING MODAL UNTUK UNDUH BLANGKO DOKUMEN NIKAH -->
+    <div id="blankoModal" class="app-modal-overlay">
+        <div class="app-modal-content" style="height: auto; max-height: 85vh; max-height: 85dvh; overflow-y: auto;">
+            <button class="app-modal-close" onclick="tutupModalBlanko()" title="Tutup">
+                <span class="material-icons-outlined">close</span>
+            </button>
+            <h3 class="app-modal-title">Unduh Blangko Dokumen Nikah</h3>
+            <div class="p-4" style="background: #f8fafc;">
+                <p class="text-muted small mb-3">Silakan klik pada dokumen yang Anda butuhkan untuk mengunduh template surat resmi N-1 sampai dengan N-6.</p>
+                
+                <ul class="doc-list-group">
+                    <li><a href="uploads/blangko/FORMULIR N-1.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-1</div><span style="font-size:0.85rem;font-weight:600;">Surat Pengantar Perkawinan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="uploads/blangko/FORMULIR N-2.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-2</div><span style="font-size:0.85rem;font-weight:600;">Permohonan Kehendak Nikah</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="uploads/blangko/FORMULIR N-3.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-3</div><span style="font-size:0.85rem;font-weight:600;">Surat Persetujuan Mempelai</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="uploads/blangko/FORMULIR N-4.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-4</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Orang Tua</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="uploads/blangko/FORMULIR N-5.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-5</div><span style="font-size:0.85rem;font-weight:600;">Surat Izin Pengadilan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                    <li><a href="uploads/blangko/FORMULIR N-6.pdf" target="_blank" rel="noopener noreferrer" class="doc-list-item"><div class="d-flex align-items-center gap-3"><div class="doc-badge">N-6</div><span style="font-size:0.85rem;font-weight:600;">Surat Kematian Pasangan</span></div><span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">file_download</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="ios-container">
+
+        <!-- BANNER CAROUSEL -->
+        <div class="banner-carousel" id="bannerCarousel" style="display:none;">
+            <div class="banner-track" id="bannerTrack"></div>
+            <div class="banner-dots" id="bannerDots"></div>
+        </div>
+
+        <!-- DASHBOARD MENU PAGE -->
+        <div id="menuPage" class="page-view">
+
+            <!-- CARD 1: TAHAPAN CATIN -->
+            <div class="ios-main-card" onclick="toggleMainMenu('catingSubmenu','catingChevron')">
+                <div class="ios-card-header">
+                    <div class="ios-card-icon-title">
+                        <div class="ios-card-icon icon-cating">
+                            <span class="material-icons-outlined" style="font-size:24px;">favorite_border</span>
+                        </div>
+                        <div>
+                            <h2 class="ios-card-title">Tahapan Mandiri Catin</h2>
+                            <span class="ios-card-desc">Alur bimbingan & pre-post test mandiri</span>
+                        </div>
+                    </div>
+                    <span class="material-icons-outlined chevron-main" id="catingChevron">chevron_right</span>
+                </div>
+
+                <div class="ios-submenu-wrapper" id="catingSubmenu">
+                    <div class="ios-submenu-inner" onclick="event.stopPropagation()">
+
+                        <a href="pretest.html" class="sub-list-item">
+                            <div class="sub-list-left">
+                                <div class="sub-badge badge-1">1</div>
+                                <div class="sub-title-box">
+                                    <span class="sub-title">Isi Evaluasi Pre-Test</span>
+                                    <span class="sub-desc">Wajib diisi sebelum membaca materi bimbingan</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">chevron_right</span>
+                        </a>
+
+                        <div onclick="toggleBookShelf(event)" class="sub-list-item" style="cursor:pointer;">
+                            <div class="sub-list-left">
+                                <div class="sub-badge badge-2">2</div>
+                                <div class="sub-title-box">
+                                    <span class="sub-title">Perpustakaan Digital Mandiri</span>
+                                    <span class="sub-desc">Akses materi bimbingan perkawinan Bab 1–10</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-outlined" id="bookChevron" style="font-size:20px;color:#94a3b8;transition:transform 0.3s;">expand_more</span>
+                        </div>
+
+                        <!-- DIGITAL BOOKSHELF GRID -->
+                        <div class="apple-books-container" id="innerBookshelf">
+                            <div class="apple-books-inner">
+                                <div class="bookshelf-grid">
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 1.pdf', 'Bab 1 - Membangun Landasan Keluarga Sakinah')" class="book-item"><div class="book-cover cover-1"><span class="book-badge">Bimwin</span><span class="book-cover-title">Membangun Landasan Keluarga Sakinah</span></div><span class="book-label-title">Bab 1</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 2.pdf', 'Bab 2 - Merencanakan Perkawinan Kokoh')" class="book-item"><div class="book-cover cover-2"><span class="book-badge">Bimwin</span><span class="book-cover-title">Merencanakan Perkawinan Kokoh</span></div><span class="book-label-title">Bab 2</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 3.pdf', 'Bab 3 - Dinamika Perkawinan')" class="book-item"><div class="book-cover cover-3"><span class="book-badge">Bimwin</span><span class="book-cover-title">Dinamika Perkawinan</span></div><span class="book-label-title">Bab 3</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 4.pdf', 'Bab 4 - Kebutuhan Keluarga')" class="book-item"><div class="book-cover cover-4"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kebutuhan Keluarga</span></div><span class="book-label-title">Bab 4</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 5.pdf', 'Bab 5 - Kesehatan Keluarga')" class="book-item"><div class="book-cover cover-5"><span class="book-badge">Bimwin</span><span class="book-cover-title">Kesehatan Keluarga</span></div><span class="book-label-title">Bab 5</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 6.pdf', 'Bab 6 - Generasi Berkualitas')" class="book-item"><div class="book-cover cover-6"><span class="book-badge">Bimwin</span><span class="book-cover-title">Generasi Berkualitas</span></div><span class="book-label-title">Bab 6</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 7.pdf', 'Bab 7 - Ketahanan Keluarga Masa Kini')" class="book-item"><div class="book-cover cover-7"><span class="book-badge">Bimwin</span><span class="book-cover-title">Ketahanan Keluarga Masa Kini</span></div><span class="book-label-title">Bab 7</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 8.pdf', 'Bab 8 - Mengenali Hukum')" class="book-item"><div class="book-cover cover-8"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengenali Hukum</span></div><span class="book-label-title">Bab 8</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 9.pdf', 'Bab 9 - Mengelola Konflik')" class="book-item"><div class="book-cover cover-9"><span class="book-badge">Bimwin</span><span class="book-cover-title">Mengelola Konflik</span></div><span class="book-label-title">Bab 9</span></div>
+                                    <div onclick="bukaModalFrame('uploads/ebooks/Bab 10.pdf', 'Bab 10 - Prosedur Pendaftaran NR')" class="book-item"><div class="book-cover cover-10"><span class="book-badge">Bimwin</span><span class="book-cover-title">Prosedur Pendaftaran NR</span></div><span class="book-label-title">Bab 10</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="posttest.html" class="sub-list-item">
+                            <div class="sub-list-left">
+                                <div class="sub-badge badge-3">3</div>
+                                <div class="sub-title-box">
+                                    <span class="sub-title">Isi Evaluasi Post-Test</span>
+                                    <span class="sub-desc">Wajib diisi setelah selesai membaca materi bimbingan</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">chevron_right</span>
+                        </a>
+
+                        <div onclick="bukaModalSertifikat()" class="sub-list-item" style="cursor:pointer;">
+                            <div class="sub-list-left">
+                                <div class="sub-badge badge-4">4</div>
+                                <div class="sub-title-box">
+                                    <span class="sub-title">Klaim & Ambil E-Sertifikat</span>
+                                    <span class="sub-desc">Unduh lembar berkas kelulusan Bimwin Anda</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-outlined" style="font-size:20px;color:#0f766e;">chevron_right</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: JADWAL LAYANAN -->
+            <div class="ios-main-card" onclick="toggleMainMenu('jadwalSubmenu','jadwalChevron')">
+                <div class="ios-card-header">
+                    <div class="ios-card-icon-title">
+                        <div class="ios-card-icon icon-jadwal">
+                            <span class="material-icons-outlined" style="font-size:24px;">calendar_today</span>
+                        </div>
+                        <div>
+                            <h2 class="ios-card-title">Layanan Penjadwalan KUA</h2>
+                            <span class="ios-card-desc">Sistem cek waktu akad & petugas penghulu</span>
+                        </div>
+                    </div>
+                    <span class="material-icons-outlined chevron-main" id="jadwalChevron">chevron_right</span>
+                </div>
+
+                <div class="ios-submenu-wrapper" id="jadwalSubmenu">
+                    <div class="ios-submenu-inner" onclick="event.stopPropagation()">
+                        <div onclick="bukaModalJadwal()" class="sub-list-item" style="cursor:pointer;">
+                            <div class="sub-list-left">
+                                <div class="sub-badge badge-icon">
+                                    <span class="material-icons-outlined" style="font-size:16px;">event</span>
+                                </div>
+                                <div class="sub-title-box">
+                                    <span class="sub-title">Cek Jadwal Akad Nikah</span>
+                                    <span class="sub-desc">Lihat data jadwal akad nikah KUA Karangdadap</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-outlined" style="font-size:20px;color:#94a3b8;">chevron_right</span>
+                        </div>
+
+                        <div onclick="bukaModalPetugas()" class="sub-list-item" style="cursor:pointer;">
+                            <div class="sub-list-left">
+                                <div class="sub-badge badge-icon">
+                                    <span class="material-icons-outlined" style="font-size:16px;">assignment_ind</span>
+                                </div>
+                                <div class="sub-title-box">
+                                    <span class="sub-title">Cek Petugas Penghulu</span>
+                                    <span class="sub-desc">Lihat surat penunjukan tugas Penghulu KUA</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-outlined" style="font-size:20px;color:#94a3b8;">chevron_right</span>
+                        </div>
+
+                        <a href="petugas.html" class="sub-list-item">
+                            <div class="sub-list-left">
+                                <div class="sub-badge badge-icon">
+                                    <span class="material-icons-outlined" style="font-size:16px;">edit_note</span>
+                                </div>
+                                <div class="sub-title-box">
+                                    <span class="sub-title">Input Data Petugas KUA</span>
+                                    <span class="sub-desc">Khusus petugas KUA – isi data akad & penghulu</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-outlined" style="font-size:18px;color:#94a3b8;">lock</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 3: DOKUMEN & BANTUAN -->
+            <div class="ios-main-card" onclick="toggleMainMenu('bantuanSubmenu','bantuanChevron')">
+                <div class="ios-card-header">
+                    <div class="ios-card-icon-title">
+                        <div class="ios-card-icon icon-bantuan">
+                            <span class="material-icons-outlined" style="font-size:24px;">info</span>
+                        </div>
+                        <div>
+                            <h2 class="ios-card-title">Informasi & Bantuan KUA</h2>
+                            <span class="ios-card-desc">Format dokumen perkawinan & chat bantuan</span>
+                        </div>
+                    </div>
+                    <span class="material-icons-outlined chevron-main" id="bantuanChevron">chevron_right</span>
+                </div>
+
+                <div class="ios-submenu-wrapper" id="bantuanSubmenu">
+                    <div class="ios-submenu-inner" onclick="event.stopPropagation()">
+
+                        <div onclick="bukaModalBlanko()" class="sub-list-item" style="cursor:pointer;">
+                            <div class="sub-list-left">
+                                <div class="sub-badge badge-icon-gold">
+                                    <span class="material-icons-outlined" style="font-size:16px;">description</span>
+                                </div>
+                                <div class="sub-title-box">
+                                    <span class="sub-title">Unduh Blangko Dokumen Nikah</span>
+                                    <span class="sub-desc">Template surat resmi N-1 sampai dengan N-6</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-outlined" style="font-size:20px;color:#b45309;">chevron_right</span>
+                        </div>
+
+                        <a href="https://wa.me/6285226466464?text=Halo%20Penghulu%20KUA%20Karangdadap..." target="_blank" rel="noopener noreferrer" class="sub-list-item">
+                            <div class="sub-list-left">
+                                <div class="sub-badge badge-icon-gold">
+                                    <span class="material-icons-outlined" style="font-size:16px;">chat</span>
+                                </div>
+                                <div class="sub-title-box">
+                                    <span class="sub-title">Tanya Layanan Penghulu</span>
+                                    <span class="sub-desc">Konsultasi interaktif via WhatsApp KUA</span>
+                                </div>
+                            </div>
+                            <span class="material-icons-outlined" style="font-size:18px;color:var(--green-mid);">open_in_new</span>
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-footer">
+                KUA Karangdadap · Kabupaten Pekalongan
+                <div class="footer-links">
+                    <a href="privacy-policy.html">Kebijakan Privasi</a>
+                    <span class="footer-sep">·</span>
+                    <a href="terms-of-service.html">Syarat & Ketentuan</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js?v=4"></script>
+</body>
+</html>

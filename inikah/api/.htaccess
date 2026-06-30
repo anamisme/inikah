@@ -1,0 +1,8 @@
+# Lindungi file config agar tidak bisa diakses langsung
+<Files "config.php">
+    Deny from all
+</Files>
+
+<Files "database.sql">
+    Deny from all
+</Files>
